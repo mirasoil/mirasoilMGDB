@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
 <div class="container">
@@ -9,9 +9,9 @@
 
                         <div class="card-body">
                             @isset($url)
-                            <form method="POST" action='{{ url("login/$url") }}' aria-label="{{ __('Login') }}">
+                            <form method="POST" action='{{ url(app()->getLocale()."/login/$url") }}' aria-label="{{ __('Login') }}">
                             @else
-                            <form method="POST" action="{{ route('login.default') }}" aria-label="{{ __('Login') }}">
+                            <form method="POST" action="{{ route('login.default', app()->getLocale()) }}" aria-label="{{ __('Login') }}">
                             @endisset
                                 @csrf
 
@@ -46,7 +46,7 @@
                         <div class="form-group row">
                             <div class="col-md-6 offset-md-4">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" value="{{ old('remember') ? 'checked' : '' }}">
 
                                     <label class="form-check-label" for="remember">
                                         {{ __('Remember Me') }}
@@ -62,7 +62,7 @@
                                 </button>
 
                                 @if (Route::has('password.request'))
-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
+                                    <a class="btn btn-link" href="{{ route('password.request', app()->getLocale()) }}">
                                         {{ __('Forgot Your Password?') }}
                                     </a>
                                 @endif

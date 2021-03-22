@@ -32,9 +32,12 @@ class LoginController extends Controller
             'password' => 'required|min:6'
         ]);
 
-        if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+        if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) && $request->locale == "en") {
 
-            return redirect()->intended('/admin');
+            return redirect()->intended('/en/admin');
+        } else if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) && $request->locale == "ro") {
+
+            return redirect()->intended('/ro/admin');
         }
         return back()->withInput($request->only('email', 'remember'));
     }
@@ -51,10 +54,17 @@ class LoginController extends Controller
             'password' => 'required|min:6'
         ]);
 
-        if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember'))) {
+        if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) && $request->locale == "en") {
 
-            return redirect()->intended('/user');
+            return redirect()->intended('/en/user');
+        }else if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) && $request->locale == "ro") {
+
+            return redirect()->intended('/ro/user');
         }
         return back()->withInput($request->only('email', 'remember'));
+    }
+
+    public function redirectTo() {
+        return app()->getLocale() .'/';
     }
 }

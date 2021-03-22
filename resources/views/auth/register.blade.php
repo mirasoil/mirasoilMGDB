@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.master')
 
 @section('content')
 <div class="container">
@@ -9,9 +9,9 @@
 
                     <div class="card-body">
                         @isset($url)
-                        <form method="POST" action='{{ url("register/$url") }}' aria-label="{{ __('Register') }}">
+                        <form method="POST" action='{{ url(app()->getLocale()."register/$url") }}' aria-label="{{ __('Register') }}">
                         @else
-                        <form method="POST" action="{{ route('register') }}" aria-label="{{ __('Register') }}">
+                        <form method="POST" action="{{ route('register', app()->getLocale()) }}" aria-label="{{ __('Register') }}">
                         @endisset
                             @csrf
 

@@ -70,4 +70,8 @@ class RegisterController extends Controller
         ]);
         return redirect()->intended('login/user');
     }
+
+    public function redirectTo() {
+        return app()->getLocale() .'/';
+    }
 }
