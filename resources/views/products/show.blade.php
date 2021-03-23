@@ -9,7 +9,7 @@
     <div class="panel panel-default">
         <div class="panel-body">
             <div class="form-group">
-                <img src="{{'../img/'.$product->image}}" class="shadow p-3 mb-5 bg-white rounded" style="width:400px; height:300px;" alt="{{$product->name}}"/> <!--- preluam din products numele --->
+                <img src="{{'../../img/'.$product->image}}" class="shadow p-3 mb-5 bg-white rounded" style="width:400px; height:300px;" alt="{{$product->name}}"/> <!--- preluam din products numele --->
             </div>
             <div class="form-group">
                 <strong>Preț: </strong><p> {{ $product->price }} RON </p>

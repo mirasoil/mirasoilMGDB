@@ -40,6 +40,10 @@ Route::group([
     Route::get('/contact', 'ContactUsFormController@createForm');
     Route::post('/contact', 'ContactUsFormController@ContactUsForm')->name('contact.store');
 
+    //pentru newsletter - parte de backend, redirectarea se face pe pagina de home la sectiunea contact
+    Route::get('newsletter', 'NewsletterController@create');
+    Route::post('newsletter', 'NewsletterController@store');
+
     Auth::routes();
 
     Route::get('/login/admin', 'Auth\LoginController@showAdminLoginForm')->name('login.admin');
@@ -49,8 +53,8 @@ Route::group([
     
     Route::post('/login/admin', 'Auth\LoginController@adminLogin');
     Route::post('/login/user', 'Auth\LoginController@userLogin')->name('login.default');
-    Route::post('/register/admin', 'Auth\RegisterController@createAdmin');
-    Route::post('/register/user', 'Auth\RegisterController@createUser');
+    Route::post('/register/admin', 'Auth\RegisterController@createAdmin')->name('register');
+    Route::post('/register/user', 'Auth\RegisterController@createUser')->name('register');
     
     Route::view('/home', 'home')->middleware('auth');
     Route::view('/admin', 'admin')->name('admin');
@@ -76,8 +80,8 @@ Route::group([
             Route::get('cart/success', 'ProductController@emptyCart');  //golire cos
             //Route::get('/details/{id}', 'ProductController@showUser')->name('details');
     
-            //Route::get('/user', 'UserController@index')->name('user');    //pagina de dashboard pentru useri, formularul de update al datelor
-            //Route::patch('user/{id}', 'UserController@update');    //modificarea propriu-zisa a datelor in tabela dupa id-ul userului
+            Route::get('/user', 'UserController@index')->name('user');    //pagina de dashboard pentru useri, formularul de update al datelor
+            Route::patch('user/{id}', 'UserController@update');    //modificarea propriu-zisa a datelor in tabela dupa id-ul userului
     
     
     });

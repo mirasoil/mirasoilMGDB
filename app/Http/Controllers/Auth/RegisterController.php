@@ -29,19 +29,21 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:255'],
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
 
-    protected function create(array $data) {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-        ]);
-    }
+    // protected function create(array $data) {
+    //     return User::create([
+    //         'firstname' => $data['firstname'],
+    //         'lastname' => $data['lastname'],
+    //         'email' => $data['email'],
+    //         'password' => Hash::make($data['password']),
+    //     ]);
+    // }
 
     public function showAdminRegisterForm() {
         return view('auth.register', ['url' => 'admin']);
@@ -64,11 +66,16 @@ class RegisterController extends Controller
     protected function createUser(Request $request) {
         $this->validator($request->all())->validate();
         $user = User::create([
-            'name' => $request['name'],
-            'email' => $request['email'],
-            'password' => Hash::make($request['password']),
+            'firstname' => $request->input('firstname'),
+            'lastname' => $request->input('lastname'),
+            'email' => $request->input('email'),
+            'password' => Hash::make($request->input('password')),
         ]);
-        return redirect()->intended('login/user');
+        if($request->locale == "ro") {
+            return redirect()->intended('ro/login/user');
+        } else if($request->locale == "en") {
+            return redirect()->intended('en/login/user');
+        }
     }
 
     public function redirectTo() {

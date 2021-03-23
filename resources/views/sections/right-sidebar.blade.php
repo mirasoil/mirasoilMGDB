@@ -10,10 +10,10 @@
                     
                         @if(Auth::guard('user')->check())
                             <li class="{{ Request::is('account') ? 'active' : '' }}">
-                                <a href="/user"> {{ __('My Account') }}</a>
+                                <a href="{{ url(app()->getLocale().'/user') }}"> {{ __('My Account') }}</a>
                             </li>
                             <li class="{{ Request::is('account') ? 'active' : '' }}">
-                                <a href="/myorders">{{ __('My Orders') }}</a>
+                                <a href="{{ url(app()->getLocale().'/myorders') }}">{{ __('My Orders') }}</a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="{{ route('logout', app()->getLocale()) }}"
@@ -27,13 +27,13 @@
                             </li>
                         @elseif(Auth::guard('admin')->check())
                             <li class="{{ Request::is('controlPanel') ? 'active' : '' }}">
-                                <a href="/products"><i class="fa fa-user"></i> {{ __('Control Panel') }}</a>
+                                <a href="{{ route('products.index', app()->getLocale()) }}"><i class="fa fa-user"></i> {{ __('Control Panel') }}</a>
                             </li>
                             <li class="{{ Request::is('account') ? 'active' : '' }}">
-                                <a href="/orders">{{ __('Orders Editor') }}</a>
+                                <a href="{{ url(app()->getLocale().'/orders') }}">{{ __('Orders Editor') }}</a>
                             </li>
                             <li class="{{ Request::is('account') ? 'active' : '' }}">
-                                <a href="/users"> {{ __('Users Editor') }}</a>
+                                <a href="{{ url(app()->getLocale().'/users') }}"> {{ __('Users Editor') }}</a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="{{ route('logout', app()->getLocale()) }}"

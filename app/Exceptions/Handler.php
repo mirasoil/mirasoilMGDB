@@ -40,6 +40,6 @@ class Handler extends ExceptionHandler
         if ($request->is('user') || $request->is('user/*')) {
             return redirect()->guest('/login/user');
         }
-        return redirect()->guest(route('login.default'));
+        return redirect()->guest(route('login.default', app()->getLocale()));
     }
 }

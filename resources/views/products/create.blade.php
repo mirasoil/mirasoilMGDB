@@ -19,11 +19,19 @@
             </div>
             @endif
             <!---Vom trimite prin post toate datele introduse in formular, apeland functia store din ProductController --->
-            {{ Form::open(array('route' => 'products.store','method'=>'POST')) }}
+            
+            <form method="POST" action="{{ route('products.store', app()->getLocale(),['id' => $id=Auth::user()->id]) }}">
+                            @csrf
+                            
                 <div class="form-group">
                     <label for="name">Nume</label>
                     <hr>
                     <input type="text" name="name" class="form-control" value="{{old('name') }}">
+                </div>
+                <div class="form-group">
+                    <label for="slug">Slug</label>
+                    <hr>
+                    <input type="text" name="slug" class="form-control" value="{{old('slug') }}">
                 </div>
                 <div class="form-group">
                     <label for="name">Cantitate</label>
@@ -64,7 +72,7 @@
                     <input type="submit" value="Adaugă produsul" class="btn btn-info">
                     <a href="{{ route('products.index', app()->getLocale()) }}" class="btn btn-danger">Renunță</a>
                 </div>
-            {{ Form::close() }}
+            </form>
         </div>
     </div>
 </div>

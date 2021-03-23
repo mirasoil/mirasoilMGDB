@@ -11,5 +11,5 @@ class Product extends Model
 {
     protected $connection = 'mongodb';
 
-    public $fillable = ['id', 'name', 'quantity', 'price', 'stock', 'image', 'description', 'properties', 'uses'];
+    public $fillable = ['id', 'name', 'slug', 'quantity', 'price', 'stock', 'image', 'description', 'properties', 'uses'];
 }

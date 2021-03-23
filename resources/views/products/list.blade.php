@@ -14,7 +14,7 @@
         <div class="form-group">
             <div class="pull-right">
                 <!---Butonul pentru adaugarea unui produs nou--->
-                <a href="/products/create" class="btn btn-info">Adaugă produs</a>
+                <a href="{{ url(app()->getLocale().'/products/create') }}" class="btn btn-info">Adaugă produs</a>
             </div>
         </div>
         <!---Capul de tabel care ramane mereu la fel, nu depinde de foreach--->
@@ -36,18 +36,18 @@
             @foreach ($products as $key => $product)
             <tr>
                 <td>{{ ++$i }}</td>
-                <td><a href="{{ route('products.show',$product->id) }}" style="text-decoration:none;color:gray;font-size:18px;"><strong>{{ $product->name }}</strong></a></td>
+                <td><a href="{{ url(app()->getLocale().'/products/'.$product->slug) }}" style="text-decoration:none;color:gray;font-size:18px;"><strong>{{ $product->name }}</strong></a></td>
                 <td class="text-center"><p>{{ $product->quantity }}</p></td>
                 <td class="text-center"><p>{{ $product->price }}</p></td>
                 <td class="text-center"><p>{{ $product->stock }}</p></td>
-                <td class="text-center"><a href="{{ route('products.show',$product->id) }}"><img src="img/{{$product->image}}" style="width:300px; height:250px;" alt="{{ $product->name }}"/></a></td>
+                <td class="text-center"><a href="{{ url(app()->getLocale().'/products/'.$product->slug) }}"><img src="../img/{{$product->image}}" style="width:300px; height:250px;" alt="{{ $product->name }}"/></a></td>
                 <td><p>{!! Str::limit($product->description, 200) !!}</p></td>
                 <td><p>{!! Str::limit($product->properties, 200) !!}</p></td>
                 <td><p>{!! Str::limit($product->uses, 200) !!}</p></td> <!---afiseaza doar primele 200 de caractere din descriere --->
                 <td>
-                    <a class="btn btn-success m-2" href="{{ route('products.show',$product->id) }}">Detalii</a><br>
-                    <a class="btn btn-primary m-2" href="{{ route('products.edit',$product->id) }}">Modifică</a><br>
-                    {{ Form::open(['method' => 'DELETE','route' => ['products.destroy', $product->id],'style'=>'display:inline']) }}   <!--se activeaza metoda destroy din ProductController-->
+                    <a class="btn btn-success m-2" href="{{ url(app()->getLocale().'/products/'.$product->slug) }}">Detalii</a><br>
+                    <a class="btn btn-primary m-2" href="{{ url(app()->getLocale().'/products/'.$product->slug.'/edit') }}">Modifică</a><br>
+                    {{ Form::open(['method' => 'DELETE','url' => [app()->getLocale().'/products/'.$product->slug],'style'=>'display:inline']) }}   <!--se activeaza metoda destroy din ProductController-->
                     {{ Form::submit('Șterge', ['class' => 'btn btn-danger m-2']) }} <!---metoda delete din ProductController functia destroy---->
                     {{ Form::close() }}
                 </td>

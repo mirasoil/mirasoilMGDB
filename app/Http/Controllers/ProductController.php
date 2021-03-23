@@ -31,10 +31,9 @@ class ProductController extends Controller
         //return view('pages.shop', compact('shop'))->with('i', $value);    
     }
 
-    public function showUser($id)  //afisarea paginii individuale a produselor conectandu-ne la acelasi model => acelasi tabel (products)
+    public function showUser(Request $request, $id)  //afisarea paginii individuale a produselor conectandu-ne la acelasi model => acelasi tabel (products)
     {
-        $shop = Product::findOrFail("6058647d802f00001f002f92");  //Problem with the id, I need a code as reference othervise I don't have access
-        return view('pages.details', compact('shop'));
+        dd($request->id);
     }
 
     //Adauga in cos - functional
@@ -87,28 +86,32 @@ class ProductController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, ['name'=>'required', 'quantity'=>'required', 'price'=>'required', 'stock'=>'required', 'image'=>'required', 'description'=>'required', 'properties'=>'required', 'uses'=>'required']);   //validarea datelor
+        $this->validate($request, ['name'=>'required', 'slug'=>'required', 'quantity'=>'required', 'price'=>'required', 'stock'=>'required', 'image'=>'required', 'description'=>'required', 'properties'=>'required', 'uses'=>'required']);   //validarea datelor
         //crearea unui produs nou
         Product::create($request->all());       //apelam modelul cu functia predefinita create prin care trimitem toate argumentele
-        return redirect()->route('products.index')->with('succes', 'Produsul a fost creat cu succes!');
+        return redirect()->route('products.index', app()->getLocale())->with('succes', 'Produsul a fost creat cu succes!');
     }
 
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $product = Product::find($id);
+        
+        $slug = request()->segment(count(request()->segments()));
+        $product = Product::where('slug', $slug)->first();
         return view('products.show', compact('product'));
     }
 
-    public function edit($id)
+    public function edit($slug)
     {
-        $product = Product::findOrFail($id);
+        $slug = request()->segments()[2];  //acessing the slug from the link as the 3rd parameter of the array 
+        $product = Product::where('slug', $slug)->first();
         return view('products.edit', compact('product'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $this->validate($request, [
             'name' => 'required',
+            'slug' => 'required',
             'quantity' => 'required',
             'price' => 'required',
             'stock' => 'required',
@@ -117,14 +120,16 @@ class ProductController extends Controller
             'properties' => 'required',
             'uses' => 'required',
         ]);
-        Product::find($id)->update($request->all());        //in model trimitem pentru id-ul specific toate campurile cu date de actualizat
-        return redirect()->route('products.index')->with('success', 'Produs actualizat cu succes!');
+        $slug = request()->segments()[2];  //acessing the slug from the link as the 3rd parameter of the array 
+        Product::where('slug', $slug)->update($request->all());        //in model trimitem pentru id-ul specific toate campurile cu date de actualizat
+        return redirect()->route('products.index', app()->getLocale())->with('success', 'Produs actualizat cu succes!');
     }
 
-    public function destroy($id)
+    public function destroy()
     {
-        Product::find($id)->delete();
-        return redirect()->route('products.index')->with('success', 'Produs sters cu succes!');
+        $slug = request()->segments()[2];
+        Product::where('slug', $slug)->delete();
+        return redirect()->route('products.index', app()->getLocale())->with('success', 'Produs sters cu succes!');
     }
 
 }
