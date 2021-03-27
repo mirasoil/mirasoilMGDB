@@ -34,36 +34,33 @@ class UserController extends Controller
 
     // Display all the users
     public function getUsers(Request $request){
-        $users = User::orderBy('id','DESC')->paginate(3); 
+        $users = User::orderBy('lastname','ASC')->paginate(3); 
         $value = ($request->input('page',1)-1)*3;
         return view('users.list', compact('users'))->with('i', $value); 
-    }
-    
-    // Edit a user's details
-    public function editUser($id)
-    {
-        $user = User::find($id);
-        return view('users.edit', compact('user'));
-    }
-
-    // Delete a user
-    public function destroyUser($id)
-    {
-        User::find($id)->delete();
-        return redirect()->route('users', app()->getLocale())->with('success', 'Utilizator sters cu succes!');
     }
 
     // Display user details
     public function getUserDetails($id){
-        $user = User::find($id);
+        $id = request()->segment(count(request()->segments()));
+        $user = User::where('_id', $id)->first();
         return view('users.show', compact('user'));
 
         // dd($items);
     } 
+    
+    // Edit a user's details
+    public function editUser($id)
+    {
+        $id = request()->segment(count(request()->segments()));
+        $user = User::find($id);
+        return view('users.edit', compact('user'));
+    }
+
 
     // Update user details
     public function updateUser(Request $request, $id)
     {
+        $id = request()->segment(count(request()->segments()));
         $this->validate($request, [
             'phone' => 'required',
             'address' => 'required',
@@ -74,6 +71,14 @@ class UserController extends Controller
         User::find($id)->update($request->all());        //in model trimitem pentru id-ul specific toate campurile cu date de actualizat
         return redirect()->route('users', app()->getLocale())->with('success', 'Detalii utilizator actualizate cu succes!');
         // dd($request->all());
+    }
+
+    // Delete a user
+    public function destroyUser($id)
+    {
+        $id = request()->segment(count(request()->segments()));
+        User::find($id)->delete();
+        return redirect()->route('users', app()->getLocale())->with('success', 'Utilizator sters cu succes!');
     }
 
 }

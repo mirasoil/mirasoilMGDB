@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-<title>Detalii produs - Mirasoil</title>
+<title>{{ __('Product Details') }} - Mirasoil</title>
 @endsection
 @section('extra-scripts')
 <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -28,12 +28,12 @@
                     <hr>
                     <div class="btn-group cart">
                         <button  class="btn btn-info btn-block text-center" id="{{$shop->id}}" onclick="btnAddCart(this.id)">
-                            Adaugă în coș 
+                        {{ __('Add to cart') }} 
                         </button>
                     </div>
                     <div class="btn-group wishlist">
                         <button  class="btn btn-warning btn-block text-center" id="{{$shop->id}}" onclick="btnAddCart(this.id)">
-                            Adaugă la favorite 
+                            {{ __('Add to favorites') }}
                         </button>
                     </div>
                 </div>
@@ -41,9 +41,9 @@
             <div class="col-md-12 product-info p-4">
                 <nav>
                     <div id="myTab" class="nav nav-tabs nav_tabs">
-                        <a class="nav-item nav-link active" href="#service-one" data-toggle="tab">DESCRIERE</a>
-                        <a class="nav-item nav-link" href="#service-two" data-toggle="tab">PROPRIETĂȚI</a>
-                        <a class="nav-item nav-link" href="#service-three" data-toggle="tab">UTILIZĂRI</a>
+                        <a class="nav-item nav-link active" href="#service-one" data-toggle="tab">{{ __('DESCRIPTION') }} </a>
+                        <a class="nav-item nav-link" href="#service-two" data-toggle="tab">{{ __('PROPERTIES') }} </a>
+                        <a class="nav-item nav-link" href="#service-three" data-toggle="tab">{{ __('USES') }} </a>
                     </div>  
                 </nav>
                 <div id="myTabContent" class="tab-content">

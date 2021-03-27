@@ -4,16 +4,15 @@
 @endsection
 @section('content')
 <div class="container">
-            <div class="titlu-about">
-                <h1 class="animate__animated animate__rubberBand animate__repeat-2">{{ __('Our story') }}</h1> 
-            </div>
-            <div class="text-about">
-                <p>
-                {{ __('As for us, it all started 4 years ago, in 2016 to be exact, when we decided to make this plantation. On the fertile territory of our area, it was quite difficult to maintain due to the grass growing between the rows, but with a lot of effort we managed to cope with it. In the first year, the production was not high enough but this generally happens in the first year of harvest, and only in the third year will be able to produce a sufficient amount of oil.') }}
-                </p>
-                <h2>{{ __('Gallery') }}</h2>
-            </div>
-        </div>
+    <div class="titlu-about">
+        <h1 class="animate__animated animate__rubberBand animate__repeat-2">{{ __('Our story') }}</h1> 
+    </div>
+    <div class="text-about">
+        <p>
+        {{ __('As for us, it all started 4 years ago, in 2016 to be exact, when we decided to make this plantation. On the fertile territory of our area, it was quite difficult to maintain due to the grass growing between the rows, but with a lot of effort we managed to cope with it. In the first year, the production was not high enough but this generally happens in the first year of harvest, and only in the third year will be able to produce a sufficient amount of oil.') }}
+        </p>
+        <h2>{{ __('Gallery') }}</h2>
+    </div>
     <div class="row m-0 p-1">
         <div class="col-3 p-1">
             <img src="../img/lav1.jpg" style="width:100%" onclick="openModal();currentSlide(1)" class="hover-shadow cursor">
@@ -262,6 +261,7 @@
             <p class="bottom-text"> {{ __('Thank you for your attention and support!') }}</p>
         </p>
     </div>
+</div>
 @endsection
 @section('extra-scripts')
 <script src="{{ URL::asset('/js/about.js') }}"></script>

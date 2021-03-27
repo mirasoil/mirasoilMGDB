@@ -1,11 +1,11 @@
 @extends('layouts.master')
 @section('title')
-<title>Modificare produs - Admin</title>
+<title>{{ __('Product changes') }} - Admin</title>
 @endsection
 @section('content')
 <div class="container">
 <h1 class="text-center">{{ $product->name }}</h1>
-<h3 class="text-center">Modificări</h3>
+<h3 class="text-center">{{ __('Changes') }}</h3>
 <div class="panel panel-default" style="padding:50px">
         <div class="panel-body">
             <!---exista inregistrari in tabelul task --->
@@ -24,44 +24,44 @@
                 @csrf
                 @method('PATCH')
                 <div class="form-group">
-                    <label for="name"><strong>Nume</strong></label>
+                    <label for="name"><strong>{{ __('Product Name') }}</strong></label>
                     <input type="text" name="name" class="form-control" value="{{$product->name }}"> 
                 </div>
                 <div class="form-group">
-                    <label for="slug"><strong>Slug</strong></label>
+                    <label for="slug"><strong>{{ __('Slug') }}</strong></label>
                     <input type="text" name="slug" class="form-control" value="{{$product->slug }}"> 
                 </div>
                 <div class="form-group">
-                    <label for="quantity"><strong>Cantitate</strong></label>
+                    <label for="quantity"><strong>{{ __('Quantity') }}</strong></label>
                     <input type="text" name="quantity" class="form-control" value="{{ $product->quantity }}">
                 </div>
                 <div class="form-group">
-                    <label for="price"><strong>Preț</strong></label>
+                    <label for="price"><strong>{{ __('Price') }}</strong></label>
                     <input type="text" name="price" class="form-control" value="{{ $product->price }}" pattern="^\d*(\.\d{0,2})?$">
                 </div>
                 <div class="form-group">
-                    <label for="stock"><strong>Stoc</strong></label>
+                    <label for="stock"><strong>{{ __('Stock') }}</strong></label>
                     <input type="text" name="stock" class="form-control" value="{{$product->stock }}">
                 </div>
                 <div class="form-group">
-                    <label for="image"><strong>Imagine</strong></label>
+                    <label for="image"><strong>{{ __('Image') }}</strong></label>
                     <input type="text" name="image" class="form-control" value="{{$product->image }}">
                 </div>
                 <div class="form-group">
-                    <label for="description"><strong>Descriere</strong></label>
+                    <label for="description"><strong>{{ __('Description') }}</strong></label>
                     <textarea name="description" class="form-control" rows="3">{{ $product->description }}</textarea> 
                 </div>
                 <div class="form-group">
-                    <label for="properties"><strong>Proprietăți</strong></label>
+                    <label for="properties"><strong>{{ __('Properties') }}</strong></label>
                     <textarea name="properties" class="form-control" rows="3">{{ $product->properties }}</textarea> 
                 </div>
                 <div class="form-group">
-                    <label for="uses"><strong>Utilizări</strong></label>
+                    <label for="uses"><strong>{{ __('Uses') }}</strong></label>
                     <textarea name="uses" class="form-control" rows="3">{{ $product->uses }}</textarea> 
                 </div>
                 <div class="form-group">
-                <input type="submit" value="Salvează" class="btn btn-info">
-                <a href="{{route('products.index', app()->getLocale()) }}" class="btn btn-danger">Renunță</a>
+                <input type="submit" value="{{ __('Save') }}" class="btn btn-info">
+                <a href="{{route('products.index', app()->getLocale()) }}" class="btn btn-danger">{{ __('Cancel') }}</a>
             </div>
             </form>
         </div>

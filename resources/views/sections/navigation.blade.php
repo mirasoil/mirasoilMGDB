@@ -5,19 +5,19 @@
             <span></span>
             <span></span>
         </button>
-        <!-- Logo -->
         <div class="d-flex justify-content-center">
             <span><a href="{{ route('/', app()->getLocale()) }}"><img src="{{URL::asset('/img/Logo-mirasoil.png')}}" alt="Logo"  width="100"></a></span> 
         </div> 
-
         @if(Auth::guard('user')->check()) 
-          @if(Request::is('shop') OR Request::is('cart'))
+          @if(Request::is(app()->getLocale().'/shop') OR Request::is(app()->getLocale().'/cart')) 
 
           @else
             <div class="row mx-5" style="width:10%;" id="mini-cart">
-              <button type="button" class="btn btn-info" onclick="location.href='/cart'" id="cart-button" style="height:38px;;">
-                <i class="fa fa-shopping-cart" aria-hidden="true"></i> Coș <span class="badge badge-pill badge-danger">{{ Cart::count() }}</span>
-              </button>
+              <a href="{{ url(app()->getLocale().'/cart') }}">
+                <button type="button" class="btn btn-info"  id="cart-button" style="height:38px;;">
+                  <i class="fa fa-shopping-cart" aria-hidden="true"></i> Coș <span class="badge badge-pill badge-danger">{{ count((array) session('cart')) }}</span>
+                </button>
+              </a>
             </div>
           @endif
         @endif

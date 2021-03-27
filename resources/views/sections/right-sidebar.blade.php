@@ -69,7 +69,7 @@
                         <a href="{{ url(app()->getLocale().'/info') }}"><i class="fa fa-info-circle"></i> {{ __('Useful information') }}</a>
                     </li>
                     <li class="{{ Request::is('contact') ? 'active' : '' }}">
-                        <a href="{{ url(app()->getLocale().'/#contact') }}"><i class="fa fa-address-book"></i> Contact</a>
+                        <a href="{{ url(app()->getLocale().'/#contact') }}"><i class="fa fa-address-book"></i> {{ __('Contact') }}</a>
                     </li>
                 </ul>
         </nav>

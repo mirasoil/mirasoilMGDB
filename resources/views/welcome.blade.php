@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-<title>Produse naturale din lavandă - Mirasoil</title>
+<title>{{ __('Natural lavender products') }} - Mirasoil</title>
 @endsection
 @section('content')
 <div class="conatiner">
@@ -14,7 +14,7 @@
         <span class="animation-text">O</span>
         <span class="animation-text">I</span>
         <span class="animation-text">L</span>
-        <h2 class="header-animated">Produse naturale din lavanda.</h2>
+        <h2 class="header-animated">{{ __('Natural lavender products') }}</h2>
     </div>
 </section>
 <section>
@@ -132,7 +132,7 @@
                             <li><i class="far fa-check-circle"></i> 500ml</li>
                             <li><i class="far fa-check-circle"></i> 1l</li>
                         </ul>
-                        <a href="{{ url(app()->getLocale().'/details/2') }}"><button type="button" class="btn btn-primary w-100">{{ __('Details') }}</button></a>
+                        <a href="{{ url(app()->getLocale().'/details/hidrolat') }}"><button type="button" class="btn btn-primary w-100">{{ __('Details') }}</button></a>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-4 my-3">
@@ -145,7 +145,7 @@
                             <li><i class="far fa-check-circle"></i> 50ml</li>
                             <li><i class="far fa-check-circle"></i> 100ml</li>
                         </ul>
-                        <a href="{{ url(app()->getLocale().'/details/1') }}"><button type="button" class="btn btn-primary w-100">{{ __('Details') }}</button></a>
+                        <a href="{{ url(app()->getLocale().'/details/ulei') }}"><button type="button" class="btn btn-primary w-100">{{ __('Details') }}</button></a>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-4 my-3">
@@ -158,7 +158,7 @@
                             <li><i class="far fa-check-circle"></i> 250g</li>
                             <li><i class="far fa-check-circle"></i> 250g</li>
                         </ul>
-                        <a href="{{ url(app()->getLocale().'/details/3') }}"><button type="button" class="btn btn-primary w-100">{{ __('Details') }}</button></a>
+                        <a href="{{ url(app()->getLocale().'/details/sapun') }}"><button type="button" class="btn btn-primary w-100">{{ __('Details') }}</button></a>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-4 my-3">
@@ -171,7 +171,7 @@
                             <li><i class="far fa-check-circle"></i> 750ml</li>
                             <li><i class="far fa-check-circle"></i> 1l</li>
                         </ul>
-                        <a href="{{ url(app()->getLocale().'/details/4') }}"><button type="button" class="btn btn-primary w-100">{{ __('Details') }}</button></a>
+                        <a href="{{ url(app()->getLocale().'/details/sirop') }}"><button type="button" class="btn btn-primary w-100">{{ __('Details') }}</button></a>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-4 my-3">
@@ -184,7 +184,7 @@
                             <li><i class="far fa-check-circle"></i> {{ __('medium') }}</li>
                             <li><i class="far fa-check-circle"></i> {{ __('big') }}</li>
                         </ul>
-                        <a href="{{ url(app()->getLocale().'/details/6') }}"><button type="button" class="btn btn-primary w-100">{{ __('Details') }}</button></a>
+                        <a href="{{ url(app()->getLocale().'/details/buchete') }}"><button type="button" class="btn btn-primary w-100">{{ __('Details') }}</button></a>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-6 col-lg-4 my-3">
@@ -197,7 +197,7 @@
                             <li><i class="far fa-check-circle"></i> 250g</li>
                             <li><i class="far fa-check-circle"></i> 250g</li>
                         </ul>
-                        <a href="{{ url(app()->getLocale().'/details/5') }}"><button type="button" class="btn btn-primary w-100">{{ __('Details') }}</button></a>
+                        <a href="{{ url(app()->getLocale().'/details/brichete') }}"><button type="button" class="btn btn-primary w-100">{{ __('Details') }}</button></a>
                     </div>
                 </div>
             </div>            

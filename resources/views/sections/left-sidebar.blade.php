@@ -4,64 +4,71 @@
                 <h3><i class="fas fa-bars"></i> {{ __('MENU') }}</h3>
             </div>
             <ul class="list-unstyled components">
-                <li class="{{ Request::is('home') ? 'active' : '' }}">
+                <li class="{{ Request::is(app()->getLocale()) ? 'active' : '' }}">
                     <a href="{{ route('/', app()->getLocale()) }}">{{ __('Home') }}</a>
                 </li>
-                <li class="{{ Request::is('about') ? 'active' : '' }}">
+                <li class="{{ Request::is(app()->getLocale().'/about') ? 'active' : '' }}">
                     <a href="{{ route('about', app()->getLocale()) }}">{{ __('About us') }}</a>
                 </li>
-                <li class="{{ Request::is('manufacture') ? 'active' : '' }}">
+                <li class="{{ Request::is(app()->getLocale().'/manufacture') ? 'active' : '' }}">
                     <a href="{{ route('manufacture', app()->getLocale()) }}">{{ __('Processing') }}</a>
                 </li>
                 @if(Auth::guard('user')->check() || Auth::guest())
-                <li class="{{ Request::is('details') ? 'active' : '' }}"><!-- Link with dropdown items -->
+                <li class="{{ Request::is(app()->getLocale().'/details') ? 'active' : '' }}"><!-- Link with dropdown items -->
                         <a class="dropdown-toggle" href="#homeSubmenu" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="homeSubmenu"><i class="fas fa-list-ol"></i> {{ __('Products') }}</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
-                                <a href="{{ url(app()->getLocale().'/details/1') }}">{{ __('Lavender Oil') }}</a>
+                                <a href="{{ url(app()->getLocale().'/details/ulei') }}">{{ __('Lavender Oil') }}</a>
                             </li>
                             <li>
-                                <a href="{{ url(app()->getLocale().'/details/2') }}">{{ __('Floral water') }}</a>
+                                <a href="{{ url(app()->getLocale().'/details/hidrolat') }}">{{ __('Floral water') }}</a>
                             </li>
                             <li>
-                                <a href="{{ url(app()->getLocale().'/details/3') }}">{{ __('Soap') }}</a>
+                                <a href="{{ url(app()->getLocale().'/details/sapun') }}">{{ __('Soap') }}</a>
                             </li>
                             <li>
-                                <a href="{{ url(app()->getLocale().'/details/4') }}">{{ __('Syrup') }}</a>
+                                <a href="{{ url(app()->getLocale().'/details/sirop') }}">{{ __('Syrup') }}</a>
                             </li>
                             <li>
-                                <a href="{{ url(app()->getLocale().'/details/5') }}">{{ __('Floral bouquets') }}</a>
+                                <a href="{{ url(app()->getLocale().'/details/buchete') }}">{{ __('Floral bouquets') }}</a>
                             </li>
                             <li>
-                                <a href="{{ url(app()->getLocale().'/details/6') }}">{{ __('Fire briquettes') }}</a>
+                                <a href="{{ url(app()->getLocale().'/details/brichete') }}">{{ __('Fire briquettes') }}</a>
                             </li>
                         </ul>
+                </li>
+                <li class="{{ Request::is(app()->getLocale().'/shop') ? 'active' : '' }}">
+                    <a href="{{ route('shop', app()->getLocale()) }}"><i class="fas fa-store-alt"></i> {{ __('Shop') }}</a>
                 </li>
                 @elseif(Auth::guard('admin')->check())
-                <li class="{{ Request::is('products') ? 'active' : '' }}"><!-- Link with dropdown items -->
+                <li class="{{ Request::is(app()->getLocale().'/products') ? 'active' : '' }}"><!-- Link with dropdown items -->
                         <a class="dropdown-toggle" href="#homeSubmenu" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="homeSubmenu"><i class="fas fa-list-ol"></i> {{ __('Products') }}</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
-                                <a href="/products/1">{{ __('Lavender Oil') }}</a>
+                                <a href="{{ url(app()->getLocale().'/products/ulei') }}">{{ __('Lavender Oil') }}</a>
                             </li>
                             <li>
-                                <a href="/products/2">{{ __('Floral water') }}</a>
+                                <a href="{{ url(app()->getLocale().'/products/hidrolat') }}">{{ __('Floral water') }}</a>
                             </li>
                             <li>
-                                <a href="/products/3">{{ __('Soap') }}</a>
+                                <a href="{{ url(app()->getLocale().'/products/sapun') }}">{{ __('Soap') }}</a>
                             </li>
                             <li>
-                                <a href="/products/4">{{ __('Syrup') }}</a>
+                                <a href="{{ url(app()->getLocale().'/products/sirop') }}">{{ __('Syrup') }}</a>
                             </li>
                             <li>
-                                <a href="/products/5">Buchete florale</a>
+                                <a href="{{ url(app()->getLocale().'/products/buchete') }}">Buchete florale</a>
                             </li>
                             <li>
-                                <a href="/products/6">{{ __('Fire briquettes') }}</a>
+                                <a href="{{ url(app()->getLocale().'/products/brichete') }}">{{ __('Fire briquettes') }}</a>
                             </li>
                         </ul>
                 </li>
+                <li class="{{ Request::is(app()->getLocale().'/products') ? 'active' : '' }}">
+                    <a href="{{ url(app()->getLocale().'/products') }}"><i class="fas fa-store-alt"></i> {{ __('Shop') }}</a>
+                </li>
                 @endif
+                
                 <li>
                     <a href="#pageSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"><i class="fas fa-users"></i> Social</a>
                     <ul class="collapse list-unstyled" id="pageSubmenu">

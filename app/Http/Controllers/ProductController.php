@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Product;
 use Auth;
+use App\User;
 use Session;
 use Jenssegers\Mongodb\Eloquent\Model;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -31,51 +32,92 @@ class ProductController extends Controller
         //return view('pages.shop', compact('shop'))->with('i', $value);    
     }
 
-    public function showUser(Request $request, $id)  //afisarea paginii individuale a produselor conectandu-ne la acelasi model => acelasi tabel (products)
+    public function indexGuest(Request $request)
     {
-        dd($request->id);
+        $products = Product::orderBy('id','ASC')->paginate(4);   //pentru afisarea paginii de produse din products pentru vizitatori
+        $value = ($request->input('page',1)-1)*5;
+        return view('pages.shop', compact('products'))->with('i', $value);   
+    }
+
+    public function showUser(Request $request)  //afisarea paginii individuale a produselor conectandu-ne la acelasi model => acelasi tabel (products)
+    {
+        $slug = request()->segment(count(request()->segments()));
+        $shop = Product::where('slug', $slug)->first();
+        return view('pages.details', compact('shop'));
     }
 
     //Adauga in cos - functional
-    public function addToCart(Product $product){
-        $duplicates = Cart::search(function ($cartItem, $rowId) use ($product){    //verificam daca produsul nu este deja in cos
-            return $cartItem->id === $product->id;
-        });
-        if ($duplicates->isNotEmpty()) {
-            return redirect()->route('shop', app()->getLocale())->with('success_message', 'Produsul exista deja in cos!'); //cresc cantitatea
+    public function addToCart(Request $request, $id){
+        $id = request()->segment(count(request()->segments()));
+        $shop = Product::find($request->product);
+        if(!$shop) {
+        abort(404);
+    }
+    
+    $cart = session()->get('cart');          //verificam daca exista un cos in sesiune
+                                            // dacă cart este gol se pune primul product
+    if(!$cart) {
+    $cart = [
+        $id => [
+            "name" => $shop->name,
+            "quantity" => 1,
+            "price" => $shop->price,
+            "image" => $shop->image
+        ]
+    ];
+    session()->put('cart', $cart);
+    return redirect()->back()->with('cart-success', 'Produs adaugat cu succes!');
+    }
+    
+    if(isset($cart[$id])) {        // daca cart nu este gol at verificam daca produsul exista pt a incrementa cantitate
+        $cart[$id]['quantity']++;
+        session()->put('cart', $cart);
+        return redirect()->back()->with('cart-success', 'Produs adaugat cu succes!');
+    }
+    
+    $cart[$id] = [       // daca item nu exista in cos at addaugam la cos cu quantity = 1
+        "name" => $shop->name,
+        "quantity" => 1,
+        "price" => $shop->price,
+        "image" => $shop->image
+    ];
+    session()->put('cart', $cart);
+    return redirect()->back()->with('cart-success', 'Produs adaugat cu succes!');
+    }
+
+    //Actualizare cantitate cos
+    public function updateCart(Request $request){
+        if($request->id and $request->quantity)
+        {
+            $cart = session()->get('cart');
+            $cart[$request->id]["quantity"] = $request->quantity;
+            session()->put('cart', $cart);
+            session()->flash('cart-success', 'Cos actualizat!');
         }
-
-        $prod = Product::findOrFail($product->id);   //cautam produsul in baza de date dupa id
-
-        Cart::add(array(                            //il adaugam in Cart
-            'id' => $prod->id, 
-            'name' => $prod->name,
-            'qty' => 1, 
-            'price' => $prod->price,
-            'weight' => $prod->quantity,
-            'options' => ['image' => $prod->image]))
-                ->associate('Product');
-
-        //return redirect()->back()->with('success_message', 'Produs adaugat cu succes!');
+        return view('pages.cart')->with('cart-success', 'Produs actualizat');
     }
 
     //Functionalitati useri - parte de cos
     public function cart(){
-        return view('pages.cart');
+        return view('pages.cart', compact('cart'));
     }
 
     //Stergere produs din cos - functional 
     public function destroyCart(Request $request)
     {
-        $id = $request->id;
-
-        Cart::remove($id);
+        if($request->id) {
+            $cart = session()->get('cart');
+            if(isset($cart[$request->id])) {
+                unset($cart[$request->id]);
+                session()->put('cart', $cart);
+                }
+            session()->flash('cart-success', 'Produsul a fost sters.');
+            }
     }
 
     //Golire cos - functional
     public function emptyCart(){         
-        Cart::destroy(); 
-
+        session()->forget('cart');
         return redirect()->back()->with('cart-success', 'Cosul dumneavoastra de cumparaturi este gol!');
     } 
 
@@ -84,6 +126,35 @@ class ProductController extends Controller
         return view('products.create');
     }
 
+    //Plasare comanda
+    public function getCheckout(){   
+        $cart = session()->get('cart');
+
+        if(count((array) session('cart')) > 0) {
+            return view('pages.revieworder')->with('cart', $cart);
+        }else {
+            return view('pages.cart');
+        }
+    
+    }
+
+    //update user info - revieworder
+    public function updateUserInfo(Request $request, $id){
+
+        $user = User::findOrFail($request->id)->first();
+        $user-> firstname = $request->firstname;
+        $user-> lastname = $request->lastname;
+        $user-> email = $request->email;
+        $user-> address = $request->address;
+        $user-> phone = $request->phone;
+        $user-> county = $request->county;
+        $user-> city = $request->city;
+        $user-> zipcode = $request->zipcode;
+        $user->save();
+
+    }
+
+    //ADMIN - gestionare produse (resources)
     public function store(Request $request)
     {
         $this->validate($request, ['name'=>'required', 'slug'=>'required', 'quantity'=>'required', 'price'=>'required', 'stock'=>'required', 'image'=>'required', 'description'=>'required', 'properties'=>'required', 'uses'=>'required']);   //validarea datelor

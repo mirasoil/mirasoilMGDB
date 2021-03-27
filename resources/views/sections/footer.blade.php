@@ -5,11 +5,11 @@
     <div class="container first_class">
             <div class="row">
                 <div class="col-md-4 col-sm-6">
-                    <h3>Fii primul care află!</h3>
-                    <p>Abonează-te la newsletter-ul nostru.</p>
+                    <h3>{{ __('Be the first one that finds out!') }}</h3>
+                    <p>{{ __('Subscribe to our newsletter.') }}</p>
                 </div>
                 <div class="col-md-4 col-sm-6" id="subscribe-container">
-                <form method="post" action="{{url('newsletter')}}" class="newsletter">
+                <form method="post" action="{{url(app()->getLocale().'/newsletter')}}" class="newsletter">
                     @csrf
                     <input type="text" name="email" placeholder="Email Address"> 
                     <button class="newsletter_submit_btn" type="submit"><i class="fa fa-paper-plane"></i></button>  
@@ -48,7 +48,7 @@
             </div>  
                 </div>
                     <div class="clearfix"></div>
-                <div class="col-md-12"><h3 style="text-align: right;">Hai să socializăm!</h3></div>
+                <div class="col-md-12"><h3 style="text-align: right;">{{ __("Let's be friends") }}</h3></div>
                 </div>
             </div>
     </div>
@@ -59,7 +59,7 @@
                     <div class="footer-logo">
                         <img src="{{ url('img/Logo-mirasoil.png') }}" width="100" height="100" alt="logo" class="ml-5">
                     </div>
-                    <p>Magazin online pentru produsele tale favorite !</p>
+                    <p>{{ __('Your favorite products are now online!') }}</p>
                     <div itemscope itemtype="http://schema.org/LocalBusiness" class="d-none">
 
                         <p itemprop="name">MIRASOIL</p>
@@ -77,56 +77,56 @@
                     </div>
                 </div>
                 <div class="col-md-2 col-sm-6">
-                    <h3>Acces rapid</h3>
+                    <h3>{{ __('Quick access') }}</h3>
                     <ul class="footer-links">
-                        <li><a href="/">Acasă</a>
+                        <li><a href="{{ url(app()->getLocale()) }}">{{ __('Home') }}</a>
                         </li>
-                        <li><a href="/about">Despre noi</a>
+                        <li><a href="{{ url(app()->getLocale().'/about') }}">{{ __('About us') }}</a>
                         </li>
-                        <li><a href="/shop">Produse</a>
+                        <li><a href="{{ url(app()->getLocale().'/shop') }}">{{ __('Products') }}</a>
                         </li>
-                        <li><a href="/#contact">Contact</a>
+                        <li><a href="{{ url(app()->getLocale().'#contact') }}">{{ __('Contact') }}</a>
                         </li>
-                        <li><a href="/info" target="_blank">Termeni &amp; Condiții</a>
+                        <li><a href="{{ url(app()->getLocale().'/info') }}" target="_blank">{{ __('Terms') }} &amp; {{ __('Conditions') }}</a>
                         </li>
                         
                     </ul>
                 </div>
                 <div class="col-md-3 col-sm-6">
-                    <h3>Produsele noastre</h3>
+                    <h3>{{ __('Our products') }}</h3>
                     @if(Auth::guard('admin')->check())
                     <ul class="footer-category">
-                        <li><a href="/products/1">Ulei</a>
+                        <li><a href="{{ url(app()->getLocale().'/products/ulei') }}">{{ __('Oil') }}</a>
                         </li>
-                        <li><a href="/products/2">Hidrolat</a>
+                        <li><a href="{{ url(app()->getLocale().'/products/hidrolat') }}">{{ __('Floral water') }}</a>
                         </li>
-                        <li><a href="/products/3">Săpun</a>
+                        <li><a href="{{ url(app()->getLocale().'/products/sapun') }}">{{ __('Soap') }}</a>
                         </li>
-                        <li><a href="/products/4">Sirop</a>
+                        <li><a href="{{ url(app()->getLocale().'/products/sirop') }}">{{ __('Syrup') }}</a>
                         </li>
-                        <li><a href="/products/6">Buchete</a>
+                        <li><a href="{{ url(app()->getLocale().'/products/buchete') }}">{{ __('Bouquettes') }}</a>
                         </li>
                     </ul>
                     @else
                     <ul class="footer-category">
-                        <li><a href="/details/1">Ulei</a>
+                        <li><a href="{{ url(app()->getLocale().'/details/ulei') }}">{{ __('Oil') }}</a>
                         </li>
-                        <li><a href="/details/2">Hidrolat</a>
+                        <li><a href="{{ url(app()->getLocale().'/details/hidrolat') }}">{{ __('Floarl water') }}</a>
                         </li>
-                        <li><a href="/details/3">Săpun</a>
+                        <li><a href="{{ url(app()->getLocale().'/details/sapun') }}">{{ __('Soap') }}</a>
                         </li>
-                        <li><a href="/details/4">Sirop</a>
+                        <li><a href="{{ url(app()->getLocale().'/details/sirop') }}">{{ __('Syrup') }}</a>
                         </li>
-                        <li><a href="/details/6">Buchete</a>
+                        <li><a href="{{ url(app()->getLocale().'/details/buchete') }}">{{ __('Bouquettes') }}</a>
                         </li>
                     </ul>
                     @endif
                     <div class="clearfix"></div>
                 </div>
                 <div class="col-md-3 col-sm-6">
-                    <h3>Evenimente</h3>
+                    <h3>{{ __('Events') }}</h3>
                     <ul class="footer-links">
-                        <li><a href="#">Ședințe foto</a>
+                        <li><a href="#">{{ __('Photo sessions') }}</a>
                         </li>
 
                         <!-- <li><a href="#">Jobs &AMP; Internship Fair 2019</a>
