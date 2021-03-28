@@ -12,7 +12,7 @@ Route::group([
 
     Route::get('/', function(){
         return view('welcome');
-    });
+    })->name('home');
     
     //View pentru pagina despre noi - ruta este /about care apeleaza view-ul about din subdirectorul pages
     Route::get('/about', function(){
@@ -37,11 +37,11 @@ Route::group([
     Route::get('/details/{id}', 'ProductController@showUser')->name('details');
 
     //pentru formularul de contact de pe pagina principala
-    Route::get('/contact', 'ContactUsFormController@createForm');
+    Route::get('/contact', 'ContactUsFormController@createForm')->name('contact');
     Route::post('/contact', 'ContactUsFormController@ContactUsForm')->name('contact.store');
 
     //pentru newsletter - parte de backend, redirectarea se face pe pagina de home la sectiunea contact
-    Route::get('/newsletter', 'NewsletterController@create');
+    Route::get('/newsletter', 'NewsletterController@create')->name('newsletter');
     Route::post('/newsletter', 'NewsletterController@store');
 
     Auth::routes();
@@ -51,28 +51,27 @@ Route::group([
     Route::get('/register/admin', 'Auth\RegisterController@showAdminRegisterForm')->name('register.admin');
     Route::get('/register/user', 'Auth\RegisterController@showUserRegisterForm')->name('register.user');
     
-    Route::post('/login/admin', 'Auth\LoginController@adminLogin');
+    Route::post('/login/admin', 'Auth\LoginController@adminLogin')->name('login.admin');
     Route::post('/login/user', 'Auth\LoginController@userLogin')->name('login.default');
     Route::post('/register/admin', 'Auth\RegisterController@createAdmin')->name('register');
     Route::post('/register/user', 'Auth\RegisterController@createUser')->name('register');
     
-    Route::view('/home', 'home')->middleware('auth');
     Route::view('/admin', 'admin')->name('admin');
-    Route::view('/user', 'user');
+    Route::view('/user', 'user')->name('user.dashboard');
     
     Route::middleware(['auth:admin'])->group(function () { 
-        Route::GET('/products', 'ProductController@index');
+        Route::GET('/products', 'ProductController@index')->name('products');
         Route::resource('products','ProductController');
 
         //View pentru pagina specifica fiecarui produs - ruta este /products/id-ul produsului care apeleaza view-ul show din subdirectorul products
         Route::get('/products/{id}', function(){
             return view('products.show');
-        });    
+        })->name('products.view');    
 
         //orders
         Route::get('orders', 'OrderController@getOrders')->name('orders');   //display all orders
-        Route::get('order/{id}', 'OrderController@getOrderSpecs');
-        Route::get('order/edit/{id}', 'OrderController@editOrder');
+        Route::get('order/{id}', 'OrderController@getOrderSpecs')->name('order.details');
+        Route::get('order/edit/{id}', 'OrderController@editOrder')->name('order.edit');
         Route::patch('order/edit/{id}', 'OrderController@updateOrder')->name('orders.update');
         Route::delete('order/{id}', 'OrderController@destroyOrder')->name('order.destroy');
     
@@ -91,14 +90,14 @@ Route::group([
             Route::get('/cart', 'ProductController@cart')->name('cart');  //cosul propriu zis - user
             Route::patch('/update-cart', 'ProductController@updateCart')->name('update-cart');  //modific cos
             Route::delete('/delete-from-cart', 'ProductController@destroyCart')->name('shop.destroy');
-            Route::get('cart/success', 'ProductController@emptyCart');  //golire cos
-            Route::get('/revieworder', 'ProductController@getCheckout'); //pentru confirmarea comenzii
+            Route::get('cart/success', 'ProductController@emptyCart')->name('cart.success');  //golire cos
+            Route::get('/revieworder', 'ProductController@getCheckout')->name('revieworder'); //pentru confirmarea comenzii
             Route::patch('/revieworder/{id}', 'ProductController@updateUserInfo')->name('review-details'); //pentru pagina de revieworder, actualizare date utilizator
             Route::post('/orders', 'OrderController@store')->name('orders.store');
 
             //pagina pentru istoricul comenzilor
-            Route::get('/myorders', 'OrderController@index');
-            Route::get('/myorder/{id}', 'OrderController@getMyOrderSpecs');
+            Route::get('/myorders', 'OrderController@index')->name('myorders');
+            Route::get('/myorder/{id}', 'OrderController@getMyOrderSpecs')->name('myorder');
     
             Route::get('/user', 'UserController@index')->name('user');    //pagina de dashboard pentru useri, formularul de update al datelor
             Route::patch('user/{id}', 'UserController@update');    //modificarea propriu-zisa a datelor in tabela dupa id-ul userului

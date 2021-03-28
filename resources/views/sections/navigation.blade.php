@@ -15,13 +15,20 @@
             <div class="row mx-5" style="width:10%;" id="mini-cart">
               <a href="{{ url(app()->getLocale().'/cart') }}">
                 <button type="button" class="btn btn-info"  id="cart-button" style="height:38px;;">
-                  <i class="fa fa-shopping-cart" aria-hidden="true"></i> Coș <span class="badge badge-pill badge-danger">{{ count((array) session('cart')) }}</span>
+                  <i class="fa fa-shopping-cart" aria-hidden="true"></i> {{ __('Cart') }} <span class="badge badge-pill badge-danger">{{ count((array) session('cart')) }}</span>
                 </button>
               </a>
             </div>
           @endif
         @endif
         <div class="butonDreapta">
+        <ul class="nav-item d-inline-block ml-auto mr-5" style="list-style:none;">
+          <li id="language-switcher"><language-switcher
+            locale="{{ app()->getLocale() }}"
+            link-ro="{{ route(Route::currentRouteName(), 'ro') }}"
+            link-en="{{ route(Route::currentRouteName(), 'en') }}"></language-switcher>
+          </li>
+        </ul>
           <button type="button" id="sidebarCollapseRight" class="navbar-btn d-inline-block ml-auto active">
             <span>
               <i class="fa fa-user" aria-hidden="true"></i>
