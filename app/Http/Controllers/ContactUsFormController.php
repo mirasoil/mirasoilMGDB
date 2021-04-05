@@ -38,9 +38,15 @@ class ContactUsFormController extends Controller
             $message->from($request->email);
             $message->to('digambersingh126@gmail.com', 'Admin')->subject($request->get('subject'));
         });
+
+        $successMessageEn = "We have received your message and would like to thank you for writing to us.";
+        $successMessageRo = "Mulțumim pentru mesajul tău ! Revenim în cel mai scurt timp cu un răspuns !";
         
-          // 
-          return back()->with('success', 'We have received your message and would like to thank you for writing to us.');
+          if (app()->getLocale() == "ro") {
+              return back()->with("success", $successMessageRo);
+          } else if (app()->getLocale() == "en") {
+            return back()->with("success", $successMessageEn);
+          }
       }
   
 }

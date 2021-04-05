@@ -1,3 +1,8 @@
+@inject('app', 'Illuminate\Contracts\Foundation\Application')
+@inject('urlGenerator', 'Illuminate\Routing\UrlGenerator')
+@section('extra-scripts')
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet"/>
+@endsection
 <nav class="mobile navbar navbar-expand-lg sticky-top navbar-light bg-light" id="mobile">
     <div class="container-fluid">
         <button type="button" id="sidebarCollapse" class="navbar-btn active">
@@ -5,9 +10,7 @@
             <span></span>
             <span></span>
         </button>
-        <div class="d-flex justify-content-center">
-            <span><a href="{{ route('/', app()->getLocale()) }}"><img src="{{URL::asset('/img/Logo-mirasoil.png')}}" alt="Logo"  width="100"></a></span> 
-        </div> 
+        @include('sections.search')
         @if(Auth::guard('user')->check()) 
           @if(Request::is(app()->getLocale().'/shop') OR Request::is(app()->getLocale().'/cart')) 
 
@@ -23,10 +26,10 @@
         @endif
         <div class="butonDreapta">
         <ul class="nav-item d-inline-block ml-auto mr-5" style="list-style:none;">
-          <li id="language-switcher"><language-switcher
+          <!-- <li id="language-switcher"><language-switcher
             locale="{{ app()->getLocale() }}"
             link-ro="{{ route(Route::currentRouteName(), 'ro') }}"
-            link-en="{{ route(Route::currentRouteName(), 'en') }}"></language-switcher>
+            link-en="{{ route(Route::currentRouteName(), 'en') }}"></language-switcher> -->
           </li>
         </ul>
           <button type="button" id="sidebarCollapseRight" class="navbar-btn d-inline-block ml-auto active">

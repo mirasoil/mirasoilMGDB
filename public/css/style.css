@@ -441,6 +441,7 @@ div.col-md-6.findButton{
 #services h1 {
    text-align: center;
    color: #efefef !important;
+   font-family: Georgia, serif;
    padding-bottom: 10px;
 }
 #services .card {

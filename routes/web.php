@@ -44,6 +44,9 @@ Route::group([
     Route::get('/newsletter', 'NewsletterController@create')->name('newsletter');
     Route::post('/newsletter', 'NewsletterController@store');
 
+    //for search bar
+    Route::get('/search', 'SearchController@search')->name('search');
+
     Auth::routes();
 
     Route::get('/login/admin', 'Auth\LoginController@showAdminLoginForm')->name('login.admin');
@@ -102,6 +105,10 @@ Route::group([
             Route::get('/user', 'UserController@index')->name('user');    //pagina de dashboard pentru useri, formularul de update al datelor
             Route::patch('user/{id}', 'UserController@update');    //modificarea propriu-zisa a datelor in tabela dupa id-ul userului
     
+            //generating invoice
+            Route::get('/checkout', 'InvoiceController@show')->name('invoice.show');
+            Route::post('/checkout/{id}', 'InvoiceController@show')->name('invoice.display');
+
     });
 
     Route::group(['middleware' => ['guest']], function () {

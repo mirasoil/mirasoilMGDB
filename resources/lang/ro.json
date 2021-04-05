@@ -23,6 +23,7 @@
     "Our products": "Produsele noastre",
     "Floral water": "Apă florală",
     "Essential oil": "Ulei esențial",
+    "Essential Oil": "Ulei esențial",
     "Lavender Oil": "Ulei esențial de lavandă",
     "Soap": "Săpun",
     "Syrup": "Sirop",
@@ -157,6 +158,10 @@
     "Photo sessions": "Ședințe foto",
     "Email Address": "Adresa de email",
     "Users": "Utilizatori",
-    "Natural lavender products": "Produse naturale din lavandă"
+    "Natural lavender products": "Produse naturale din lavandă",
+    "Product not found!": "Nu s-a găsit produsul căutat!",
+    "Follow us !": "Urmărește-ne !",
+    "Search product": "Caută produs",
+    "We have received your message and would like to thank you for writing to us.": "Mulțumim pentru mesajul tău ! Revenim în cel mai scurt timp cu un răspuns !"
     
 }

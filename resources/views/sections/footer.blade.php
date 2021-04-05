@@ -111,7 +111,7 @@
                     <ul class="footer-category">
                         <li><a href="{{ url(app()->getLocale().'/details/ulei') }}">{{ __('Oil') }}</a>
                         </li>
-                        <li><a href="{{ url(app()->getLocale().'/details/hidrolat') }}">{{ __('Floarl water') }}</a>
+                        <li><a href="{{ url(app()->getLocale().'/details/hidrolat') }}">{{ __('Floral water') }}</a>
                         </li>
                         <li><a href="{{ url(app()->getLocale().'/details/sapun') }}">{{ __('Soap') }}</a>
                         </li>

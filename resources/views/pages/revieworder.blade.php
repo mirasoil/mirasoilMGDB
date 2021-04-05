@@ -244,12 +244,31 @@
             </form>
         </div>  
     </div>
-    <button class="btn btn-primary btn-lg btn-block" type="submit"><a href="{{ url(app()->getLocale().'/checkout') }}" style="text-decoration:none;color:white;">{{ __('Proceed to payment') }}</a></button>
+    <button id="invoice-generator" class="btn btn-primary btn-lg btn-block" type="submit" data-id="{{ Auth::user()->id }}">{{ __('Proceed to payment') }}</button>
+    <a href="{{ url(app()->getLocale().'/checkout') }}">INVOICE</a>
 </div>
 @for ($i = 0; $i < 5; $i++)
     <br>
 @endfor
 <script>
+$('#invoice-generator').click(function(event){
+    event.preventDefault();
+
+    var id = $(this).data('id');
+
+    $.ajax({
+        url: "{{ url(app()->getLocale().'/checkout/') }}"+'/'+id,
+        type:"POST",
+        data:{
+            "_token": "{{ csrf_token() }}",
+            id:id,
+        },
+        // success: function(response){
+        //     console.dir(response);   
+        // },
+    });    
+});
+
 $('#update-user-details').click(function(event){
       event.preventDefault();
 
