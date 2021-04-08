@@ -15,10 +15,11 @@ class UserController extends Controller
         return view('user');
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request){
 
         //dd($request->id);
-        $user = User::findOrFail($request->id);
+        $id = request('user_id');
+        $user = User::findOrFail($id);
         $user-> firstname = $request->firstname;
         $user-> lastname = $request->lastname;
         $user-> email = $request->email;
@@ -29,7 +30,7 @@ class UserController extends Controller
         $user-> zipcode = $request->zipcode;
         $user->save();
 
-        return redirect()->back()->with('user-success', 'Informatiile au fost actualizate!');
+        return json_encode(array('statusCode'=>200, 'user-success' => 'Informatiile au fost actualizate!'));
     }
 
     // Display all the users
@@ -48,11 +49,11 @@ class UserController extends Controller
         // dd($items);
     } 
     
-    // Edit a user's details
+    // Displays the user edit view
     public function editUser($id)
     {
-        $id = request()->segment(count(request()->segments()));
-        $user = User::find($id);
+        $id = request()->segment(count(request()->segments()));         
+        $user = User::find($id);                                    //finds the user in the database using the url's 3rd segment (the id)
         return view('users.edit', compact('user'));
     }
 
@@ -60,25 +61,17 @@ class UserController extends Controller
     // Update user details
     public function updateUser(Request $request, $id)
     {
-        $id = request()->segment(count(request()->segments()));
-        $this->validate($request, [
-            'phone' => 'required',
-            'address' => 'required',
-            'county' => 'required',
-            'city' => 'required',
-            'zipcode' => 'required',
-        ]);
-        User::find($id)->update($request->all());        //in model trimitem pentru id-ul specific toate campurile cu date de actualizat
-        return redirect()->route('users', app()->getLocale())->with('success', 'Detalii utilizator actualizate cu succes!');
-        // dd($request->all());
+        $id = request('user_id');
+        User::find($id)->update($request->all());
+        return json_encode(array('statusCode'=>200, 'success' => 'Detalii utilizator actualizate cu succes!'));
     }
 
     // Delete a user
-    public function destroyUser($id)
+    public function destroyUser(Request $request)
     {
-        $id = request()->segment(count(request()->segments()));
+        $id = request('id');
         User::find($id)->delete();
-        return redirect()->route('users', app()->getLocale())->with('success', 'Utilizator sters cu succes!');
+        return json_encode(array('statusCode'=>200, 'success' => 'Utilizator sters cu succes!'));
     }
 
 }

@@ -34,7 +34,7 @@
         @if (count($products) > 0) <!---Numara cate produse sunt afisate pe ecran. Daca numarul e pozitiv, adica daca exista produse atunci le afisam. Cine e $products ? ---->
             <!---Afisarea propriu zisa a produselor--->
             @foreach ($products as $key => $product)
-            <tr>
+            <tr id="prod-{{$product->slug}}">
                 <td class="d-none">{{ ++$i }}</td>
                 <td><strong><i>{{ $product->slug }}</i></strong></td>
                 <td><a href="{{ url(app()->getLocale().'/products/'.$product->slug) }}" style="text-decoration:none;color:gray;font-size:18px;"><strong>{{ $product->name }}</strong></a></td>
@@ -48,9 +48,7 @@
                 <td>
                     <a class="btn btn-success m-2" href="{{ url(app()->getLocale().'/products/'.$product->slug) }}">{{ __('Details') }}</a><br>
                     <a class="btn btn-primary m-2" href="{{ url(app()->getLocale().'/products/'.$product->slug.'/edit') }}">{{ __('Modify') }}</a><br>
-                    {{ Form::open(['method' => 'DELETE','url' => [app()->getLocale().'/products/'.$product->slug],'style'=>'display:inline']) }}   <!--se activeaza metoda destroy din ProductController-->
-                    {{ Form::submit(__('Delete'), ['class' => 'btn btn-danger m-2']) }} <!---metoda delete din ProductController functia destroy---->
-                    {{ Form::close() }}
+                    <button class="btn btn-danger m-2" id="{{ $product->slug }}" onclick="deleteProduct(this.id)">{{ __('Delete') }}</button>
                 </td>
             </tr>
              @endforeach
@@ -63,8 +61,27 @@
         <div class="float-right m-4">
             <a class="btn btn-info m-4" href="{{ url(app()->getLocale().'/admin') }}">{{ __('Back') }}</a>
         </div>
-        <!-- Introduce nr pagina -->
+        <!-- Page numbering -->
         {{$products->render()}} 
     </div>
  </div>
+ <script>
+//Delete button
+function deleteProduct(slug){
+    if(confirm('Are you sure ?')){
+        $.ajax({
+            url : "{{ url(app()->getLocale().'/products/') }}"+'/'+slug,
+            type: "DELETE",
+            data:{
+                _token:'{{ csrf_token() }}',
+                'slug': slug
+            },
+            success: function(data){
+                //window.location.href = "{{ route('products.index', app()->getLocale(), [ session(['success' => 'Produs sters cu succes!'])]) }}";
+                $("#prod-"+slug).remove();
+            }
+        });
+    }
+}
+ </script>
 @endsection

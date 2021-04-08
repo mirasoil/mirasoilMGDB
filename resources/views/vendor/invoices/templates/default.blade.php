@@ -5,7 +5,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
         <link rel="stylesheet" href="{{ public_path('vendor/invoices/bootstrap.min.css') }}">
-
         <style type="text/css" media="screen">
             * {
                 font-family: "DejaVu Sans";
@@ -41,12 +40,12 @@
                 <tr>
                     <td class="border-0 pl-0" width="70%">
                         <h4 class="text-uppercase">
-                            <strong>{{ $invoice->name }}</strong>
+                            <strong>Factura</strong>
                         </h4>
                     </td>
                     <td class="border-0 pl-0">
-                        <p>{{ __('invoices::invoice.serial') }} <strong>{{ $invoice->getSerialNumber() }}</strong></p>
-                        <p>{{ __('invoices::invoice.date') }}: <strong>{{ $invoice->getDate() }}</strong></p>
+                        <p>Număr: <strong>{{ $invoice->getSerialNumber() }}</strong></p>
+                        <p>Data: <strong>{{ $invoice->getDate() }}</strong></p>
                     </td>
                 </tr>
             </tbody>
@@ -70,7 +69,7 @@
                     <td class="px-0">
                         @if($invoice->seller->name)
                             <p class="seller-name">
-                            <strong>Furnizor:</strong> SC Johnny Company Europa 
+                            <strong>Furnizor: </strong> {{ $invoice->seller->name }}
                             </p>
                         @endif
 
@@ -91,7 +90,11 @@
                         </p>
                         
                         <p class="seller-address">
-                            <strong>Punct de lucru:</strong> Str. Principală, Nr. 130, Miraslău, Alba, 517470
+                            <strong>Punct de lucru:</strong> Str. Principală, Nr. 130, Miraslău, Alba
+                        </p>
+
+                        <p class="seller-swift">
+                            <strong>Cont bancar:</strong> RO58BTRL00801202R0XXXXXX
                         </p>
                         <!-- @if($invoice->seller->code)
                             <p class="seller-code">
@@ -150,14 +153,14 @@
         </table>
 
         {{-- Table --}}
-        <table class="table">
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th scope="col" class="border-0 pl-0">{{ __('invoices::invoice.description') }}</th>
                     @if($invoice->hasItemUnits)
                         <th scope="col" class="text-center border-0">{{ __('invoices::invoice.units') }}</th>
                     @endif
-                    <th scope="col" class="text-center border-0">{{ __('invoices::invoice.quantity') }}</th>  <!----Should be orders ----->
+                    <th scope="col" class="text-center border-0">{{ __('invoices::invoice.quantity') }}</th>  
                     <th scope="col" class="text-right border-0">{{ __('invoices::invoice.price') }}</th>
                     @if($invoice->hasItemDiscount)
                         <th scope="col" class="text-right border-0">{{ __('invoices::invoice.discount') }}</th>

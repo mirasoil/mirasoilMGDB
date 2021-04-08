@@ -21,7 +21,7 @@
         </tr>
         @if(count($users) > 0)
             @foreach ($users as $key =>$user)
-            <tr>
+            <tr id="user-{{ $user->id }}">
                 <div class="d-none">{{ ++$i }}</div>
                 <td>{{$user->id}}</td>
                 <td><a href="{{ url(app()->getLocale().'/user/'.$user->id) }}" style="text-decoration:none;color:gray;font-size:18px;"><strong>{{ $user->firstname }}</strong></a></td>
@@ -32,9 +32,7 @@
                 <td class="text-center">
                     <a class="btn btn-success m-2" href="{{ url(app()->getLocale().'/user/'.$user->id) }}">{{ __('Details') }}</a><br>
                     <a class="btn btn-primary m-2" href="{{ url(app()->getLocale().'/user/edit/'.$user->id) }}">{{ __('Modify') }}</a><br>
-                    {{ Form::open(['method' => 'DELETE','url' => [app()->getLocale().'/user/'.$user->id],'style'=>'display:inline']) }}   <!--se activeaza metoda destroy din ProductController-->
-                    {{ Form::submit(__('Delete'), ['class' => 'btn btn-danger m-2']) }} <!---metoda delete din ProductController functia destroy---->
-                    {{ Form::close() }}
+                    <button class="btn btn-danger m-2" id="{{ $user->id }}" onclick="deleteUser(this.id)">{{ __('Delete') }}</button>
                 </td>
             </tr>
              @endforeach
@@ -51,4 +49,21 @@
     </div>
  </div>
 </div>
+<script>
+function deleteUser(id){
+    if(confirm('Are you sure you want to permanently remove the user ? This action cannot be undone.')){
+        $.ajax({
+            url : "{{ url(app()->getLocale().'/user/') }}"+'/'+id,
+            type: "DELETE",
+            data:{
+                _token:'{{ csrf_token() }}',
+                'id': id
+            },
+            success: function(data){
+                $("#user-"+id).remove();
+            }
+        });
+    }
+}
+</script>
 @endsection

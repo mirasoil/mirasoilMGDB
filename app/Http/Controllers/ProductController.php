@@ -16,7 +16,7 @@ class ProductController extends Controller
 
     public function index(Request $request)
     {
-        $products = Product::orderBy('name','ASC')->paginate(5);   //apelam modelul care va face legatura cu BD de unde va afisa produsele
+        $products = Product::orderBy('created_at','DESC')->paginate(5);   //apelam modelul care va face legatura cu BD de unde va afisa produsele
         $value = ($request->input('page',1)-1)*5;
         return view('products.list', compact('products'))->with('i', $value);     //compact substituie ->with, e o metoda comprimata
     }
@@ -155,17 +155,33 @@ class ProductController extends Controller
     }
 
     //ADMIN - gestionare produse (resources)
-    public function store(Request $request)
+    public function storeOk(Request $request)
     {
         $this->validate($request, ['name'=>'required', 'slug'=>'required', 'quantity'=>'required', 'price'=>'required', 'stock'=>'required', 'image'=>'required', 'description'=>'required', 'properties'=>'required', 'uses'=>'required']);   //validarea datelor
         //crearea unui produs nou
         Product::create($request->all());       //apelam modelul cu functia predefinita create prin care trimitem toate argumentele
         return redirect()->route('products.index', app()->getLocale())->with('succes', 'Produsul a fost creat cu succes!');
     }
+    public function store(Request $request)
+    {
+        $request->validate([
+            'name'=>'required', 
+            'slug'=>'required', 
+            'quantity'=>'required', 
+            'price'=>'required', 
+            'stock'=>'required', 
+            'image'=>'required', 
+            'description'=>'required', 
+            'properties'=>'required', 
+            'uses'=>'required']);   //validarea datelor
+        //crearea unui produs nou
+        Product::create($request->all());       //apelam modelul cu functia predefinita create prin care trimitem toate argumentele
+        //return redirect()->route('products.index', app()->getLocale())->with('succes', 'Produsul a fost creat cu succes!');
+        return json_encode(array('statusCode'=>200, 'success' => 'Produs adaugat cu succes!'));
+    }
 
     public function show(Request $request, $id)
     {
-        
         $slug = request()->segment(count(request()->segments()));
         $product = Product::where('slug', $slug)->first();
         return view('products.show', compact('product'));
@@ -178,29 +194,30 @@ class ProductController extends Controller
         return view('products.edit', compact('product'));
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $slug)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'slug' => 'required',
-            'quantity' => 'required',
-            'price' => 'required',
-            'stock' => 'required',
-            'image' => 'required',
-            'description' => 'required',
-            'properties' => 'required',
-            'uses' => 'required',
-        ]);
-        $slug = request()->segments()[2];  //acessing the slug from the link as the 3rd parameter of the array 
-        Product::where('slug', $slug)->update($request->all());        //in model trimitem pentru id-ul specific toate campurile cu date de actualizat
-        return redirect()->route('products.index', app()->getLocale())->with('success', 'Produs actualizat cu succes!');
+        $slug = request('slug');
+        $product = Product::where('slug', $slug)->first();        //in model trimitem pentru id-ul specific toate campurile cu date de actualizat
+        $product->name = request('name');
+        $product->slug = request('slug');
+        $product->quantity = request('quantity');
+        $product->price = request('price');
+        $product->stock = request('stock');
+        $product->image = request('image');
+        $product->description = request('description');
+        $product->properties = request('properties');
+        $product->uses = request('uses');
+        $product->save();
+        // return redirect()->route('products.index', app()->getLocale())->with('success', 'Produs actualizat cu succes!');
+        return json_encode(array('statusCode'=>200, 'success' => 'Produs actualizat cu succes!'));
     }
 
-    public function destroy()
+    public function destroy(Request $request)
     {
-        $slug = request()->segments()[2];
+        $slug = request('slug');
         Product::where('slug', $slug)->delete();
-        return redirect()->route('products.index', app()->getLocale())->with('success', 'Produs sters cu succes!');
+        //return redirect()->route('products.index', app()->getLocale())->with('success', 'Produs sters cu succes!');
+        return json_encode(array('statusCode'=>200, 'success' => 'Produs sters cu succes!'));
     }
 
 }

@@ -21,10 +21,11 @@
 
                 <div class="card-body">
                     <h1>{{ __('Welcome back') }}, {{ Auth::user()->firstname }} !</h1>
-                        <form method="POST" action="{{ url(app()->getLocale().'/user',['id' => $id=Auth::user()->id]) }}">
+                        <form id="update-data-form">
                             @csrf
                             @method('PATCH')
                             <div class="form-group row">
+                            <input id="userId" type="text" class="form-control d-none" value="{{ Auth::user()->id }}">
                             <label for="firstname" class="col-md-4 col-form-label text-md-right">{{ __('First Name') }}</label>
 
                             <div class="col-md-6">
@@ -136,11 +137,9 @@
                                 @enderror
                             </div>
                         </div>
-
-
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
+                                <button class="btn btn-primary" id="edit-user-data">
                                     {{ __('Save') }}
                                 </button>
                             </div>
@@ -152,7 +151,46 @@
     </div>
 </div>
 
-@for ($i = 0; $i < 23; $i++)
+@for ($i = 0; $i < 10; $i++)
     <br>
 @endfor
+<script>
+$(document).ready(function(){
+
+$(document).on("click", "#edit-user-data", function() { 
+    var user_id = $('#userId').val();
+    var url = "{{ url(app()->getLocale().'/user') }}"+'/'+user_id;
+    $.ajax({
+        url: url,
+        type: "PATCH",
+        cache: false,
+        data:{
+            _token:'{{ csrf_token() }}',
+            user_id: user_id,
+            firstname: $('#firstname').val(),
+            lastname: $('#lastname').val(),
+            email: $('#email').val(),
+            phone: $('#phone').val(),
+            address: $('#address').val(),
+            county: $('#county').val(),
+            city: $('#city').val(),
+            zipcode: $('#zipcode').val()
+        },
+        success: function(dataResult){
+            dataResult = JSON.parse(dataResult);
+         if(dataResult.statusCode)
+         {
+            $(".alert").addClass("alert-success")  //stilizare
+            $("#message-response").html("Informațiile au fost actualizate")  //continutul mesajului  
+            $('#update-data-form').load(); //resetare formular pentru a afisa detaliile noi introduse 
+         }
+         else{
+             alert("Internal Server Error");
+         }
+            
+        }
+    });
+}); 
+});
+</script>
 @endsection

@@ -28,15 +28,15 @@ return [
     ],
 
     'currency' => [
-        'code'                => 'eur',
+        'code'                => 'RON',
         /**
          * Usually cents
          * Used when spelling out the amount and if your currency has decimals.
          *
          * Example: Amount in words: Eight hundred fifty thousand sixty-eight EUR and fifteen ct.
          */
-        'fraction'            => 'ct.',
-        'symbol'              => '€',
+        'fraction'            => 'ban',
+        'symbol'              => 'RON',
         /**
          * Example: 19.00
          */
@@ -44,12 +44,12 @@ return [
         /**
          * Example: 1.99
          */
-        'decimal_point'       => '.',
+        'decimal_point'       => ',',
         /**
          * By default empty.
          * Example: 1,999.00
          */
-        'thousands_separator' => '',
+        'thousands_separator' => '.',
         /**
          * Supported tags {VALUE}, {SYMBOL}, {CODE}
          * Example: 1.99 €
@@ -78,11 +78,11 @@ return [
          * Default attributes for Seller::class
          */
         'attributes' => [
-            'name'          => 'Towne, Smith and Ebert',
-            'address'       => '89982 Pfeffer Falls Damianstad, CO 66972-8160',
-            'code'          => '41-1985581',
-            'vat'           => '123456789',
-            'phone'         => '760-355-3930',
+            'name'          => 'SC Johnny Company Europa',
+            'address'       => 'Str. Cuza Voda 12, Aiud, Alba',
+            'code'          => 'RO1754002',
+            'vat'           => 'J1/724/1992',
+            'phone'         => '0754916986',
             'custom_fields' => [
                 /**
                  * Custom attributes for Seller::class
@@ -90,7 +90,8 @@ return [
                  * Used to display additional info on Seller section in invoice
                  * attribute => value
                  */
-                'SWIFT' => 'BANK101',
+                'cont'  => 'RO58BTRL00801202R0XXXXXX, Banca Transilvania',
+                'punct de lucru' => 'Str. Principală, Nr. 130, Miraslău, Alba, 517470',
             ],
         ],
     ],

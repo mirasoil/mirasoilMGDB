@@ -29,7 +29,7 @@
           <!-- <li id="language-switcher"><language-switcher
             locale="{{ app()->getLocale() }}"
             link-ro="{{ route(Route::currentRouteName(), 'ro') }}"
-            link-en="{{ route(Route::currentRouteName(), 'en') }}"></language-switcher> -->
+            link-en="{{ route(Route::currentRouteName(), 'en') }}"></language-switcher> --> 
           </li>
         </ul>
           <button type="button" id="sidebarCollapseRight" class="navbar-btn d-inline-block ml-auto active">

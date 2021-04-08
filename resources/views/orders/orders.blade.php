@@ -21,7 +21,7 @@
                 <th>{{ __('Actions') }}</th>
             </tr>
             @foreach($orders as $order)
-            <tr>
+            <tr id="order-{{ $order->id }}">
                 <div class="d-none">{{ ++$i }}</div>
                 <td>
                     <a href="{{ url(app()->getLocale().'/order/'.$order['id']) }}">{{ $order['id'] }}</a>
@@ -40,9 +40,7 @@
                 <td> 
                 <a class="btn btn-success m-2" href="{{ url(app()->getLocale().'/order',$order->id) }}">{{ __('Details') }}</a><br>
                     <a class="btn btn-primary m-2" href="{{ url(app()->getLocale().'/order/edit',$order->id) }}">{{ __('Modify') }}</a><br>
-                    {{ Form::open(['method' => 'DELETE','url' => [app()->getLocale().'/order/'.$order['id']],'style'=>'display:inline']) }}   <!--se activeaza metoda destroy din ProductController-->
-                    {{ Form::submit(__('Delete'), ['class' => 'btn btn-danger m-2']) }} <!---metoda delete din ProductController functia destroy---->
-                    {{ Form::close() }}
+                    <button class="btn btn-danger m-2" id="{{ $order->id }}" onclick="deleteOrder(this.id)">{{ __('Delete') }}</button>
                 </td>
             </tr>
             @endforeach
@@ -57,4 +55,21 @@
  @for($i=0;$i<=7;$i++)
  <br>
  @endfor
+ <script>
+ function deleteOrder(id){
+    if(confirm('Are you sure you want to permanently delete this order ? This action can\'t be undone.')){
+        $.ajax({
+            url : "{{ url(app()->getLocale().'/order/') }}"+'/'+id,
+            type: "DELETE",
+            data:{
+                _token:'{{ csrf_token() }}',
+                'id': id
+            },
+            success: function(data){
+                $("#order-"+id).remove();
+            }
+        });
+    }
+}
+ </script>
 @endsection

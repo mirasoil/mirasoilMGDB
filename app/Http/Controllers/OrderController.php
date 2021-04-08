@@ -95,7 +95,7 @@ class OrderController extends Controller
         // dd($items);
     }
 
-    //ORDERS for admin
+    //ORDERS for ADMIN
     function getOrders(Request $request){
 
         // $orders = Order::all();
@@ -145,30 +145,18 @@ class OrderController extends Controller
     }
 
     // Update order details
-    public function updateOrder(Request $request, $id)
+    public function updateOrder(Request $request)
     {
-        $id = request()->segment(count(request()->segments()));
-        $this->validate($request, [
-            'billing_fname' => 'required',
-            'billing_lname' => 'required',
-            'billing_email' => 'required',
-            'billing_phone' => 'required',
-            'billing_address' => 'required',
-            'billing_county' => 'required',
-            'billing_city' => 'required',
-            'billing_zipcode' => 'required',
-            'billing_total' => 'required',
-        ]);
-        Order::find($id)->update($request->all());        //in model trimitem pentru id-ul specific toate campurile cu date de actualizat
-        return redirect()->route('orders', app()->getLocale())->with('success', 'Comanda actualizata cu succes!');
-        // dd($order);
+        $id = request('order_id');
+        Order::find($id)->update($request->all());
+        return json_encode(array('statusCode'=>200, 'success' => 'Detalii comanda actualizate cu succes!'));
     }
 
     //Delete an order
-    public function destroyOrder($id)
+    public function destroyOrder(Request $request)
     {
-        $id = request()->segment(count(request()->segments()));
+        $id = request('id');
         Order::find($id)->delete();
-        return redirect()->route('orders', app()->getLocale())->with('success', 'Comanda sters cu succes!');
+        return json_encode(array('statusCode'=>200, 'success' => 'Comanda a fost stearsa cu succes!'));
     }
 }

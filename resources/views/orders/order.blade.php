@@ -79,7 +79,8 @@
             </tbody>
          </table>
          <div class="float-right m-4">
-            <a class="btn btn-info m-4" href="{{ url(app()->getLocale().'/orders') }}">{{ __('Back') }}</a>
+            <a class="btn btn-dark" href="{{ url(app()->getLocale().'/invoice/'.$order->id) }}">{{ __('Invoice') }}</a>
+            <a class="btn btn-info ml-2" href="{{ url(app()->getLocale().'/orders') }}">{{ __('Back') }}</a>
         </div>
     </div>
   </div>
