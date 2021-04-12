@@ -7,10 +7,13 @@ use Illuminate\Notifications\Notifiable;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Illuminate\Auth\Authenticatable as AuthenticatableTrait;
 use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Auth\Passwords\CanResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use App\ResetPasswordNotification;
 
-class User extends Eloquent implements Authenticatable
+class User extends Eloquent implements Authenticatable,CanResetPasswordContract 
 {
-    use AuthenticatableTrait;
+    use AuthenticatableTrait,CanResetPassword;
     use Notifiable;
 
     protected $connection = 'mongodb';
@@ -24,4 +27,9 @@ class User extends Eloquent implements Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+    
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
+    }
 }

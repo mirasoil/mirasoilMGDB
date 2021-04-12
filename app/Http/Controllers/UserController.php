@@ -30,7 +30,7 @@ class UserController extends Controller
         $user-> zipcode = $request->zipcode;
         $user->save();
 
-        return json_encode(array('statusCode'=>200, 'user-success' => 'Informatiile au fost actualizate!'));
+        return json_encode(array('statusCode'=>200));
     }
 
     // Display all the users

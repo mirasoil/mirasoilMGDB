@@ -26,11 +26,7 @@
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
 
-  
-  
-  
-  
-          /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
+/* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
   function openNav() {
     
     document.getElementById("mySidebar").style.width = "250px";
@@ -59,6 +55,40 @@
     document.getElementById("main1").style.marginRight = "0";
   }
   
+let show = () => {
+  let homeSubmenu = document.getElementById('homeSubmenu');
+  let collapse = homeSubmenu.previousElementSibling;
+  if (collapse.getAttribute('aria-expanded') === 'true') {
+    collapse.setAttribute('aria-expanded', 'false');
+  } 
+}
+  show();
+
+  // let homeSubmenu = document.getElementById('homeSubmenu');
+  // let collapse = homeSubmenu.previousElementSibling;
+  // collapse.addEventListener("click", function() {
+  //   if (collapse.getAttribute('aria-expanded') === 'true') {
+  //     collapse.setAttribute('aria-expanded', 'false');
+  //   }
+  //   // if(document.getElementById("#homeSubmenu").classList.contains("show")) {
+  //   //   document.getElementById("#homeSubmenu").classList.remove('show');
+  //   // }
+  //   document.querySelector("#homeSubmenu").classList.toggle('show', false);
+  //   this.removeEventListener('click', this);
+  // })
+
+
+  function myCollapseFunction() {
+    var x = document.getElementById("homeSubmenuActivator").getAttribute("aria-expanded"); 
+    if (x == "true") 
+    {
+    x = "false"
+    } else {
+    x = "true"
+    }
+    document.getElementById("homeSubmenuActivator").setAttribute("aria-expanded", x);
+    document.getElementById("homeSubmenu").classList.remove('show');
+    }
   /*
   // Get the modal
   var modal = document.getElementById("nav-bar");

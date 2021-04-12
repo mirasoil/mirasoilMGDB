@@ -20,55 +20,55 @@
             @endif
             <!---Vom trimite prin post toate datele introduse in formular, apeland functia store din ProductController --->
             
-            <form>
+            <form id="form">
             @csrf           
                 <div class="form-group">
                     <label for="name">{{ __('Product Name') }}</label>
                     <hr>
-                    <input type="text" name="name" class="form-control"  id="nameInput" value="{{old('name') }}">
+                    <input type="text" name="name" class="form-control"  id="name">
                 </div>
                 <div class="form-group">
                     <label for="slug">{{ __('Slug') }}</label>
                     <hr>
-                    <input type="text" name="slug" class="form-control" id="slugInput" value="{{old('slug') }}">
+                    <input type="text" name="slug" class="form-control" id="slug">
                 </div>
                 <div class="form-group">
                     <label for="name">{{ __('Quantity') }}</label>
                     <hr>
-                    <input type="number" name="quantity" min="0" class="form-control" id="qtyInput" value="{{old('quantity') }}">
+                    <input type="number" name="quantity" min="0" class="form-control" id="quantity">
                 </div>
                 <div class="form-group">
                     <label for="price">{{ __('Price') }}</label>
                     <hr>
-                    <input type="number" name="price" min="0" step=".01" class="form-control" id="priceInput" value="{{old('price') }}">
+                    <input type="number" name="price" min="0" step=".01" class="form-control" id="price">
                 </div>
                 <div class="form-group">
                     <label for="stock">{{ __('Stock') }}</label>
                     <hr>
-                    <input type="number" name="stock" min="0" class="form-control" id="stockInput" value="{{old('stock') }}">
+                    <input type="number" name="stock" min="0" class="form-control" id="stock">
                 </div>
                 <div class="form-group">
                     <label for="image">{{ __('Image') }}</label>
                     <hr>
-                    <input type="file" name="image" class="p-0" id="imageInput">
+                    <input type="file" name="image" class="p-0" id="image">
                 </div>
                 <div class="form-group">
                     <label for="description">{{ __('Description') }}</label>
                     <hr>
-                    <textarea name="description" class="form-control" id="descInput" rows="3">{!! old('description') !!}</textarea>
+                    <textarea name="description" class="form-control" id="description" rows="3"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="properties">{{ __('Properties') }}</label>
                     <hr>
-                    <textarea name="properties" class="form-control" id="propInput" rows="3">{!! old('properties') !!}</textarea>
+                    <textarea name="properties" class="form-control" id="properties" rows="3"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="uses">{{ __('Uses') }}</label>
                     <hr>
-                    <textarea name="uses" class="form-control" id="usesInput" rows="3">{!! old('uses') !!}</textarea>
+                    <textarea name="uses" class="form-control" id="uses" rows="3"></textarea>
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-info" id="createProduct">{{ __('Save product') }}</button>
+                    <input type="submit" name="submit" class="button" id="submit_btn" value="Send" />
                     <a href="{{ route('products.index', app()->getLocale()) }}" class="btn btn-danger">{{ __('Cancel') }}</a>
                 </div>
             </form>
@@ -128,6 +128,28 @@ $(document).ready(function() {
      }
  });
 });
+
+
+//Working - image = binary
+// $( "#form" ).on( "submit", function(e) {
+ 
+//  var dataString = new FormData(this);
+
+//  $.ajax({
+//    type: "POST",
+//    url: "{{ route('products.store', app()->getLocale()) }}",
+//    crossDomain: true,
+//     dataType: "json",
+//     contentType: false,
+//     processData: false,
+//     data: dataString,
+//     success: function () {
+//        console.log('success');
+//     }
+//  });
+
+//  e.preventDefault();
+// });
 
 </script>
 @endsection

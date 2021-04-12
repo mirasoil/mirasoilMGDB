@@ -63,16 +63,17 @@
             <input type="number" name="shipped" class="form-control" id="shipped" value="{{ $order->shipped ? 1 : 0 }}"> 
         </div>
         <div class="form-group">
-                <button class="btn btn-info" id="updateOrderDetails" data-id="{{ $order->id }}">{{ __('Save') }}</button>
-                <a href="{{url(app()->getLocale().'/orders') }}" class="btn btn-danger">{{ __('Cancel') }}</a>
-            </div>
+            <button class="btn btn-info" id="updateOrderDetails" data-id="{{ $order->id }}">{{ __('Save') }}</button>
+            <a href="{{url(app()->getLocale().'/orders') }}" class="btn btn-danger">{{ __('Cancel') }}</a>
+            <a class="btn btn-info float-right" href="{{ url(app()->getLocale().'/orders') }}">{{ __('Back') }}</a>
+        </div>
         </form>
         </div>
     </div>
 </div>
 <script>
 $(document).ready(function() {
-   
+   //Updating order info
    $('#updateOrderDetails').on('click', function() {
      var order_id = $('#orderId').val();
 

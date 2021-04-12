@@ -15,7 +15,7 @@
                 </li>
                 @if(Auth::guard('user')->check() || Auth::guest())
                 <li class="{{ Request::is(app()->getLocale().'/details') ? 'active' : '' }}"><!-- Link with dropdown items -->
-                        <a class="dropdown-toggle" href="#homeSubmenu" role="button" data-toggle="collapse" aria-expanded="false" aria-controls="homeSubmenu"><i class="fas fa-list-ol"></i> {{ __('Products') }}</a>
+                        <a class="dropdown-toggle" href="#homeSubmenu" role="button" data-toggle="collapse" id="homeSubmenuActivator" onclick="myCollapseFunction()" aria-expanded="false" aria-controls="#homeSubmenu" ><i class="fas fa-list-ol"></i> {{ __('Products') }}</a>
                         <ul class="collapse list-unstyled" id="homeSubmenu">
                         <li>
                                 <a href="{{ url(app()->getLocale().'/details/ulei') }}">{{ __('Lavender Oil') }}</a>

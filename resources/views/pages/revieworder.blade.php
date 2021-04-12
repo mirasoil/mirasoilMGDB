@@ -222,7 +222,7 @@
                 </div>
                 <div class="form-group row mb-0">
                     <div class="col-md-8">
-                        <button type="submit" id="complete-order" class="btn btn-primary mt-3">
+                        <button type="submit" id="complete-order" data-id="{{ Auth::user()->id }}" class="btn btn-primary mt-3">
                             {{ __('Proceed to payment') }}
                         </button>
                     </div>

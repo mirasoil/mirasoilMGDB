@@ -4,16 +4,10 @@
 @endsection
 @section('content')
 <div class="container">
-@if (\Session::has('user-success'))
-<div class="alert alert-success">
-<p id="message-response">{{ \Session::get('user-success') }}</p>
+
+<div class="alert">
+<p id="messageResp"></p>
 </div><br />
-@endif
-@if (\Session::has('user-failure'))
-<div class="alert alert-danger">
-<p id="message-response">{{ \Session::get('user-failure') }}</p>
-</div><br />
-@endif
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
@@ -23,7 +17,6 @@
                     <h1>{{ __('Welcome back') }}, {{ Auth::user()->firstname }} !</h1>
                         <form id="update-data-form">
                             @csrf
-                            @method('PATCH')
                             <div class="form-group row">
                             <input id="userId" type="text" class="form-control d-none" value="{{ Auth::user()->id }}">
                             <label for="firstname" class="col-md-4 col-form-label text-md-right">{{ __('First Name') }}</label>
@@ -163,7 +156,6 @@ $(document).on("click", "#edit-user-data", function() {
     $.ajax({
         url: url,
         type: "PATCH",
-        cache: false,
         data:{
             _token:'{{ csrf_token() }}',
             user_id: user_id,
@@ -178,16 +170,16 @@ $(document).on("click", "#edit-user-data", function() {
         },
         success: function(dataResult){
             dataResult = JSON.parse(dataResult);
-         if(dataResult.statusCode)
+         if(dataResult.statusCode == 200)
          {
-            $(".alert").addClass("alert-success")  //stilizare
-            $("#message-response").html("Informațiile au fost actualizate")  //continutul mesajului  
-            $('#update-data-form').load(); //resetare formular pentru a afisa detaliile noi introduse 
+            $(".alert").addClass("alert-success");  //stilizare
+            $("#messageResp").html("Informațiile au fost actualizate");  //continutul mesajului  
+            // $('#update-data-form').load(); //resetare formular pentru a afisa detaliile noi introduse 
          }
          else{
              alert("Internal Server Error");
          }
-            
+           
         }
     });
 }); 

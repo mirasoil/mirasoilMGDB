@@ -17,9 +17,7 @@ class SearchController extends Controller
             $products = Product::where('name','LIKE','%'.$request->search.'%')->get();
             if($products){  
                 foreach ($products as $key => $product) {
-                    $output.='<tr>'.
-                    '<td><a href="/'.app()->getLocale().'/details/'.$product->slug.'" style="text-decoration:none;">'.$product->name.'</a></td><br>'.
-                    '</tr>';
+                    $output.='<a class="dropdown-item" href="/'.app()->getLocale().'/details/'.$product->slug.'" style="text-decoration:none;">'.$product->name.'</a>';
                 }
             return Response($output);
             }

@@ -27,7 +27,7 @@
                             </li>
                         @elseif(Auth::guard('admin')->check())
                             <li class="{{ Request::is('controlPanel') ? 'active' : '' }}">
-                                <a href="{{ route('products.index', app()->getLocale()) }}"><i class="fa fa-user"></i> {{ __('Control Panel') }}</a>
+                                <a href="{{ route('products.index', app()->getLocale()) }}">{{ __('Control Panel') }}</a>
                             </li>
                             <li class="{{ Request::is('account') ? 'active' : '' }}">
                                 <a href="{{ url(app()->getLocale().'/orders') }}">{{ __('Orders Editor') }}</a>
@@ -47,10 +47,7 @@
                             </li>                       
                         @else 
                                 <li>
-                                    <a href="{{ route('login.default', app()->getLocale()) }}">{{ __('Login as client') }}</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('login.admin', app()->getLocale()) }}">{{ __('Login as admin') }}</a>
+                                    <a href="{{ route('login.default', app()->getLocale()) }}">{{ __('Login') }}</a>
                                 </li>     
                                 <li>
                                 <a href="{{ route('register.user', app()->getLocale()) }}">{{ __('Register') }}</a>
@@ -71,5 +68,12 @@
                     <li class="{{ Request::is('contact') ? 'active' : '' }}">
                         <a href="{{ url(app()->getLocale().'/#contact') }}"><i class="fa fa-address-book"></i> {{ __('Contact') }}</a>
                     </li>
+                    @if(Auth::guard('admin')->check() || Auth::guard('user')->check())
+                    
+                    @else 
+                    <li class="{{ Request::is('admin') ? 'active' : '' }}">
+                        <a href="{{ route('login.admin', app()->getLocale()) }}"><i class="fas fa-user-lock"></i> {{ __('Admin') }}</a>
+                    </li>
+                    @endif
                 </ul>
         </nav>

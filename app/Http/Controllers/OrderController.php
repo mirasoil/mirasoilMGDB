@@ -6,6 +6,7 @@ use Auth;
 use App\User;
 use App\Order;
 use App\Product;
+use Carbon\Carbon;
 use App\OrderProduct;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 
@@ -14,7 +15,7 @@ use Illuminate\Http\Request;
 class OrderController extends Controller
 {
     //store the order for the logged in user 
-    public function store(Request $request){
+    public function storeOk(Request $request){
         $order = Order::create([
             'user_id' => auth()->user() ? auth()->user()->id : null,
             'billing_fname' => $request->firstname,
@@ -41,6 +42,41 @@ class OrderController extends Controller
         }
 
         return $order;
+    }
+    public function store(Request $request) {
+        $query = Order::where('user_id', auth()->user()->id)->latest()->first();
+        $query->where('created_at', '<', Carbon::now()->subDays(1)->toDateTimeString());   //if last order was placed less than 24h ago user cannot place another one
+        if (!$query) {
+            $order = Order::create([
+                'user_id' => auth()->user() ? auth()->user()->id : null,
+                'billing_fname' => $request->firstname,
+                'billing_lname' => $request->lastname,
+                'billing_email' => $request->email,
+                'billing_phone' => $request->phone,
+                'billing_address' => $request->address,
+                'billing_county' => $request->input('county'),
+                'billing_city' => $request->city,
+                'billing_zipcode' => $request->zipcode,
+                'billing_total' => $request->total
+            ]);
+    
+            $cart = session()->get('cart');
+            // Insert into order_product table
+            foreach ($cart as $item) {
+                $product = Product::where('name', '=', $item['name'])->get();  //nu am acces la id asa ca identific produsul dupa nume - pe viitor modific cosul din sesiune sa imi tina minte si id-ul
+                $id = $product->first()->id;
+                OrderProduct::create([
+                    'order_id' => $order->id,
+                    'product_id' => $id,
+                    'quantity' => $item['quantity'],
+                ]);
+            }
+    
+            return $order;
+        } else {
+            return;
+        }
+        
     }
 
     //display all the orders for the logged in user
@@ -140,7 +176,7 @@ class OrderController extends Controller
     public function editOrder($id)
     {
         $id = request()->segment(count(request()->segments()));
-        $order = Order::find($id)->first();
+        $order = Order::where('_id', $id)->first();
         return view('orders.edit', compact('order'));
     }
 

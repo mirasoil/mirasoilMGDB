@@ -26,10 +26,10 @@
         @endif
         <div class="butonDreapta">
         <ul class="nav-item d-inline-block ml-auto mr-5" style="list-style:none;">
-          <!-- <li id="language-switcher"><language-switcher
+          <li id="language-switcher"><language-switcher
             locale="{{ app()->getLocale() }}"
-            link-ro="{{ route(Route::currentRouteName(), 'ro') }}"
-            link-en="{{ route(Route::currentRouteName(), 'en') }}"></language-switcher> --> 
+            link-ro="{{ route(Route::currentRouteName(), ['locale' => 'ro', 'id' => '/{id?}']) }}"
+            link-en="{{ route(Route::currentRouteName(), ['locale' => 'en','id' => '/{id?}']) }}"></language-switcher> 
           </li>
         </ul>
           <button type="button" id="sidebarCollapseRight" class="navbar-btn d-inline-block ml-auto active">
