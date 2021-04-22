@@ -7,15 +7,14 @@
 @endsection
 @section('content')
 <div id="checkout" class="container">
-    <div class="py-5 text-center">
+    <div class="pt-3 text-center">
         <h2>{{ __('Place order') }}</h2>
         <p class="lead"></p>
     </div>
-
-<div class="alert">
-<p id="message-response"></p>
-</div><br />
-
+    <div class="alert">
+        <p id="message-response"></p>
+    </div>
+    <br />
     <div class="row">
         <!-- Sectiunea Cosul Meu si Adresa facturare -->
         <div class="col-md-4 order-md-2 mb-2">
@@ -27,21 +26,22 @@
             <ul class="list-group mb-3">
                 <?php $total = 0 ?>
                 @if(session('cart'))
-                @foreach(session('cart') as $id => $details)
-                <?php $total += $details['price'] * $details['quantity'] ?>
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
-                        <img src="../img/{{ $details['image'] }}" alt="Hidrolat de lavandă" width="40" height="40">
-                        <div>
-                            <h6 class="my-0">{{ $details['name'] }}</h6>
-                            <small class="text-muted">{{ __('Quantity') }}: {{ $details['quantity'] }}</small>
-                        </div>
-                        <span class="text-muted">{{ $details['price'] }} Lei</span>
-                    </li>
-                @endforeach
+                    @foreach(session('cart') as $id => $details)
+                    <?php $total += $details['price'] * $details['quantity'] ?>
+                        <li class="list-group-item d-flex justify-content-between lh-condensed">
+                            <img src="../img/{{ $details['image'] }}" alt="Hidrolat de lavandă" width="60" height="60">
+                            <div>
+                                <h6 class="my-0">{{ $details['name'] }}</h6>
+                                <small class="text-muted">{{ __('Quantity') }}: {{ $details['quantity'] }}</small><br>
+                                <small class="text-muted">{{ __('Unit price') }}: {{ $details['price'] }} RON</small>
+                            </div>
+                            <span class="text-muted">{{ $details['price'] * $details['quantity'] }} RON</span>
+                        </li>
+                    @endforeach
                 @endif
                 <li class="list-group-item d-flex justify-content-between">
                     <span>Total (RON)</span>
-                    <strong id="total">{{ $total.' Lei' }}</strong>
+                    <strong id="total">{{ $total.' RON' }}</strong>
                 </li>
             </ul>
             <div class="card p-2 mb-3">
@@ -75,7 +75,6 @@
         <div class="col-md-8 order-md-1">
             <form method="POST" id="update-data-form">
             @csrf
-            
                 <!-- Sectiunea Adresa de Livrare -->
                 <h4 class="mb-3">{{ __('Shipping Address') }}</h4><hr>
                 <div class="card p-2 mb-3 shadow-sm">

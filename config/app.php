@@ -164,6 +164,8 @@ return [
         Jenssegers\Mongodb\MongodbServiceProvider::class,
         LaravelDaily\Invoices\InvoiceServiceProvider::class,
 
+        Intervention\Image\ImageServiceProvider::class,
+
         /*
          * Package Service Providers...
          */
@@ -235,6 +237,7 @@ return [
         'Html' => Collective\Html\HtmlFacade::class,
         'Cart' => Gloudemans\Shoppingcart\Facades\Cart::class,
         'Invoice' => LaravelDaily\Invoices\Facades\Invoice::class,
+        'Image' => Intervention\Image\Facades\Image::class,
     ],
 
 ];

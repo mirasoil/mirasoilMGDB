@@ -118,7 +118,7 @@ class OrderController extends Controller
         foreach($details as $detail){
             $items[] = $detail->product_id;    //array-ul cu toate detaliile din comanda respectiva
 
-            $prod = Product::findOrFail($detail->product_id);   //cautama produsele cu id-ul respectiv si le adaugam in array
+            $prod = Product::findOrFail($detail->product_id);   //cautam produsele cu id-ul respectiv si le adaugam in array
             $products[] = $prod;
         }
 

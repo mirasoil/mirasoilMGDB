@@ -26,16 +26,29 @@
                     <div class="product-price"><strong>Preț:</strong> {{$shop->price}} RON</div>
                     <div class="product-stock">În stoc</div>
                     <hr>
+                    @if(Auth::guard('user')->check())
                     <div class="btn-group cart">
                         <button  class="btn btn-info btn-block text-center" id="{{$shop->id}}" onclick="btnAddCart(this.id)">
-                        {{ __('Add to cart') }} 
+                            {{ __("Add to cart")}} 
                         </button>
                     </div>
                     <div class="btn-group wishlist">
                         <button  class="btn btn-warning btn-block text-center" id="{{$shop->id}}" onclick="btnAddCart(this.id)">
-                            {{ __('Add to favorites') }}
+                            {{ __("Add to favorites")}} 
                         </button>
                     </div>
+                    @else 
+                    <div class="btn-group cart">
+                        <button  class="btn btn-info btn-block text-center" id="{{$shop->id}}" onclick="alert('Please login first!')">
+                            {{ __("Add to cart")}} 
+                        </button>
+                    </div>
+                    <div class="btn-group wishlist">
+                        <button  class="btn btn-warning btn-block text-center" id="{{$shop->id}}" onclick="alert('Please login first!')">
+                            {{ __("Add to favorites")}} 
+                        </button>
+                    </div>
+                    @endif
                 </div>
                 <div class="container-fluid">       
             <div class="col-md-12 product-info p-4">
@@ -71,7 +84,7 @@
 <script>
 function btnAddCart(param) {
   var product = param;
-  var url = "/add-to-cart/"+product;
+  var url = "{{ url(app()->getLocale().'/add-to-cart/') }}"+'/'+product;
 
   $.ajaxSetup({
         headers: {
@@ -85,10 +98,7 @@ function btnAddCart(param) {
         "product": product
 	 },
 	 success: function (response) {
-			$('#mini-cart').load('/details/'+product+' #mini-cart'); 
-            // $('#mini-cart').css('margin-right', '0');   
-			$(".alert").removeClass("d-none").addClass("alert alert-success")  //stilizare
-			$('.shop-success').html('Produs adaugat in cos');
+			console.log('succes');
 
     },
     error: function (response) {

@@ -14,22 +14,18 @@
   		        <div class="col-sm-3"><!--left col-->
                   
                     <div class="text-center">
-                    @if(isset(Auth::user()->avatar))
-                        <img src="../uploads/avatars/{{ Auth::user()->avatar }}" class="avatar img-circle img-thumbnail" alt="avatar" style="width:200px; height:200px;border-radius:50%;">
-                    @else
-                        <img src="../uploads/avatars/default.jpg" class="avatar img-circle img-thumbnail" alt="avatar" style="width:200px; height:200px;border-radius:50%;">
-                    @endif
-                        <h6 class="my-3">{{ __('Upload a different photo') }}</h6>
+                        <img src="../uploads/avatars/{{ $user->avatar }}" class="avatar img-circle img-thumbnail" alt="avatar" style="width:200px; height:200px;border-radius:50%;">
+                        <h6>Upload a different photo...</h6>
                         <form id="update-photo-data" enctype="multipart/form-data" action="{{ url(app()->getLocale().'/user') }}" method="POST">
                         @csrf
                             <input type="file" class="text-center center-block file-upload" name="avatar">
-                            <input type="submit" class="btn btn-sm btn-primary mt-3" value="{{ __('Modify') }}">
+                            <input type="submit" class="btn btn-sm btn-primary">
                         </form>
                     </div>
                     <hr><br>
                     
                     <ul class="list-group">
-                        <li class="list-group-item text-muted">{{ __('Activities') }} </li>
+                        <li class="list-group-item text-muted">{{ __('Activity') }} <i class="fa fa-dashboard fa-1x"></i></li>
                         <li class="list-group-item"><a href="{{ url(app()->getLocale().'/shop') }}" style="text-decoration: none;"><strong>{{ __('Check products')}}</strong></a></li>
                         <li class="list-group-item"><a href="{{ url(app()->getLocale().'/myorders') }}" style="text-decoration: none;"><strong>{{ __('Check history')}} </strong></a></li>
                     </ul> 
@@ -174,6 +170,8 @@
     <br>
 @endfor
 <script>
+
+
 $(document).on("click", "#edit-user-data", function() { 
     var user_id = $('#userId').val();
     var url = "{{ url(app()->getLocale().'/user') }}"+'/'+user_id;

@@ -106,6 +106,7 @@ Route::group([
     
             Route::get('/user', 'UserController@index')->name('user');    //pagina de dashboard pentru useri, formularul de update al datelor
             Route::patch('user/{id}', 'UserController@update');    //modificarea propriu-zisa a datelor in tabela dupa id-ul userului
+            Route::post('user', 'UserController@updateAvatar')->name('update.avatar');
     
             //generating invoice
             Route::get('/checkout', 'InvoiceController@show')->name('invoice.show');
