@@ -8,7 +8,10 @@
 @section('content')
 <div class="container">
 <h3 class="text-center">{{ __('Orders Editor') }}</h3>
-    <div class="panel panel-default" style="padding:50px">
+    <div class="alert"> <!--- mesaje de succes pt insert delete ---->
+        <p id="message-response"></p>
+    </div>
+    <div class="panel panel-default">
         <div class="panel-body">
             <!---Capul de tabel care ramane mereu la fel, nu depinde de foreach--->
             <table class="table table-bordered table-stripped">
@@ -31,15 +34,46 @@
                 </td>
                 <td>{{$order->created_at->isoFormat('D MMM YYYY')}}</td>
                 <td>{{ $order['billing_total'] }} RON</td>
-                <td>@if(!$order->shipped)
-                        {{ __('Not shipped') }}
-                    @else
-                        {{ __('Shipped') }}
-                    @endif
+                <td>
+                    <p id="shipping-response-{{ $order->id }}">
+                        @if(!$order->shipped)
+                            {{ __('Not shipped') }}
+                        @else
+                            {{ __('Shipped') }}
+                        @endif
+                    </p>
                 </td>
                 <td> 
                 <a class="btn btn-success m-2" href="{{ url(app()->getLocale().'/order',$order->id) }}">{{ __('Details') }}</a><br>
-                    <a class="btn btn-primary m-2" href="{{ url(app()->getLocale().'/order/edit',$order->id) }}">{{ __('Modify') }}</a><br>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal-{{ $order->id }}">
+                    {{ __('Modify') }}
+                    </button><br>
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal-{{ $order->id }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">{{ __('Modify shipping status') }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="shipped"><strong>Status</strong></label>
+                                <input type="number" name="shipped" class="form-control" id="shipped-{{ $order->id }}" value="{{ $order->shipped }}" min="0" max="1"><br> 
+                                <h6 class="text-center">0 - {{ __('Not shipped') }}</h6>
+                                <h6 class="text-center">1 - {{ __('Shipped') }}</h6>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
+                            <button type="button" class="btn btn-primary" id="{{ $order->id }}" onclick="setShipping(this.id)">{{ __('Save') }}</button>
+                        </div>
+                        </div>
+                    </div>
+                    </div> <!--- --->
                     <button class="btn btn-danger m-2" id="{{ $order->id }}" onclick="deleteOrder(this.id)">{{ __('Delete') }}</button>
                 </td>
             </tr>
@@ -71,5 +105,36 @@
         });
     }
 }
- </script>
+
+ function setShipping(order_id){
+    var shipped = $('#shipped-'+order_id).val();
+    let currentUrl = "{{ url(app()->getLocale().'/orders') }}";
+        $.ajax({
+            url : "{{ url(app()->getLocale().'/order/edit') }}"+'/'+order_id,
+            type: "PATCH",
+            data:{
+                _token:'{{ csrf_token() }}',
+                order_id: order_id,
+                shipped: shipped
+            },
+            success: function(data){
+                var data = JSON.parse(data);
+                 if(data.statusCode==200){			
+                    $('.modal').modal('hide');
+                    $('.modal-backdrop').remove();
+                    $(".alert").addClass("alert-success");  //stilizare
+                    $("#message-response").html("Status comandă actualizat"); 
+                    $('#shipping-response-'+order_id).load(currentUrl+' #shipping-response-'+order_id);
+                 }
+                 else if(data.statusCode==201){
+                    alert("Error occured !");
+                 }
+            }
+        });
+}
+</script>
 @endsection
+
+
+
+

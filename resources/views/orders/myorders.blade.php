@@ -7,6 +7,13 @@
 @endsection
 @section('content')
 <div class="container">
+    <nav aria-label="breadcrumb" class="main-breadcrumb mt-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/') }}">{{ __('Home') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/user') }}">{{ __('My Account') }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('My Orders') }}</li>
+        </ol>
+    </nav>
     <div class="container-fluid p-5" style="background-color:#e4f1f9;">
         <h3 class="text-center">{{ __('My Orders') }}</h3>
         <ul class="order-list">

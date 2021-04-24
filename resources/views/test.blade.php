@@ -1,231 +1,139 @@
 @extends('layouts.master')
 @section('title')
-<title>{{ __('My Account') }} - Mirasoil</title>
+<title>{{ __('Shop') }} - Mirasoil</title>
+@endsection
+@section('extra-scripts')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('content')
+@if (session()->has('success_message'))
+	<div class="alert alert-success">
+		<p class="shop-success">{{ session()->get('success_message') }}</p>
+	</div>
+@endif
+
+@if(count($errors) > 0)
+	<div class="alert alert-danger">
+		<ul>
+			@foreach ($errors->all() as $error)
+				<li>{{ $error }}</li>
+			@endforeach
+		</ul>
+	</div>
+@endif
 <div class="container">
-        <div class="row">
-            <div class="col-sm-10">
-                <h1 class="float-right">{{ __('Welcome back') }}, {{ Auth::user()->firstname }} !</h1>
+<div class="row" id="shop">
+		<div class="col-lg-12 col-sm-12 col-12 main-section">
+			<div class="dropdown" id="dropdown-cart">
+				<button type="button" class="btn btn-info" data-toggle="dropdown" id="cart-button">
+					<i class="fa fa-shopping-cart" aria-hidden="true"></i> {{ __('Cart') }} <span class="badge badge-pill badge-danger">{{ count((array) session('cart')) }}</span>
+				</button>
+				<div class="dropdown-menu" id="dropdown-cart-menu">
+					<div class="row total-header-section">
+						<div class="col-lg-6 col-sm-6 col-6">
+							<i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class="badge badge-pill badge-danger">{{ count((array) session('cart')) }}</span>
+						</div>
+						<?php $total = 0 ?>
+ 						@foreach((array) session('cart') as $id => $details)
+ 							<?php $total += $details['price'] * $details['quantity'] ?>
+ 						@endforeach
+        				<div class="col-lg-6 col-sm-6 col-6 total-section text-right">
+            				<p>{{ __('Total') }}: <span class="text-info">{{ $total }} lei</span></p>
+        				</div>
+    				</div>
+					@if(session('cart'))
+ 						@foreach(session('cart') as $id => $details)
+							<div class="row cart-detail">
+								<div class="col-lg-4 col-sm-4 col-4 cart-detail-img">
+									<img src="../img/{{$details['image']}}" width="100" height="100"/>
+								</div>
+								<div class="col-lg-8 col-sm-8 col-8 cart-detail-product">
+									<p>{{ $details['name'] }}</p>
+									<p class="text-muted small">{{ __('Quantity') }}: <span class="price text-info">{{ $details['quantity'] }} buc</span></p>
+									<p class="text-muted small">{{ __('Unit price') }}: <span class="price text-info">{{ $details['price'] }} RON</span></p>
+								</div>
+							</div>
+						@endforeach
+					@endif
+					<div class="row">
+						<div class="col-lg-12 col-sm-12 col-12 text-center checkout">
+							<a href="{{ url(app()->getLocale().'/cart') }}" class="btn btn-primary btn-block">{{ __('See cart') }}</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>	
+	</div>
+	<div class="alert d-none">
+		<p class="shop-success"></p>
+	</div>
+<div class="container d-flex justify-content-center mt-2 mb-5">
+    <div class="row">
+    @if (count($products) > 0)
+		@foreach($products as $product)
+        <div class="d-none">{{ ++$i }}</div>
+        <div class="col-md-4 mt-4">
+            <div class="card shadow rounded">
+                <div class="card-body">
+                    <div class="card-img-actions"> <a href="{{ url(app()->getLocale().'/details', $product->slug) }}"><img src="../img/{{$product->image}}" class="card-img" width="96" height="350" alt=""> </a></div>
+                </div>
+                <div class="card-body bg-light text-center">
+                    <div class="mb-2">
+                        <h4 class="font-weight-semibold mb-2"> <a href="{{ url(app()->getLocale().'/details', $product->slug) }}" class="text-default mb-2" data-abc="true" style="text-decoration:none;color:black;">{{ $product->name }}</a> </h4> <!---<a href="#" class="text-muted" data-abc="true">Laptops & Notebooks</a>-->
+                        <p class="text-muted font-italic" style="font-size:15px;">{!! Str::limit($product->description, 70) !!}</p>
+                    </div>
+                    <h5 class="mb-0 font-weight-semibold">{{ $product->price }} RON</h5>
+                    @if(Auth::guard('user')->check())
+				    <button  type="button" class="btn btn-info btn-block text-center mt-4" id="{{$product->id}}" onclick="btnAddCart(this.id)">{{ __('Add to cart') }}</button>
+                    @else
+                    <a href="{{ route('login.default', app()->getLocale(), [session(['shop-session' => 'shop-session'])] ) }}" style="text-decoration:none;">
+                        <button type="button" class="btn btn-info btn-block text-center mt-4" id="{{$product->id}}">{{ __('Add to cart') }}</button><!---redirectare inapoi in cos --->
+                    </a>
+                    @endif
+                </div>
             </div>
         </div>
-        <div class="container bootstrap snippet">
-            <div class="row mt-5">
-  		        <div class="col-sm-3"><!--left col-->
-                  
-                    <div class="text-center">
-                        <img src="../uploads/avatars/{{ $user->avatar }}" class="avatar img-circle img-thumbnail" alt="avatar" style="width:200px; height:200px;border-radius:50%;">
-                        <h6>Upload a different photo...</h6>
-                        <form id="update-photo-data" enctype="multipart/form-data" action="{{ url(app()->getLocale().'/user') }}" method="POST">
-                        @csrf
-                            <input type="file" class="text-center center-block file-upload" name="avatar">
-                            <input type="submit" class="btn btn-sm btn-primary">
-                        </form>
-                    </div>
-                    <hr><br>
-                    
-                    <ul class="list-group">
-                        <li class="list-group-item text-muted">{{ __('Activity') }} <i class="fa fa-dashboard fa-1x"></i></li>
-                        <li class="list-group-item"><a href="{{ url(app()->getLocale().'/shop') }}" style="text-decoration: none;"><strong>{{ __('Check products')}}</strong></a></li>
-                        <li class="list-group-item"><a href="{{ url(app()->getLocale().'/myorders') }}" style="text-decoration: none;"><strong>{{ __('Check history')}} </strong></a></li>
-                    </ul> 
-                </div><!--/col-3-->
-                <div class="col-sm-9">
-                <div class="tab-content">
-                    <div class="tab-pane active" id="home">
-                        <hr>
-                        <form id="update-data-form">
-                            @csrf
-                            <div class="form-group">
-                                <div class="col-xs-6">
-                                    <input id="userId" type="text" class="form-control d-none" value="{{ Auth::user()->id }}">
-                                    <label for="firstname"><h5>{{ __('First Name') }}</h5></label>
-                                    <input id="firstname" type="firstname" class="form-control @error('firstname') is-invalid @enderror" name="firstname" required autocomplete="current-firstname" value="{{ Auth::user()->firstname }}">
-                                </div>
-
-                                @error('firstname')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-
-                            <div class="form-group">
-                                <label for="lastname"><h5>{{ __('Last Name') }}</h5></label>
-
-                                <div class="col-xs-6">
-                                    <input id="lastname" type="lastname" class="form-control @error('lastname') is-invalid @enderror" name="lastname" required autocomplete="current-lastname" value="{{ Auth::user()->lastname }}">
-
-                                    @error('lastname')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="email"><h5>{{ __('E-Mail') }}</h5></label>
-
-                                <div class="col-xs-6">
-                                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ Auth::user()->email }}" required autocomplete="email">
-
-                                    @error('email')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="phone"><h5>{{ __('Phone') }}</h5></label>
-
-                                <div class="col-xs-6">
-                                    <input id="phone" type="phone" class="form-control @error('phone') is-invalid @enderror" name="phone" required autocomplete="current-phone" value="{{ Auth::user()->phone }}">
-
-                                    @error('phone')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="address"><h5>{{ __('Address') }}</h5></label>
-
-                                <div class="col-xs-6">
-                                    <input id="address" type="address" class="form-control @error('address') is-invalid @enderror" name="address" required autocomplete="current-address" value="{{ Auth::user()->address }}">
-
-                                    @error('address')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="city"><h5>{{ __('City') }}</h5></label>
-
-                                <div class="col-xs-6">
-                                    <input id="city" type="city" class="form-control @error('city') is-invalid @enderror" name="city" required autocomplete="current-city" value="{{ Auth::user()->city }}">
-
-                                    @error('city')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="county"><h5>{{ __('County') }}</h5></label>
-
-                                <div class="col-xs-6">
-                                    <input id="county" type="county" class="form-control @error('county') is-invalid @enderror" name="county" required autocomplete="current-county" value="{{ Auth::user()->county }}">
-
-                                    @error('county')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="zipcode"><h5>{{ __('Zipcode') }}</h5></label>
-
-                                <div class="col-xs-6">
-                                    <input id="zipcode" type="zipcode" class="form-control @error('zipcode') is-invalid @enderror" name="zipcode" required autocomplete="current-zipcode" value="{{ Auth::user()->zipcode }}">
-
-                                    @error('zipcode')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="form-group mt-2">
-                                <div class="col-xs-6">
-                                    <button class="btn btn-primary" id="edit-user-data">
-                                        {{ __('Save') }}
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                        <hr>
-                    </div><!--/tab-pane-->
-                    <div class="tab-pane" id="messages"><h2></h2>
-                    <hr>
-                </div><!--/tab-pane-->
-                </div><!--/tab-content-->
-            </div><!--/col-9-->
-        </div>
+        @endforeach
+        @endif     
     </div>
 </div>
-@for ($i = 0; $i < 3; $i++)
-    <br>
-@endfor
+<div class="float-right mt-5">{{$products->render()}}</div><br>
+<div class="mt-5"></div>
+</div>
 <script>
+function btnAddCart(param) {
+	let currentUrl = "{{ url(app()->getLocale().'/shop') }}";
+  var product = param;
+  var url = "{{ url(app()->getLocale().'/add-to-cart/') }}"+'/'+product;
 
-
-$(document).on("click", "#edit-user-data", function() { 
-    var user_id = $('#userId').val();
-    var url = "{{ url(app()->getLocale().'/user') }}"+'/'+user_id;
-    $.ajax({
-        url: url,
-        type: "PATCH",
-        data:{ //body
-            _token:'{{ csrf_token() }}',
-            user_id: user_id,
-            firstname: $('#firstname').val(),
-            lastname: $('#lastname').val(),
-            email: $('#email').val(),
-            phone: $('#phone').val(),
-            address: $('#address').val(),
-            county: $('#county').val(),
-            city: $('#city').val(),
-            zipcode: $('#zipcode').val()
-        }, //Content Type
-        success: function(dataResult){
-            dataResult = JSON.parse(dataResult);
-         if(dataResult.statusCode == 200)
-         {
-            $(".alert").addClass("alert-success");  //stilizare
-            $("#messageResp").html("Informațiile au fost actualizate");  //continutul mesajului  
-            // $('#update-data-form').load(); //resetare formular pentru a afisa detaliile noi introduse 
-         }
-         else{
-             alert("Internal Server Error");
-         }
-           
+  $.ajaxSetup({
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-}); 
+  $.ajax({
+	contentType: "application/x-www-form-urlencoded",
+    type: "POST",
+    url: url,
+    data: { 
+        "product": product
+	 },
+	 success: function (response) {
+			$('#shop').load(currentUrl+' #shop');    
+			$("#shop").css({"margin-left":"80%"});
+			$(".alert").removeClass("d-none").addClass("alert alert-success")  //stilizare
+			$('.shop-success').html('Produs adăugat în coș!');
+			console.log(product);
 
-// $(document).ready(function() {
-
-    
-// var readURL = function(input) {
-//     if (input.files && input.files[0]) {
-//         var reader = new FileReader();
-
-//         reader.onload = function (e) {
-//             $('.avatar').attr('src', e.target.result);
-//         }
-
-//         reader.readAsDataURL(input.files[0]);
-//     }
-// }
-
-
-// $(".file-upload").on('change', function(){
-//     readURL(this);
-// });
-// });
- 
+    },
+    error: function (response) {
+      console.log('Error:', response);
+    }
+  });
+};
 </script>
 @endsection
+
+
+
+

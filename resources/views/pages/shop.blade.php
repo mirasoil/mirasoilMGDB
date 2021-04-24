@@ -22,11 +22,11 @@
 	</div>
 @endif
 <div class="container">
-	<div class="row" id="shop">
+<div class="row" id="shop">
 		<div class="col-lg-12 col-sm-12 col-12 main-section">
 			<div class="dropdown" id="dropdown-cart">
 				<button type="button" class="btn btn-info" data-toggle="dropdown" id="cart-button">
-					<i class="fa fa-shopping-cart" aria-hidden="true"></i>{{ __('Cart') }}<span class="badge badge-pill badge-danger">{{ count((array) session('cart')) }}</span>
+					<i class="fa fa-shopping-cart" aria-hidden="true"></i> {{ __('Cart') }} <span class="badge badge-pill badge-danger">{{ count((array) session('cart')) }}</span>
 				</button>
 				<div class="dropdown-menu" id="dropdown-cart-menu">
 					<div class="row total-header-section">
@@ -67,30 +67,38 @@
 	<div class="alert d-none">
 		<p class="shop-success"></p>
 	</div>
-	<div class="card-deck justify-content-center">	
-	@if (count($products) > 0)
+<div class="container d-flex justify-content-center mt-2 mb-5">
+    <div class="row">
+    @if (count($products) > 0)
 		@foreach($products as $product)
-		<div class="d-none">{{ ++$i }}</div>
-		<div class="ml-5 my-4 text-center shadow p-4 bg-white rounded" style="width: 23rem;">
-			<a href="{{ url(app()->getLocale().'/details', $product->slug) }}"><img class="card-img-top" src="../img/{{$product->image}}" height="320"></a>
-			<div class="card-body text-center">
-				<h4><a href="{{ url(app()->getLocale().'/details', $product->slug) }}" style="text-decoration:none;color:black;">{{ $product->name }}</a></h4>
-				<p>{!! Str::limit($product->description, 50) !!}</p>
-				<p><strong>{{ __('Price') }}: </strong> {{ $product->price }} RON</p>
-			</div>
-			@if(Auth::guard('user')->check())
-				<button  class="btn btn-warning btn-block text-center" id="{{$product->id}}" onclick="btnAddCart(this.id)">{{ __('Add to cart') }}</button>
-			@else
-			<a href="{{ url(app()->getLocale().'/login/user') }}" style="text-decoration:none;">
-				<button  class="btn btn-warning btn-block text-center" id="{{$product->id}}">{{ __('Add to cart') }}</button><!---redirectare inapoi in cos --->
-			</a>
-			@endif
-			
-		</div>
-		@endforeach	
-	</div>
-	@endif
-	<div class="float-right mr-5 pr-5 mb-5">{{$products->render()}}</div><br>
+        <div class="d-none">{{ ++$i }}</div>
+        <div class="col-md-4 mt-4">
+            <div class="card shadow rounded">
+                <div class="card-body">
+                    <div class="card-img-actions"> <a href="{{ url(app()->getLocale().'/details', $product->slug) }}"><img src="../img/{{$product->image}}" class="card-img" width="96" height="350" alt=""> </a></div>
+                </div>
+                <div class="card-body bg-light text-center">
+                    <div class="mb-2">
+                        <h4 class="font-weight-semibold mb-2"> <a href="{{ url(app()->getLocale().'/details', $product->slug) }}" class="text-default mb-2" data-abc="true" style="text-decoration:none;color:black;">{{ $product->name }}</a> </h4> <!---<a href="#" class="text-muted" data-abc="true">Laptops & Notebooks</a>-->
+                        <p class="text-muted font-italic" style="font-size:15px;">{!! Str::limit($product->description, 70) !!}</p>
+                    </div>
+                    <h5 class="mb-0 font-weight-semibold">{{ $product->price }} RON</h5>
+                    @if(Auth::guard('user')->check())
+				    <button  type="button" class="btn btn-info btn-block text-center mt-4" id="{{$product->id}}" onclick="btnAddCart(this.id)">{{ __('Add to cart') }}</button>
+                    @else
+                    <a href="{{ route('login.default', app()->getLocale(), [session(['shop-session' => 'shop-session'])] ) }}" style="text-decoration:none;">
+                        <button type="button" class="btn btn-info btn-block text-center mt-4" id="{{$product->id}}">{{ __('Add to cart') }}</button><!---redirectare inapoi in cos --->
+                    </a>
+                    @endif
+                </div>
+            </div>
+        </div>
+        @endforeach
+        @endif     
+    </div>
+</div>
+<div class="float-right mt-5">{{$products->render()}}</div><br>
+<div class="mt-5"></div>
 </div>
 <script>
 function btnAddCart(param) {
@@ -125,3 +133,7 @@ function btnAddCart(param) {
 };
 </script>
 @endsection
+
+
+
+

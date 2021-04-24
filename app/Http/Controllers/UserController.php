@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Auth;
 use App\User;
+use App\Order;
 use Image;
 use Illuminate\Http\Request;
 
@@ -60,9 +61,12 @@ class UserController extends Controller
     public function getUserDetails($id){
         $id = request()->segment(count(request()->segments()));
         $user = User::where('_id', $id)->first();
-        return view('users.show', compact('user'));
+        $orders = Order::where('user_id', $id)->get();
+            return view('users.show', array(
+                'user' => $user,
+                'orders' => $orders));
 
-        // dd($items);
+        // dd($orders);
     } 
     
     // Displays the user edit view

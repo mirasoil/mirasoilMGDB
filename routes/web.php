@@ -69,7 +69,9 @@ Route::group([
         //View pentru pagina specifica fiecarui produs - ruta este /products/id-ul produsului care apeleaza view-ul show din subdirectorul products
         Route::get('/products/{id}', function(){
             return view('products.show');
-        })->name('products.view');    
+        })->name('products.view'); 
+        
+        Route::post('check', 'ProductController@checkSlug')->name('slug.check');
 
         //orders
         Route::get('orders', 'OrderController@getOrders')->name('orders');   //display all orders
@@ -109,8 +111,10 @@ Route::group([
             Route::post('user', 'UserController@updateAvatar')->name('update.avatar');
     
             //generating invoice
-            Route::get('/checkout', 'InvoiceController@show')->name('invoice.show');
-            Route::post('/checkout/{id}', 'InvoiceController@show')->name('invoice.display');
+            // Route::get('/checkout', 'InvoiceController@show')->name('invoice.show');
+            // Route::post('/checkout/{id}', 'InvoiceController@show')->name('invoice.display');
+            // Route::get('/invoice', 'InvoiceController@show')->name('invoice.show');
+            Route::get('/invoice/{id}', 'InvoiceController@show')->name('invoice.display');
 
     });
 

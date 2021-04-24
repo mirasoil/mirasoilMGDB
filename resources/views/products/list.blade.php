@@ -4,7 +4,7 @@
 @endsection
 @section('content')
 <h1 class="text-center">{{ __('Control Panel') }}</h1>
-@if ($message = Session::get('success'))
+@if ($message = Session::get('admin-success'))
  <div class="alert alert-success mx-5"> <!--- mesaje de succes pt insert delete ---->
     <p>{{ $message }}</p>
  </div>

@@ -52,13 +52,13 @@
         </td>
         <td data-th="Price" id="price{{$id}}">{{ $details['price'].' Lei' }}</td>
         <td data-th="Quantity">
-            <input type="number" value="{{ $details['quantity'] }}" class="form-control quantity{{$id}}"/>
+            <input type="number" value="{{ $details['quantity'] }}" class="form-control quantity{{$id}}" min="1" oninput="validity.valid||(value='');"/>
         </td>
         <td data-th="Subtotal" class="text-center" id="subtotal{{$id}}">{{ $details['price'] * $details['quantity'] }} Lei</td>
         <td class="actions text-center" data-th="">
         
-            <button class="btn btn-info btn-sm update-cart"  data-id="{{ $id }}" style="margin: 10px;" ><i class="fa fa-refresh"></i> {{ __('Modify') }}</button>
-            <button class="btn btn-danger btn-sm remove-from-cart"  data-id="{{ $id }}" style="margin: 10px;" id="{{$details['name']}}"><i class="fa fa-trash-o"></i>{{ __('Delete') }}</button> 
+            <button class="btn btn-info btn-sm update-cart"  data-id="{{ $id }}"><i class="fa fa-refresh"></i> {{ __('Modify') }}</button>
+            <button class="btn btn-danger btn-sm remove-from-cart"  data-id="{{ $id }}"  id="{{$details['name']}}"><i class="fa fa-trash-o"></i> {{ __('Delete') }}</button> 
         </form>
             
         </td>
@@ -72,13 +72,13 @@
         <td></td>
     </tr>
     <tr>
-        <td><a href="{{ url(app()->getLocale().'/shop') }}" class="btn btn-warning">{{ __('Continue shopping') }}</a></td>
+        <td><a href="{{ url(app()->getLocale().'/shop') }}" class="btn btn-info">{{ __('Continue shopping') }}</a></td>
         <td colspan="3" class="hidden-xs"></td>
-        <td class="text-center"><a href="{{ url(app()->getLocale().'/cart/success') }}" class="btn btn-warning text-center">{{ __('Empty cart') }}</a></td>
+        <td class="text-center"><a href="{{ url(app()->getLocale().'/cart/success') }}" class="btn btn-danger text-center">{{ __('Empty cart') }}</a></td>
     </tr>
     <tr>
         <td colspan="4" class="hidden-xs"></td>
-        <td class="text-center"><a href="{{ url(app()->getLocale().'/revieworder') }}" class="btn btn-warning">{{ __('Place order') }}</a></td>
+        <td class="text-center"><a href="{{ url(app()->getLocale().'/revieworder') }}" class="btn btn-success">{{ __('Place order') }}</a></td>
 </tfoot>
 </table>
 @else

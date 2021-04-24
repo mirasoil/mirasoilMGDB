@@ -23,10 +23,10 @@
             @if(Request::is(app()->getLocale().'/shop') OR Request::is(app()->getLocale().'/cart') OR Request::is(app()->getLocale().'/revieworder')) 
 
             @else
-              <div class="nav-item d-inline-block mr-4" style="width:auto;" id="mini-cart">
+              <div class="nav-item d-inline-block mr-4" style="width:auto;height:40px;" id="mini-cart">
                 <a href="{{ url(app()->getLocale().'/cart') }}">
-                  <button type="button" class="btn btn-info"  id="cart-button" style="height:38px;;">
-                    <i class="fa fa-shopping-cart" aria-hidden="true"></i> {{ __('Cart') }} <span class="badge badge-pill badge-danger">{{ count((array) session('cart')) }}</span>
+                  <button type="button" class="btn btn-light"  id="cart-button" style="height:38px;;">
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i><span class="badge badge-pill badge-danger float-right">{{ count((array) session('cart')) }}</span>
                   </button>
                 </a>
               </div>
@@ -36,11 +36,11 @@
           @if(Auth::guard('user')->check())
                 <div class="navbar-btn d-inline-block ml-auto" id="sidebarCollapseRight">
                 @if(Auth::guard('user')->user()->avatar)
-                  <img src="../uploads/avatars/{{ Auth::guard('user')->user()->avatar }}" class="d-inline-block ml-auto avatar"  alt="avatar" style="width:60px; height:50px;border-radius:50%;">
+                  <img src="{{ asset('uploads/avatars/'.Auth::guard('user')->user()->avatar) }}" class="d-inline-block ml-auto avatar"  alt="avatar" style="width:48px; height:45px;border-radius:50%;">
                 @else 
-                <img src="../uploads/avatars/default.jpg" class="d-inline-block ml-auto avatar"  alt="avatar" style="width:60px; height:50px;border-radius:50%;">
+                <img src="{{ asset('uploads/avatars/default.jpg') }}" class="d-inline-block ml-auto avatar"  alt="avatar" style="width:45px; height:45px;border-radius:50%;">
                 @endif
-                  <h5 class="d-inline-block">{{ Auth::guard('user')->user()->firstname }}</h5> &#711;
+                <cite title="Source Title" style="font-size:20px;">{{ Auth::guard('user')->user()->firstname }}&#711;</cite> 
                 </div>
             @else
             <button type="button" id="sidebarCollapseRight" class="navbar-btn d-inline-block ml-auto active" style="height:40px;width:40px;">

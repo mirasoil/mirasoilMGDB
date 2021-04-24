@@ -4,37 +4,48 @@
 @endsection
 @section('content')
 <div class="container">
-<h3 class="text-center">{{ $product->name }}</h3>
-<h5 class="text-center">{{ __('Details') }}</h5>
-    <div class="panel panel-default">
-        <div class="panel-body">
-            <div class="form-group">
-                <img src="{{'../../img/'.$product->image}}" class="shadow p-3 mb-5 bg-white rounded" style="width:400px; height:300px;" alt="{{$product->name}}"/> <!--- preluam din products numele --->
-            </div>
-            <div class="form-group">
-                <strong>{{ __('Price') }}: </strong><p> {{ $product->price }} RON </p>
-            </div>
-            <div class="form-group">
-                <strong>{{ __('Stock') }}: </strong><p> {{ $product->stock }} buc </p>
-            </div>
-            <div class="form-group">
-                <strong>{{ __('Image') }}: </strong><p> {{ $product->image }} </p>
-            </div>
-            <div class="form-group">
-                <strong>{{ __('Description') }}: </strong><p> {!! $product->description !!} </p>
-            </div>
-            <div class="form-group">
-                <strong>{{ __('Properties') }}: </strong><p> {!! $product->properties !!} </p>
-            </div>
-            <div class="form-group">
-                <strong>{{ __('Uses') }}: </strong><p> {!! $product->uses !!} </p>
-            </div>
-            <div class="float-right m-4">
-                <a class="btn btn-info m-4" href="{{ route('products.index', app()->getLocale()) }}">{{ __('Back') }}</a>
+    <h3>{{ $product->name }} - <span class="text-muted h4">{{ __('Details') }}</span></h3>
+
+    <div class="row mt-5">
+        <div class="col">
+            <img src="{{'../../img/'.$product->image}}" class="rounded mx-auto d-block shadow-lg" style="width:350px; height:300px;" alt="{{$product->name}}" />
+        </div>
+        <div class="col mt-2">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <h5 class="mb-2">{{ __('Price') }}: </h5>
+                        <p> {{ $product->price }} RON </p>
+                    </div>
+                    <div class="form-group">
+                        <h5 class="mb-2">{{ __('Stock') }}: </h5>
+                        <p> {{ $product->stock }} buc </p>
+                    </div>
+                    <div class="form-group">
+                        <h5 class="mb-2">{{ __('Image') }}: </h5>
+                        <p> {{ $product->image }} </p>
+                    </div>
+
+                </div>
             </div>
         </div>
+        <div class="form-group mt-5">
+            <h5 class="mb-2">{{ __('Description') }}: </h5>
+            <p> {!! $product->description !!} </p>
+        </div>
+        <div class="form-group">
+            <h5 class="mb-2">{{ __('Properties') }}: </h5>
+            <p> {!! $product->properties !!} </p>
+        </div>
+        <div class="form-group">
+            <h5 class="mb-2">{{ __('Uses') }}: </h5>
+            <p> {!! $product->uses !!} </p>
+        </div>
+    </div>
+    <div class="float-right m-4">
+        <a class="btn btn-primary" href="{{ url(app()->getLocale().'/products/'.$product->slug.'/edit') }}">{{ __('Modify') }}</a>
+        <a class="btn btn-info m-3" href="{{ route('products.index', app()->getLocale()) }}">{{ __('Back') }}</a>
     </div>
 </div>
 <div class="p-5"></div>
 @endsection
-<!--- afiseaza datele pe ecran cum sunt in baza de date cu id-ul curent --->

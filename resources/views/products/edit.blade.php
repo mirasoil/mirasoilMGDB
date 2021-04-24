@@ -103,7 +103,7 @@ $(document).ready(function() {
                 //  console.log(dataResult);
                  var dataResult = JSON.parse(dataResult);
                  if(dataResult.statusCode==200){			
-                   window.location.href = "{{ route('products.index', app()->getLocale()) }}";     //redirected back with success message
+                   window.location.href = "{{ route('products.index', ['locale' => app()->getLocale(), 'admin-success' => 'Produs adaugat cu succes!']) }}";     //redirected back with success message
                    //session needs to be flushed after reload or specified amount of time
                  }
                  else if(dataResult.statusCode==201){

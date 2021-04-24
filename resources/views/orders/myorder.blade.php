@@ -4,7 +4,14 @@
 @endsection
 @section('content')
 <div class="container">
-    <h3 class="text-center">{{ __('Order no.') }} {{$orders['id']}}</h3>
+   <nav aria-label="breadcrumb" class="main-breadcrumb mt-4">
+      <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/') }}">{{ __('Home') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/user') }}">{{ __('My Account') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/myorders') }}">{{ __('My Orders') }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('Order') }} {{$orders['id']}}</li>
+      </ol>
+   </nav>
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-4">
@@ -73,6 +80,7 @@
             </tbody>
          </table>
          <div class="float-right m-4">
+            <a class="btn btn-dark" href="{{ url(app()->getLocale().'/invoice/'.$orders->id) }}">{{ __('Invoice') }}</a>
             <a class="btn btn-info m-4" href="{{ url(app()->getLocale().'/myorders') }}">{{ __('Back') }}</a>
         </div>
     </div>

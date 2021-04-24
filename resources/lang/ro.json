@@ -165,6 +165,13 @@
     "Activities": "Activități",
     "Check products": "Răsfoiește catalog",
     "Check history": "Istoric comenzi",
-    "Upload a different photo": "Schimbă poza de profil"
+    "Upload a different photo": "Schimbă poza de profil",
+    "Close": "Închide",
+    "Modify shipping status": "Modifică status comandă",
+    "Account created at": "Cont creat la data de",
+    "Full name": "Nume",
+    "User's orders": "Comenzile utilizatorului",
+    "Registered at": "Înregistrată la data de",
+    "This user has no orders registered yet": "Acest utilizator nu are comenzi înregistrate în baza de date"
     
 }

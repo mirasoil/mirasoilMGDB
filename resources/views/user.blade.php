@@ -4,15 +4,15 @@
 @endsection
 @section('content')
 <div class="container">
-        <div class="row">
-            <div class="col-sm-10">
-                <h1 class="float-right">{{ __('Welcome back') }}, {{ Auth::user()->firstname }} !</h1>
-            </div>
-        </div>
+        <nav aria-label="breadcrumb" class="main-breadcrumb mt-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/') }}">{{ __('Home') }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ __('My Account') }}</li>
+            </ol>
+        </nav>
         <div class="container bootstrap snippet">
-            <div class="row mt-5">
-  		        <div class="col-sm-3"><!--left col-->
-                  
+            <div class="row">
+  		        <div class="col-sm-3 mt-2"><!--left col-->
                     <div class="text-center">
                     @if(isset(Auth::user()->avatar))
                         <img src="../uploads/avatars/{{ Auth::user()->avatar }}" class="avatar img-circle img-thumbnail" alt="avatar" style="width:200px; height:200px;border-radius:50%;">
@@ -31,13 +31,13 @@
                     <ul class="list-group">
                         <li class="list-group-item text-muted">{{ __('Activities') }} </li>
                         <li class="list-group-item"><a href="{{ url(app()->getLocale().'/shop') }}" style="text-decoration: none;"><strong>{{ __('Check products')}}</strong></a></li>
+                        <li class="list-group-item"><a href="{{ url(app()->getLocale().'/cart') }}" style="text-decoration: none;"><strong>{{ __('My Cart')}} </strong></a></li>
                         <li class="list-group-item"><a href="{{ url(app()->getLocale().'/myorders') }}" style="text-decoration: none;"><strong>{{ __('Check history')}} </strong></a></li>
                     </ul> 
                 </div><!--/col-3-->
-                <div class="col-sm-9">
+                <div class="col-sm-9 mt-3">
                 <div class="tab-content">
                     <div class="tab-pane active" id="home">
-                        <hr>
                         <form id="update-data-form">
                             @csrf
                             <div class="form-group">
@@ -154,9 +154,17 @@
                             <hr>
                             <div class="form-group mt-2">
                                 <div class="col-xs-6">
-                                    <button class="btn btn-primary" id="edit-user-data">
+                                    <button class="btn btn-success" id="edit-user-data">
                                         {{ __('Save') }}
                                     </button>
+                                    <a class="btn btn-primary float-right" href="{{ route('logout', app()->getLocale()) }}"
+                                        onclick="event.preventDefault();
+                                                        document.getElementById('logout-form').submit();">
+                                        {{ __('Logout') }}
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout', app()->getLocale()) }}" method="POST" style="display: none;">
+                                        @csrf
+                                    </form>
                                 </div>
                             </div>
                         </form>

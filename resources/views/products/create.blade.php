@@ -30,7 +30,10 @@
                 <div class="form-group">
                     <label for="slug">{{ __('Slug') }}</label>
                     <hr>
-                    <input type="text" name="slug" class="form-control" id="slug">
+                    <input type="text" name="slug" class="form-control" id="slug" onblur="checkSlug()">
+                    <span class="invalid-feedback" role="alert">
+                        <strong id="slug-error"></strong>
+                    </span>
                 </div>
                 <div class="form-group">
                     <label for="name">{{ __('Quantity') }}</label>
@@ -68,7 +71,7 @@
                     <textarea name="uses" class="form-control" id="uses" rows="3"></textarea>
                 </div>
                 <div class="form-group">
-                    <input type="submit" name="submit" class="button" id="submit_btn" value="Send" />
+                    <button class="btn btn-info" id="createProduct">{{ __('Save product') }}</button>
                     <a href="{{ route('products.index', app()->getLocale()) }}" class="btn btn-danger">{{ __('Cancel') }}</a>
                 </div>
             </form>
@@ -79,19 +82,20 @@
 //Create product
 $(document).ready(function() {
    
-   $('#createProduct').on('click', function() {
-     var name = $('#nameInput').val();
-     var slug = $('#slugInput').val();
-     var quantity = $('#qtyInput').val();
-     var price = $('#priceInput').val();
-     var stock = $('#stockInput').val();
+   $('#createProduct').on('click', function(e) {
+     e.preventDefault();
+     var name = $('#name').val();
+     var slug = $('#slug').val();
+     var quantity = $('#quantity').val();
+     var price = $('#price').val();
+     var stock = $('#stock').val();
      //selecting only last part of the string as image path (C:/fakepath/name.jpg)
      var filename = $('input[type="file"]').val().split("\\");  //escaping
      var image = filename[filename.length - 1];
-     var description = $('#descInput').val();
-     var properties = $('#propInput').val();
-     var uses = $('#usesInput').val();
-
+     var description = $('#description').val();
+     var properties = $('#properties').val();
+     var uses = $('#uses').val();
+    console.log(name, slug, quantity, price, stock, image, properties);
      if(name!="" && slug!="" && quantity!="" && price!="" && stock!="" && image!="" && description!="" && properties!="" && uses!=""){
          $.ajax({
              url: "{{ route('products.store', app()->getLocale()) }}",
@@ -118,17 +122,55 @@ $(document).ready(function() {
                    //session needs to be flushed after reload or specified amount of time
                  }
                  else if(dataResult.statusCode==201){
-                    alert("Error occured !");
-                 }
-                 
-             }
+                    alert('Acest slug exista deja in baza de date !');
+                 }  
+             },
+             error: function(xhr, textStatus, errorThrown) {
+                alert('There was an error ' + errorThrown);
+            }
          });
      }
      else{
          alert('Please fill all the field !');
      }
  });
+ return false;
 });
+
+function checkSlug() {
+    // e.preventDefault();
+    var slug = $('#slug').val();
+    if(slug != "") {
+        $.ajax({
+            url: "{{ route('slug.check', app()->getLocale()) }}",
+            type: "POST",
+            data: {
+                 _token: '{{ csrf_token() }}',
+                 slug: slug
+             },
+             cache: false,
+             success: function(dataResult){
+                
+                var dataResult = JSON.parse(dataResult);
+                 if(dataResult.statusCode==200){			
+                   
+                 }
+                 else if(dataResult.statusCode==201){
+                    // alert('Acest slug exista deja in baza de date !');
+                    var input = document.getElementById('slug');
+                    input.classList.add('is-invalid');
+                    $('#slug-error').html('Acest slug exista deja in baza de date !');
+                    // $('#slug-error').fadeOut(1000);
+                 }  
+             },
+             error: function(xhr, textStatus, errorThrown) {
+                alert('There was an error ' + errorThrown);
+            }
+        });
+    }
+    //unbind the event handler - second onblur is not working  
+}
+
 
 
 //Working - image = binary

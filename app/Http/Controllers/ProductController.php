@@ -23,8 +23,8 @@ class ProductController extends Controller
 
     public function indexUser(Request $request)
     {
-        $products = Product::orderBy('id','ASC')->paginate(4);   //pentru afisarea paginii de produse din acelasi tabel pentru useri logati
-        $value = ($request->input('page',1)-1)*5;
+        $products = Product::orderBy('id','ASC')->paginate(6);   //pentru afisarea paginii de produse din acelasi tabel pentru useri logati
+        $value = ($request->input('page',1)-1)*6;
         return view('pages.shop', compact('shop'))->with([
             'products' => $products,
             'i' => $value
@@ -34,8 +34,8 @@ class ProductController extends Controller
 
     public function indexGuest(Request $request)
     {
-        $products = Product::orderBy('id','ASC')->paginate(4);   //pentru afisarea paginii de produse din products pentru vizitatori
-        $value = ($request->input('page',1)-1)*5;
+        $products = Product::orderBy('crested_at','ASC')->paginate(6);   //pentru afisarea paginii de produse din products pentru vizitatori
+        $value = ($request->input('page',1)-1)*6;
         return view('pages.shop', compact('products'))->with('i', $value);   
     }
 
@@ -155,13 +155,8 @@ class ProductController extends Controller
     }
 
     //ADMIN - gestionare produse (resources)
-    public function storeOk(Request $request)
-    {
-        $this->validate($request, ['name'=>'required', 'slug'=>'required', 'quantity'=>'required', 'price'=>'required', 'stock'=>'required', 'image'=>'required', 'description'=>'required', 'properties'=>'required', 'uses'=>'required']);   //validarea datelor
-        //crearea unui produs nou
-        Product::create($request->all());       //apelam modelul cu functia predefinita create prin care trimitem toate argumentele
-        return redirect()->route('products.index', app()->getLocale())->with('succes', 'Produsul a fost creat cu succes!');
-    }
+    
+    //Adding a new product
     public function store(Request $request)
     {
         $request->validate([
@@ -173,11 +168,27 @@ class ProductController extends Controller
             'image'=>'required', 
             'description'=>'required', 
             'properties'=>'required', 
-            'uses'=>'required']);   //validarea datelor
-        //crearea unui produs nou
-        Product::create($request->all());       //apelam modelul cu functia predefinita create prin care trimitem toate argumentele
-        //return redirect()->route('products.index', app()->getLocale())->with('succes', 'Produsul a fost creat cu succes!');
-        return json_encode(array('statusCode'=>200, 'success' => 'Produs adaugat cu succes!'));
+            'uses'=>'required']);   
+        
+        $checkSlug = Product::where('slug', $request->slug)->get();     //in case the checkSlug validation fails
+        if ($checkSlug->count() > 0) {
+            return json_encode(array('statusCode'=>201));
+        } else {
+            Product::create($request->all());       
+            return json_encode(array('statusCode'=>200));
+        }
+        
+    }
+
+    //Check if new entered slug already exists
+    public function checkSlug(Request $request) {
+        $checkSlug = Product::where('slug', $request->slug)->get();
+        if ($checkSlug->count() > 0) {
+            return json_encode(array('statusCode'=>201));
+        } else {
+            Product::create($request->all());       
+            return json_encode(array('statusCode'=>200));
+        }
     }
 
     public function show(Request $request, $id)

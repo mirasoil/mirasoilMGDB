@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Jenssegers\Mongodb\Eloquent\Model as Eloquent;
 use Illuminate\Http\Request;
 use Auth;
+use Session;
 
 
 class LoginController extends Controller
@@ -16,17 +17,20 @@ class LoginController extends Controller
 
     protected $redirectTo = RouteServiceProvider::HOME;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('guest')->except('logout');
         $this->middleware('guest:admin')->except('logout');
         $this->middleware('guest:user')->except('logout');
     }
 
-    public function showAdminLoginForm() {
+    public function showAdminLoginForm()
+    {
         return view('auth.login', ['url' => 'admin']);
     }
 
-    public function adminLogin(Request $request) {
+    public function adminLogin(Request $request)
+    {
         $this->validate($request, [
             'email'   => 'required|email',
             'password' => 'required|min:6'
@@ -39,7 +43,8 @@ class LoginController extends Controller
 
             return redirect()->intended('/ro/admin');
         }
-        return back()->withInput($request->only('email', 'remember'));
+
+        return back()->withErrors(['password' => 'Parolă sau email invalide'])->withInput($request->only('email', 'remember'));
     }
 
     public function showUserLoginForm()
@@ -53,18 +58,29 @@ class LoginController extends Controller
             'email'   => 'required|email',
             'password' => 'required|min:6'
         ]);
+        // dd(Session::has('shop-session'));
+        if (Session::has('shop-session')) {
+            if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) && $request->locale == "en") {
 
-        if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) && $request->locale == "en") {
+                return redirect()->intended('/en/shop');
+            } else if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) && $request->locale == "ro") {
 
-            return redirect()->intended('/en/user');
-        }else if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) && $request->locale == "ro") {
+                return redirect()->intended('/ro/shop');
+            }
+        } else {
+            if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) && $request->locale == "en") {
 
-            return redirect()->intended('/ro/user');
+                return redirect()->intended('/en/user');
+            } else if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) && $request->locale == "ro") {
+
+                return redirect()->intended('/ro/user');
+            }
         }
-        return back()->withInput($request->only('email', 'remember'));
+        return back()->withErrors(['password' => 'Parolă sau email invalide'])->withInput($request->only('email', 'remember'));
     }
 
-    public function redirectTo() {
-        return app()->getLocale() .'/';
+    public function redirectTo()
+    {
+        return app()->getLocale() . '/';
     }
 }
