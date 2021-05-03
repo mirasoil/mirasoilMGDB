@@ -16,30 +16,33 @@
     </nav>
     <div class="container-fluid p-3" style="background-color:#e4f1f9;">
         <h3 class="text-center">{{ __('My Orders') }}</h3>
+        @if(!empty($orders))
         <ul class="order-list">
-        @foreach($orders as $order)
-        <div class="list-group my-2">
-    <a href="{{ url(app()->getLocale().'/myorder/'.$order->id) }}" class="list-group-item list-group-item-action flex-column align-items-start bg-info text-white mt-5">
-        <div class="d-flex w-100 justify-content-between">
-        <h3 class="mb-1">{{ __('Order no.') }} {{$order['_id']}}</h3>
-        <small>
-            @if(!$order->shipped)
-                {{ __('Not shipped') }}
-            @else
-                {{ __('Shipped.') }}
-            @endif
-        </small>
-        </div>
-        <p class="my-1 text-white"><strong><small>{{ __('Placed at') }}: </small></strong> {{$order->created_at->isoFormat('D MMM YYYY')}}   <strong><small>{{ __('Total') }}:</small></strong> {{$order->billing_total}} RON</p>
-        <small>{{ __('Address') }}:</small>  {{$order->billing_address}} {{$order->billing_city}} - {{$order->billing_county}}
-        
-            <button class="btn btn-light float-right mt-3" onclick="location.href='/myorder/{{$order->id}}'">Detalii</button>
-    </a>
-
-    <br>
-    </div>
-    @endforeach
+            @foreach($orders as $order)
+            <div class="list-group my-2">
+                <a href="{{ url(app()->getLocale().'/myorder/'.$order->id) }}" class="list-group-item list-group-item-action flex-column align-items-start bg-info text-white mt-5">
+                    <div class="d-flex w-100 justify-content-between">
+                        <h3 class="mb-1">{{ __('Order no.') }} {{$order['_id']}}</h3>
+                            <small>
+                                @if(!$order->shipped)
+                                    {{ __('Not shipped') }}
+                                @else
+                                    {{ __('Shipped') }}
+                                @endif
+                            </small>
+                    </div>
+                    <p class="my-1 text-white"><strong><small>{{ __('Placed at') }}: </small></strong> {{$order->created_at->isoFormat('D MMM YYYY')}}   <strong><small>{{ __('Total') }}:</small></strong> {{$order->billing_total}} RON</p>
+                    <small>{{ __('Address') }}:</small>  {{$order->billing_address}} {{$order->billing_city}} - {{$order->billing_county}}
+                
+                    <button class="btn btn-light float-right mt-3" onclick="location.href='/myorder/{{$order->id}}'">Detalii</button>
+                </a>
+                <br>
+            </div>
+            @endforeach
         </ul>
+        @else
+        <h5 class="text-center mt-5">{{ __('You have no orders registered yet.') }} </h5>
+        @endif
     </div>
 </div>
 @for($i=0;$i<=5;$i++)

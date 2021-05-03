@@ -10,14 +10,16 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function index() {
+    // Display the dashboard for user
+    public function index() 
+    {
         $user = Auth::user();
-        //var_dump($user);
-
         return view('user');
     }
 
-    public function updateAvatar(Request $request) {
+    // Set user profile picture
+    public function updateAvatar(Request $request) 
+    {
         //Handle the user upload of avatar
         if ($request->hasFile('avatar')) {
             $avatar = $request->file('avatar');
@@ -32,9 +34,9 @@ class UserController extends Controller
         return view('user');
     }
 
-    public function update(Request $request){
-
-        //dd($request->id);
+    // Update user data
+    public function update(Request $request)
+    {
         $id = request('user_id');
         $user = User::findOrFail($id);
         $user-> firstname = $request->firstname;
@@ -51,14 +53,16 @@ class UserController extends Controller
     }
 
     // Display all the users
-    public function getUsers(Request $request){
+    public function getUsers(Request $request)
+    {
         $users = User::orderBy('lastname','ASC')->paginate(3); 
         $value = ($request->input('page',1)-1)*3;
         return view('users.list', compact('users'))->with('i', $value); 
     }
 
     // Display user details
-    public function getUserDetails($id){
+    public function getUserDetails($id)
+    {
         $id = request()->segment(count(request()->segments()));
         $user = User::where('_id', $id)->first();
         $orders = Order::where('user_id', $id)->get();

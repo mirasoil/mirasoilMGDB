@@ -90,4 +90,3 @@
 </div>
 <div class="p-5"></div>
 @endsection
-<!--- afiseaza datele pe ecran cum sunt in baza de date cu id-ul curent --->

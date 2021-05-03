@@ -25,12 +25,12 @@ class OrderController extends Controller
     }
 
     //Store the order for the logged in user 
-    public function store(Request $request) {
-        $query = Order::where('user_id', auth()->user()->id)->latest()->first();
+    public function storeOk(Request $request) {  //first order for the logged in user => not working, query gets null
+        $query = Order::where('user_id', auth()->user()->id)->latest()->get();
         $query->where('created_at', '<', Carbon::now()->subDays(1)->toDateTimeString());   //If last order was placed less than 24h ago - user cannot place another one
         
-        //Creating the order so I can have access to the id
-        if (true) {
+        // Creating the order so I can have access to the id
+        if (!$query) {
             $order = Order::create([
                 'user_id' => auth()->user() ? auth()->user()->id : null,
                 'billing_fname' => $request->firstname,

@@ -96,7 +96,7 @@ Route::group([
             Route::post('/add-to-cart/{product}', 'ProductController@addToCart')->name('shop.store');   //add to cart
             Route::get('/cart', 'ProductController@cart')->name('cart');  //cosul propriu zis - user
             Route::patch('/update-cart', 'ProductController@updateCart')->name('update-cart');  //modific cos
-            Route::delete('/delete-from-cart', 'ProductController@destroyCart')->name('shop.destroy');
+            Route::delete('/delete-from-cart', 'ProductController@deleteProduct')->name('shop.destroy');
             Route::get('cart/success', 'ProductController@emptyCart')->name('cart.success');  //golire cos
             Route::get('/revieworder', 'ProductController@getCheckout')->name('revieworder'); //pentru confirmarea comenzii
             Route::patch('/revieworder/{id}', 'ProductController@updateUserInfo')->name('review-details'); //pentru pagina de revieworder, actualizare date utilizator
@@ -120,6 +120,6 @@ Route::group([
 
     Route::group(['middleware' => ['guest']], function () {
         //Magazin - doar vizualizare pentru guest
-        Route::GET('/shop', 'ProductController@indexGuest')->name('shop');
+        Route::GET('/shop', 'ProductController@indexUser')->name('shop');
     });
 });

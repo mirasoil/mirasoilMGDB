@@ -172,6 +172,7 @@
     "Full name": "Nume",
     "User's orders": "Comenzile utilizatorului",
     "Registered at": "Înregistrată la data de",
-    "This user has no orders registered yet": "Acest utilizator nu are comenzi înregistrate în baza de date"
+    "This user has no orders registered yet": "Acest utilizator nu are comenzi înregistrate în baza de date",
+    "You have no orders registered yet.": "Nu aveți comenzi înregistrate"
     
 }
