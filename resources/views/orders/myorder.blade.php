@@ -65,15 +65,16 @@
                   </td>
                   <td><a href="{{url(app()->getLocale().'/details', $product->slug)}}"><img src="../../img/{{$product['image']}}" width="100" height="100"></a></td>
                   <td>
-                     <p>{{$product->price}} RON</p>
+                     <p>{{$product->price}} <small>RON</small></p>
                   </td>
-                    @foreach($details as $detail)
-                        @if($product->id == $detail->product_id) <!---afisez cantitatea pentru fiecare produs din comanda separat verificand daca id-ul este egal--->
-                            <td><p>{{ $detail->quantity }} buc</p></td>
-                        @endif
-                   @endforeach 
+                  @for($i = 0; $i < count($products); $i++)
+                  <!--Only if the product id from the orders is the same as the product id from products then that is the right quantity -->
+                     @if($orders['products'][$i]['product_id'] == $product->id)
+                        <td><p>{{ $orders['products'][$i]['quantity'] }} <small>buc</small></p></td>
+                     @endif
+                  @endfor
                   <td>
-                     <p>{{$orders['created_at']}}</p>
+                     <p>{{$orders['created_at']->isoFormat('D MMM YYYY hh:mm') }}</p>
                   </td>
                </tr>
                @endforeach

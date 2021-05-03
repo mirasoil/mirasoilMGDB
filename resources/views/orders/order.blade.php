@@ -65,11 +65,12 @@
                   <td>
                      <p>{{ $product->price }} RON</p>
                   </td>
-                  @foreach($details as $detail)
-                    @if($product->id == $detail->product_id) <!---afisez cantitatea pentru fiecare produs din comanda separat verificand daca id-ul este egal--->
-                     <td><p>{{ $detail->quantity }} buc</p></td>
-                    @endif
-                  @endforeach 
+                  @for($i = 0; $i < count($products); $i++)
+                  <!--Only if the product id from the orders is the same as the product id from products then that is the right quantity -->
+                     @if($orders[0]['products'][$i]['product_id'] == $product->id)
+                        <td><p>{{ $orders[0]['products'][$i]['quantity'] }} <small>buc</small></p></td>
+                     @endif
+                  @endfor
                   <td><p>{{ $order->created_at->isoFormat('D MMM YYYY') }}</p></td>
                   <td>
                      
@@ -79,7 +80,7 @@
             </tbody>
          </table>
          <div class="float-right m-4">
-            <a class="btn btn-dark" href="{{ url(app()->getLocale().'/invoice/'.$order->id) }}">{{ __('Invoice') }}</a>
+            <a class="btn btn-dark" href="{{ url(app()->getLocale().'/invoices/'.$order->id) }}">{{ __('Invoice') }}</a>
             <a class="btn btn-info ml-2" href="{{ url(app()->getLocale().'/orders') }}">{{ __('Back') }}</a>
         </div>
     </div>

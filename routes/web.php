@@ -87,7 +87,7 @@ Route::group([
         Route::patch('user/edit/{id}', 'UserController@updateUser')->name('user.update');
         Route::delete('user/{id}', 'UserController@destroyUser')->name('user.destroy');
 
-        Route::get('invoice/{id}', 'InvoiceController@showAdmin')->name('invoice.admin');
+        Route::get('/invoices/{id}', 'InvoiceController@showAdmin')->name('invoice.admin');
     
     });
     

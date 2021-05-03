@@ -144,7 +144,6 @@ class ProductController extends Controller
         $user = User::findOrFail($request->id)->first();
         $user-> firstname = $request->firstname;
         $user-> lastname = $request->lastname;
-        $user-> email = $request->email;
         $user-> address = $request->address;
         $user-> phone = $request->phone;
         $user-> county = $request->county;

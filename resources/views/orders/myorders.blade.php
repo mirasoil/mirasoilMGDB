@@ -14,7 +14,7 @@
             <li class="breadcrumb-item active" aria-current="page">{{ __('My Orders') }}</li>
         </ol>
     </nav>
-    <div class="container-fluid p-5" style="background-color:#e4f1f9;">
+    <div class="container-fluid p-3" style="background-color:#e4f1f9;">
         <h3 class="text-center">{{ __('My Orders') }}</h3>
         <ul class="order-list">
         @foreach($orders as $order)
@@ -32,9 +32,8 @@
         </div>
         <p class="my-1 text-white"><strong><small>{{ __('Placed at') }}: </small></strong> {{$order->created_at->isoFormat('D MMM YYYY')}}   <strong><small>{{ __('Total') }}:</small></strong> {{$order->billing_total}} RON</p>
         <small>{{ __('Address') }}:</small>  {{$order->billing_address}} {{$order->billing_city}} - {{$order->billing_county}}
-        <!-- <small>
-            <a href="/myorder/{{$order->id}}"><button class="btn btn-info float-right mt-3">Detalii</button></a>
-        </small> -->
+        
+            <button class="btn btn-light float-right mt-3" onclick="location.href='/myorder/{{$order->id}}'">Detalii</button>
     </a>
 
     <br>

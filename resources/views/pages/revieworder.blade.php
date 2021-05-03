@@ -103,7 +103,7 @@
                     <div class="row">
                         <div class="col-md-6 form-group">
                             <label for="email">{{ __('Email') }}</label>
-                            <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ Auth::user()->email }}">
+                            <input readonly type="email" name="email" class="form-control @error('email') is-invalid @enderror" id="email" value="{{ Auth::user()->email }}">
 
                             @error('email')
                                 <span class="invalid-feedback" role="alert">
@@ -273,7 +273,7 @@ $('#update-user-details').click(function(event){
 
       let firstname = $("input[name=firstname]").val();
       let lastname = $("input[name=lastname]").val();
-      let email = $("input[name=email]").val();
+    //   let email = $("input[name=email]").val();
       let phone = $("input[name=phone]").val();
       let address = $("#address").val();
       let county = $("#county").val();
@@ -290,7 +290,6 @@ $('#update-user-details').click(function(event){
             id:id,
             firstname:firstname,
             lastname:lastname,
-            email:email,
             phone:phone,
             address:address,
             county:county,
@@ -301,7 +300,7 @@ $('#update-user-details').click(function(event){
         success: function(response){
             $(".alert").addClass("alert-success")  //stilizare
             $("#message-response").html("Informațiile au fost actualizate")  //continutul mesajului  
-            $('#update-data-form').load(); //resetare formular pentru a afisa detaliile noi introduse    
+            // $('#update-data-form').load(); //resetare formular pentru a afisa detaliile noi introduse    
         },
        });
 });
@@ -342,7 +341,13 @@ $("#complete-order").click(function(event){
         },
         contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
         success: function(response){
-            showPaymentForm();        
+            var dataResult = JSON.parse(response);
+			if(dataResult.statusCode==200){
+                showPaymentForm();        
+            } else {
+                $('.alert').addClass(' alert-danger');
+                $('#message-response').html(dataResult.orderError);
+            }
         },
        });
   });

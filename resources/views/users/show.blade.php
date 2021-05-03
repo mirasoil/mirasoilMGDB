@@ -98,7 +98,7 @@
                     <div class="mt-2">
                       <h4>{{ __("User's orders") }}</h4>
                       <hr>
-                      @if(empty($orders))
+                      @if(!empty($orders))
                         @foreach($orders as $order)
                         <div class="mt-3">
                             <a href="{{ url(app()->getLocale().'/order/'.$order['id']) }}" class="text-decoration-none h5">{{ $order['id'] }}</a> 
