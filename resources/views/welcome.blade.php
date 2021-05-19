@@ -4,7 +4,7 @@
 @endsection
 @section('content')
 <div class="conatiner">
-<section id="animatie">
+<!-- <section id="animatie">
     <div class="animated-text">
         <span class="animation-text">M</span>
         <span class="animation-text">I</span>
@@ -17,8 +17,8 @@
         <h2 class="header-animated">{{ __('Natural lavender products') }}</h2>
     </div>
 </section>
-<section>
-<div id="slider">
+<section> -->
+<div>
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
             <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
