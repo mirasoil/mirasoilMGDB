@@ -2,15 +2,17 @@
 @section('title')
 <title>{{ __('Control Panel') }} - Admin</title>
 @endsection
+@section('extra-scripts')
+<!--Axios-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+@endsection
 @section('content')
 <h1 class="text-center">{{ __('Control Panel') }}</h1>
-@if ($message = Session::get('admin-success'))
- <div class="alert alert-success mx-5"> <!--- mesaje de succes pt insert delete ---->
-    <p>{{ $message }}</p>
- </div>
- @endif
  <div class="panel panel-default" style="padding:50px">
     <div class="panel-body">
+        <div class="alert"> 
+            <p id="messageResp"></p>
+        </div>
         <div class="form-group">
             <div class="pull-right">
                 <!---Butonul pentru adaugarea unui produs nou--->
@@ -68,19 +70,22 @@
  <script>
 //Delete button
 function deleteProduct(slug){
-    if(confirm('Are you sure ?')){
-        $.ajax({
-            url : "{{ url(app()->getLocale().'/products/') }}"+'/'+slug,
-            type: "DELETE",
+    if(confirm('Sunteti sigur ca doriti stergerea permanenta a produsului ?')){
+        axios
+        .delete("{{ url(app()->getLocale().'/products/') }}"+'/'+slug, {
             data:{
                 _token:'{{ csrf_token() }}',
                 'slug': slug
-            },
-            success: function(data){
+            }
+        })
+        .then(res => {
+            if (res.status === 200) {
                 //window.location.href = "{{ route('products.index', app()->getLocale(), [ session(['success' => 'Produs sters cu succes!'])]) }}";
                 $("#prod-"+slug).remove();
+            } else {
+                alert('A intervenit o eroare');
             }
-        });
+        })
     }
 }
  </script>

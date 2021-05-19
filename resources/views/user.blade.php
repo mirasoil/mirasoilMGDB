@@ -2,6 +2,10 @@
 @section('title')
 <title>{{ __('My Account') }} - Mirasoil</title>
 @endsection
+@section('extra-scripts')
+<!--Axios-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+@endsection
 @section('content')
 <div class="container">
         <nav aria-label="breadcrumb" class="main-breadcrumb mt-4">
@@ -10,9 +14,12 @@
                 <li class="breadcrumb-item active" aria-current="page">{{ __('My Account') }}</li>
             </ol>
         </nav>
+        <div class="alert"> 
+            <p id="messageResp"></p>
+        </div>
         <div class="container bootstrap snippet">
             <div class="row">
-  		        <div class="col-sm-3 mt-2"><!--left col-->
+  		        <div class="col-sm-3"><!--left col-->
                     <div class="text-center">
                     @if(isset(Auth::user()->avatar))
                         <img src="../uploads/avatars/{{ Auth::user()->avatar }}" class="avatar img-circle img-thumbnail" alt="avatar" style="width:200px; height:200px;border-radius:50%;">
@@ -154,7 +161,7 @@
                             <hr>
                             <div class="form-group mt-2">
                                 <div class="col-xs-6">
-                                    <button class="btn btn-success" id="edit-user-data">
+                                    <button class="btn btn-success" id="edit-user-data" type="button">
                                         {{ __('Save') }}
                                     </button>
                                     <a class="btn btn-primary float-right" href="{{ route('logout', app()->getLocale()) }}"
@@ -182,60 +189,63 @@
     <br>
 @endfor
 <script>
-$(document).on("click", "#edit-user-data", function() { 
-    var user_id = $('#userId').val();
-    var url = "{{ url(app()->getLocale().'/user') }}"+'/'+user_id;
-    $.ajax({
-        url: url,
-        type: "PATCH",
-        data:{ //body
-            _token:'{{ csrf_token() }}',
-            user_id: user_id,
-            firstname: $('#firstname').val(),
-            lastname: $('#lastname').val(),
-            email: $('#email').val(),
-            phone: $('#phone').val(),
-            address: $('#address').val(),
-            county: $('#county').val(),
-            city: $('#city').val(),
-            zipcode: $('#zipcode').val()
-        }, //Content Type
-        success: function(dataResult){
-            dataResult = JSON.parse(dataResult);
-         if(dataResult.statusCode == 200)
-         {
-            $(".alert").addClass("alert-success");  //stilizare
-            $("#messageResp").html("Informațiile au fost actualizate");  //continutul mesajului  
-            // $('#update-data-form').load(); //resetare formular pentru a afisa detaliile noi introduse 
-         }
-         else{
-             alert("Internal Server Error");
-         }
-           
-        }
-    });
-}); 
+    $(document).on("click", "#edit-user-data", function() { 
+        var user_id = $('#userId').val();
+        var url = "{{ url(app()->getLocale().'/user') }}"+'/'+user_id;
 
-// $(document).ready(function() {
+        formElement = document.getElementById("update-data-form")
+        formObject = new FormData(formElement)
+        formObject.append("user_id", user_id);
 
-    
-// var readURL = function(input) {
-//     if (input.files && input.files[0]) {
-//         var reader = new FileReader();
+        dataObject = {}
+        formObject.forEach(function(valoare,cheie) {
+            dataObject[cheie]=valoare
+            })
+        finalData = JSON.stringify(dataObject)
+        
+        axios
+        .patch(url, finalData, {
+            headers: {"Content-Type": "application/json"}
+            }) 
+            .then(response => {
+                if(response.status == 200)
+                {
+                    $(".alert").addClass("alert-success"); 
+                    $("#messageResp").html("Informațiile au fost actualizate");  
+                }
+                else{
+                    alert("Internal Server Error");
+                }
+            })
+        });
+// $(document).on("click", "#edit-user-data", function() { 
+//     var user_id = $('#userId').val();
+//     var url = "{{ url(app()->getLocale().'/user') }}"+'/'+user_id;
+//     axios
+//     .patch(url, { 
+//             _token:'{{ csrf_token() }}',
+//             user_id: user_id,
+//             firstname: $('#firstname').val(),
+//             lastname: $('#lastname').val(),
+//             email: $('#email').val(),
+//             phone: $('#phone').val(),
+//             address: $('#address').val(),
+//             county: $('#county').val(),
+//             city: $('#city').val(),
+//             zipcode: $('#zipcode').val()
+//         }) 
+//         .then(response => {
+//             if(response.data.statusCode == 200)
+//             {
+//                 $(".alert").addClass("alert-success");  //stilizare
+//                 $("#messageResp").html("Informațiile au fost actualizate");  //continutul mesajului  
+//             }
+//             else{
+//                 alert("Internal Server Error");
+//             }
+//         })
+//     });
 
-//         reader.onload = function (e) {
-//             $('.avatar').attr('src', e.target.result);
-//         }
-
-//         reader.readAsDataURL(input.files[0]);
-//     }
-// }
-
-
-// $(".file-upload").on('change', function(){
-//     readURL(this);
-// });
-// });
  
 </script>
 @endsection

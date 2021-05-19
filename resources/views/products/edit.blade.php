@@ -2,12 +2,19 @@
 @section('title')
 <title>{{ __('Product changes') }} - Admin</title>
 @endsection
+@section('extra-scripts')
+<!--Axios-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+@endsection
 @section('content')
 <div class="container">
 <h1 class="text-center">{{ $product->name }}</h1>
 <h3 class="text-center">{{ __('Changes') }}</h3>
 <div class="panel panel-default" style="padding:50px">
         <div class="panel-body">
+            <div class="alert"> 
+                <p id="messageResp"></p>
+            </div>
             <!---exista inregistrari in tabelul task --->
             @if (count($errors) > 0)
                 <div class="alert alert-danger">
@@ -20,7 +27,7 @@
                 </div>
             @endif
             <!--populez campurile formularului cu datele aferente din tabela tbl_product pe care le pot modifica-->
-            <form>
+            <form id="update-data-form">
                 @csrf
                 <div class="form-group">
                     <label for="name"><strong>{{ __('Product Name') }}</strong></label>
@@ -59,7 +66,7 @@
                     <textarea name="uses" class="form-control" id="usesInput" rows="3">{{ $product->uses }}</textarea> 
                 </div>
                 <div class="form-group">
-                <button class="btn btn-info" id="updateDetails" data-id="{{ $product->slug }}">{{ __('Save') }}</button>
+                <button class="btn btn-info" id="updateDetails" data-id="{{ $product->slug }}" type="button">{{ __('Save') }}</button>
                 <a href="{{route('products.index', app()->getLocale()) }}" class="btn btn-danger">{{ __('Cancel') }}</a>
             </div>
             </form>
@@ -67,56 +74,43 @@
     </div>
 </div>
 <script>
-$(document).ready(function() {
-   
-   $('#updateDetails').on('click', function() {
-     var name = $('#nameInput').val();
-     var slug = $('#slugInput').val();
-     var quantity = $('#qtyInput').val();
-     var price = $('#priceInput').val();
-     var stock = $('#stockInput').val();
-     //selecting only last part of the string as image path (C:/fakepath/name.jpg)
-     var filename = $('input[type="file"]').val().split("\\");  //escaping
-     var image = filename[filename.length - 1];
-     var description = $('#descInput').val();
-     var properties = $('#propInput').val();
-     var uses = $('#usesInput').val();
+    $(document).on("click", "#updateDetails", function() { 
+        var slug = $('#slugInput').val();
+        var filename = $('input[type="file"]').val().split("\\");  //escaping
+        var image = filename[filename.length - 1];
+        var url = "{{ url(app()->getLocale().'/products/') }}"+'/'+slug;
 
-     if(name!="" && slug!="" && quantity!="" && price!="" && stock!="" && image!="" && description!="" && properties!="" && uses!=""){
-         $.ajax({
-             url: "{{ url(app()->getLocale().'/products/') }}"+'/'+slug,
-             type: "PATCH",
-             data: {
-                 _token: '{{ csrf_token() }}',
-                 name: name,
-                 slug: slug,
-                 quantity: quantity,
-                 price: price,
-                 stock: stock,
-                 image: image,
-                 description: description,
-                 properties: properties,
-                 uses: uses
-             },
-             cache: false,
-             success: function(dataResult){
-                //  console.log(dataResult);
-                 var dataResult = JSON.parse(dataResult);
-                 if(dataResult.statusCode==200){			
-                   window.location.href = "{{ route('products.index', ['locale' => app()->getLocale(), 'admin-success' => 'Produs adaugat cu succes!']) }}";     //redirected back with success message
-                   //session needs to be flushed after reload or specified amount of time
-                 }
-                 else if(dataResult.statusCode==201){
-                    alert("Error occured !");
-                 }
-                 
-             }
-         });
-     }
-     else{
-         alert('Please fill all the field !');
-     }
- });
-});
+        formElement = document.getElementById("update-data-form");
+        formObject = new FormData(formElement);
+        formObject.append("slug", slug);
+
+        dataObject = {};
+        formObject.forEach(function(valoare,cheie) {
+            dataObject[cheie]=valoare
+            })
+        dataObject["image"] = image;
+        finalData = JSON.stringify(dataObject);
+
+        if(image!="" ) {
+            axios
+            .patch(url, finalData, {
+                headers: {"Content-Type": "application/json"}
+                }) 
+                .then(response => {
+                    if(response.data.statusCode==200){			
+                    window.location.href = "{{ route('products.index', app()->getLocale()) }}";     
+                    $(".alert").addClass("alert-success"); 
+                    $("#messageResp").html("Informațiile au fost actualizate"); 
+                    }
+                    else if(response.data.statusCode==201){
+                        alert("Error occured !");
+                    }
+                })
+            } else {
+                alert('Selecteaza imaginea');
+            }
+        
+        });
+
 </script>
 @endsection

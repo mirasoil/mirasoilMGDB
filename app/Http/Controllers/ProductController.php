@@ -169,8 +169,11 @@ class ProductController extends Controller
             'image'=>'required', 
             'description'=>'required', 
             'properties'=>'required', 
-            'uses'=>'required']);   
-        
+            'uses'=>'required']);  
+
+        $_POST = json_decode(file_get_contents("php://input"),true);
+        $slug= $_POST['slug'];
+
         $checkSlug = Product::where('slug', $request->slug)->get();     //in case the checkSlug validation in FE fails
         if ($checkSlug->count() > 0) {
             return json_encode(array('statusCode'=>201));
@@ -187,8 +190,7 @@ class ProductController extends Controller
         $checkSlug = Product::where('slug', $request->slug)->get();
         if ($checkSlug->count() > 0) {
             return json_encode(array('statusCode'=>201));
-        } else {
-            Product::create($request->all());       
+        } else {    
             return json_encode(array('statusCode'=>200));
         }
     }
@@ -212,18 +214,10 @@ class ProductController extends Controller
     // Modify details for products
     public function update(Request $request, $slug)
     {
-        $slug = request('slug');
-        $product = Product::where('slug', $slug)->first();        //in model trimitem pentru id-ul specific toate campurile cu date de actualizat
-        $product->name = request('name');
-        $product->slug = request('slug');
-        $product->quantity = request('quantity');
-        $product->price = request('price');
-        $product->stock = request('stock');
-        $product->image = request('image');
-        $product->description = request('description');
-        $product->properties = request('properties');
-        $product->uses = request('uses');
-        $product->save();
+        $_POST = json_decode(file_get_contents("php://input"),true);
+        $slug = $_POST['slug'];
+        $product = Product::where('slug', $slug)->first();        
+        $product->update($request->all());
         
         return json_encode(array('statusCode'=>200, 'success' => 'Produs actualizat cu succes!'));
     }
@@ -231,9 +225,11 @@ class ProductController extends Controller
     // Delete products from database
     public function destroy(Request $request)
     {
-        $slug = request('slug');
+        $_POST = json_decode(file_get_contents("php://input"),true);
+        $slug = $_POST['slug'];
+
         Product::where('slug', $slug)->delete();
-        //return redirect()->route('products.index', app()->getLocale())->with('success', 'Produs sters cu succes!');
+
         return json_encode(array('statusCode'=>200, 'success' => 'Produs sters cu succes!'));
     }
 

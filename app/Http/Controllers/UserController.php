@@ -85,7 +85,8 @@ class UserController extends Controller
     // Update user details
     public function updateUser(Request $request, $id)
     {
-        $id = request('user_id');
+        $_POST = json_decode(file_get_contents("php://input"),true);
+        $id = $_POST['user_id'];
         User::find($id)->update($request->all());
         return json_encode(array('statusCode'=>200, 'success' => 'Detalii utilizator actualizate cu succes!'));
     }
