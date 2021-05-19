@@ -4,20 +4,6 @@
 @endsection
 @section('content')
 <div class="conatiner">
-<!-- <section id="animatie">
-    <div class="animated-text">
-        <span class="animation-text">M</span>
-        <span class="animation-text">I</span>
-        <span class="animation-text">R</span>
-        <span class="animation-text">A</span>
-        <span class="animation-text">S</span>
-        <span class="animation-text">O</span>
-        <span class="animation-text">I</span>
-        <span class="animation-text">L</span>
-        <h2 class="header-animated">{{ __('Natural lavender products') }}</h2>
-    </div>
-</section>
-<section> -->
 <div>
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
