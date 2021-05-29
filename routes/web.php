@@ -59,10 +59,8 @@ Route::group([
     Route::post('/register/admin', 'Auth\RegisterController@createAdmin')->name('register');
     Route::post('/register/user', 'Auth\RegisterController@createUser')->name('register');
     
-    Route::view('/admin', 'admin')->name('admin');
-    Route::view('/user', 'user')->name('user.dashboard');
-    
     Route::middleware(['auth:admin'])->group(function () { 
+        Route::view('/admin', 'admin')->name('admin');
         Route::GET('/products', 'ProductController@index')->name('products');
         Route::resource('products','ProductController');
 
@@ -77,7 +75,7 @@ Route::group([
         Route::get('orders', 'OrderController@getOrders')->name('orders');   //display all orders
         Route::get('order/{id}', 'OrderController@getOrderSpecs')->name('order.details');
         Route::get('order/edit/{id}', 'OrderController@editOrder')->name('order.edit');
-        Route::patch('order/edit/{id}', 'OrderController@updateOrder')->name('orders.update');
+        Route::post('order/edit/{id}', 'OrderController@updateOrder')->name('orders.update');
         Route::delete('order/{id}', 'OrderController@destroyOrder')->name('order.destroy');
     
         //users
@@ -92,6 +90,7 @@ Route::group([
     });
     
     Route::middleware(['auth:user'])->group(function () {
+            Route::view('/user', 'user')->name('user.dashboard');
             Route::GET('/shop', 'ProductController@indexUser')->name('shop');
             Route::post('/add-to-cart/{product}', 'ProductController@addToCart')->name('shop.store');   //add to cart
             Route::get('/cart', 'ProductController@cart')->name('cart');  //cosul propriu zis - user

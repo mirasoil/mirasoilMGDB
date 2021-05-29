@@ -2,6 +2,13 @@
 @section('title')
 <title>{{ __('Cart') }} - Mirasoil</title>
 @endsection
+@section('extra-scripts')
+<!--Axios-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+@endsection
 @section('content')
 <div class="container">
     <div class="py-2 text-center">
@@ -34,7 +41,7 @@
     </thead>
     <tbody>
 @endif
-    <?php $total = 0 ?>
+<?php $total = 0 ?>
  @if(session('cart'))
  @foreach(session('cart') as $id => $details)
  <?php $total += $details['price'] * $details['quantity'] ?>
@@ -42,25 +49,27 @@
         <td data-th="Product">
         <form>
             @csrf
-            @method('PATCH')
-        <div class="row">
-            <div class="col-sm-3 hidden-xs"><img src="../img/{!!$details['image']!!}" width="100" height="100" class="img-responsive"/></div>
-                <div class="col-sm-9">
-                    <h4 class="nomargin">{{ $details['name'] }}</h4>
+            <div class="row">
+                <div class="col-sm-3 hidden-xs"><img src="../img/{!!$details['image']!!}" width="100" height="100" class="img-responsive"/></div>
+                    <div class="col-sm-9">
+                        <h4 class="nomargin">{{ $details['name'] }}</h4>
+                    </div>
                 </div>
             </div>
-        </td>
-        <td data-th="Price" id="price{{$id}}">{{ $details['price'].' Lei' }}</td>
-        <td data-th="Quantity">
-            <input type="number" value="{{ $details['quantity'] }}" class="form-control quantity{{$id}}" min="1" oninput="validity.valid||(value='');"/>
-        </td>
-        <td data-th="Subtotal" class="text-center" id="subtotal{{$id}}">{{ $details['price'] * $details['quantity'] }} Lei</td>
-        <td class="actions text-center" data-th="">
-        
-            <button class="btn btn-info btn-sm update-cart"  data-id="{{ $id }}"><i class="fa fa-refresh"></i> {{ __('Modify') }}</button>
-            <button class="btn btn-danger btn-sm remove-from-cart"  data-id="{{ $id }}"  id="{{$details['name']}}"><i class="fa fa-trash-o"></i> {{ __('Delete') }}</button> 
-        </form>
-            
+            </td>
+            <td data-th="Price" id="price{{$id}}">{{ $details['price'].' Lei' }}</td>
+            <td data-th="Quantity">
+                <input type="number" value="{{ $details['quantity'] }}" class="form-control quantity{{$id}}" min="1" oninput="validity.valid||(value='');"/>
+            </td>
+            <td data-th="Subtotal" class="text-center" id="subtotal{{$id}}">{{ $details['price'] * $details['quantity'] }} Lei</td>
+            <td class="actions text-center" data-th="">
+            <button class="btn btn-info btn-sm update-cart"  data-id="{{ $id }}"><i class="fa fa-refresh"></i>
+                {{ __('Modify') }}
+            </button>
+            <button class="btn btn-danger btn-sm remove-from-cart"  data-id="{{ $id }}"  id="{{$details['name']}}"><i class="fa fa-trash-o"></i> 
+                {{ __('Delete') }}
+            </button> 
+        </form>  
         </td>
     </tr>
  @endforeach
@@ -88,61 +97,65 @@
  </div>
  @endif
  <script>
- $(".update-cart").click(function (e) {
-        e.preventDefault();
-        var ele = $(this);
-        var id = ele.attr('data-id');
-        //accesez pretul din string
-        var price = $('#price'+id).html();
-        var str = price;
-        var res = str.split(" ");
-        //cantitatea individuala a fiearui produs
-        var quantity = $('.quantity'+id).val();
-        
-        let currentUrl = "{{ url(app()->getLocale().'/cart') }}";
+ // Modify cart quantity for a product
+  $(".update-cart").click(function (e) {
+    e.preventDefault();
+    var ele = $(this);
+    var id = ele.attr('data-id');
+    // get the price from the string
+    var price = $('#price'+id).html();
+    var str = price;
+    var res = str.split(" ");
+    // individual quantity
+    var quantity = $('.quantity'+id).val();
+    
+    let currentUrl = "{{ url(app()->getLocale().'/cart') }}";
+    
+    axios
+    .patch("{{ url(app()->getLocale().'/update-cart') }}", {
+        data: {
+            _token: '{{ csrf_token() }}',
+            "id": id, 
+            "quantity": quantity
+        }
+    })
+    .then(response => {
+        let newSubtotal = parseInt(quantity) * parseInt(res[0]); 
+        $('#subtotal'+id).html(newSubtotal+' Lei');
+        $('#total').load(currentUrl+' #total'); 
+        $(".alert").addClass("alert-success");
+        $("#message-response").html("Produsul a fost actualizat");
+    })
+    .catch(function (error) {
+    	alert('A intervenit o eroare. Va rugam sa incercati din nou');
+  })
+});
 
-        $.ajax({
-            url: "{{ url(app()->getLocale().'/update-cart') }}",
-            method: "PATCH",
-            data: {
-                _token: '{{ csrf_token() }}',
-                id: id, 
-                quantity: quantity
-            }, 
-            success: function(response) {
-                let newSubtotal = parseInt(quantity) * parseInt(res[0]); 
-                $('#subtotal'+id).html(newSubtotal+' Lei');
-                $('#total').load(currentUrl+' #total'); 
-                $(".alert").addClass("alert-success");
-                $("#message-response").html("Produsul a fost actualizat");
-                
-                console.log(newSubtotal, quantity, res[0])
-            }
-        
-    });
- });
+// Remove product from cart
  $(".remove-from-cart").click(function (e) {
-        e.preventDefault();
-        var ele = $(this);
-        var id = $(this).data('id');
-        let url = "{{ url(app()->getLocale().'/cart') }}"
-        if(confirm("Sunteti sigur ca doriti sa stergeti acest produs?")) {
-            $.ajax({
-                type: 'DELETE',
-                url: "{{ url(app()->getLocale().'/delete-from-cart') }}",
-                data: {
-                        "_token": "{{ csrf_token() }}",
-                        "id": id
-                    },
-                success: function (response) {
-                    $(".alert").addClass("alert-success")  //stilizare
-                    $("#message-response").html("Produsul a fost sters")  //continutul mesajului
-                    $("#product-show-"+id).remove(); //vreau doar sa dispara paragraful cu produsul sters, fara reload
-                    $('#total').load(url+' #total');    //reincarca doar sectiunea #total din pagina
-            }
-        });
+    e.preventDefault();
+    var ele = $(this);
+    var id = $(this).data('id');
+    let url = "{{ url(app()->getLocale().'/cart') }}"
+    if(confirm("Sunteti sigur ca doriti sa stergeti acest produs?")) {
+        axios
+        .delete("{{ url(app()->getLocale().'/delete-from-cart') }}", {
+            data: {    
+                _token:'{{ csrf_token() }}',
+                "id": id
+                }
+        })
+        .then(response => {
+            $(".alert").addClass("alert-success")  
+            $("#message-response").html("Produsul a fost sters")  
+            $("#product-show-"+id).remove(); 
+            $('#total').load(url+' #total');   
+        }) 
+        .catch(function (error) {
+            alert('A intervenit o eroare. Va rugam sa incercati din nou');
+        })   
     }
- });
+});
  </script>
 </div>
 @endsection

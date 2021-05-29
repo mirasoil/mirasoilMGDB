@@ -14,10 +14,10 @@ class InvoiceController extends Controller
 {
     // Display invoice for user 
     public function show() {
-        $order_id = request()->segment(count(request()->segments()));                       //the order id from url
-        $orders = Order::where('_id', $order_id)->get();                                    //the order from Orders collection
+        $order_id = request()->segment(count(request()->segments()));                                                           // the order id from url
+        $orders = Order::where('_id', $order_id)->get();                                                                        // the order from Orders collection
         
-        $customer = new Buyer([                                                             //the user's info from Orders collection
+        $customer = new Buyer([                                                                                                 // the user's info from Orders collection
             'name'          => $orders[0]['attributes']['billing_fname'].' '.$orders[0]['billing_lname'],
             'custom_fields' => [
                 'email' => $orders[0]['billing_email'],
@@ -40,8 +40,8 @@ class InvoiceController extends Controller
         
         $items = [];
         foreach ($products as $product) { 
-            for ($i = 0; $i < count($products); $i++) {                                                  //store the quantity that were bought from that specific product 
-                if ($product['_id'] == $orders[0]['products'][$i]['product_id']) {                       //if the id from products is equal to the product_id from our collection
+            for ($i = 0; $i < count($products); $i++) {                                                                         //store the quantity that were bought from that specific product 
+                if ($product['_id'] == $orders[0]['products'][$i]['product_id']) {                                               //if the id from products is equal to the product_id from our collection
                     $quantity = $quantities[$i]; 
                 }
                 

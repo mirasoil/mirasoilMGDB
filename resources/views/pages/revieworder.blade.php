@@ -250,107 +250,103 @@
     <br>
 @endfor
 <script>
-$('#invoice-generator').click(function(event){
+// Update user details - on checkout
+$('#update-user-details').click(function(event){
     event.preventDefault();
 
+    let firstname = $("input[name=firstname]").val();
+    let lastname = $("input[name=lastname]").val();
+
+    let phone = $("input[name=phone]").val();
+    let address = $("#address").val();
+    let county = $("#county").val();
+    let city = $("input[name=city]").val();
+    let zipcode = $("input[name=zipcode]").val();
+
     var id = $(this).data('id');
+    let url = "{{ url(app()->getLocale().'/revieworder/') }}"+'/'+id;
 
-    $.ajax({
-        url: "{{ url(app()->getLocale().'/checkout/') }}"+'/'+id,
-        type:"POST",
-        data:{
-            "_token": "{{ csrf_token() }}",
-            id:id,
-        },
-        // success: function(response){
-        //     console.dir(response);   
-        // },
-    });    
+    let axiosConfig = {
+        headers: {
+            'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+        }
+    };
+    axios({
+    method: 'patch',
+    url: url,
+    headers: axiosConfig,
+    data: {
+            _token: "{{ csrf_token() }}",
+            id: id,
+            firstname: firstname,
+            lastname: lastname,
+            phone: phone,
+            address: address,
+            county: county,
+            city: city,
+            zipcode: zipcode
+    }
+    })
+    .then((response) => {			
+        $(".alert").addClass("alert-success")  //stilizare
+        $("#message-response").html("Informațiile au fost actualizate")  //continutul mesajului   
+    })
+    .catch(function (error) {
+        alert('A intervenit o eroare. Va rugam sa incercati din nou');
+    })
 });
 
-$('#update-user-details').click(function(event){
-      event.preventDefault();
-
-      let firstname = $("input[name=firstname]").val();
-      let lastname = $("input[name=lastname]").val();
-    //   let email = $("input[name=email]").val();
-      let phone = $("input[name=phone]").val();
-      let address = $("#address").val();
-      let county = $("#county").val();
-      let city = $("input[name=city]").val();
-      let zipcode = $("input[name=zipcode]").val();
-
-      var id = $(this).data('id');
-
-      $.ajax({
-        url: "{{ url(app()->getLocale().'/revieworder/') }}"+'/'+id,
-        type:"PATCH",
-        data:{
-            "_token": "{{ csrf_token() }}",
-            id:id,
-            firstname:firstname,
-            lastname:lastname,
-            phone:phone,
-            address:address,
-            county:county,
-            city:city,
-            zipcode:zipcode,
-        },
-        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        success: function(response){
-            $(".alert").addClass("alert-success")  //stilizare
-            $("#message-response").html("Informațiile au fost actualizate")  //continutul mesajului  
-            // $('#update-data-form').load(); //resetare formular pentru a afisa detaliile noi introduse    
-        },
-       });
-});
-
+// Store the order
 $("#complete-order").click(function(event){
-      event.preventDefault();
+    event.preventDefault();
 
-      let firstname = $("input[name=firstname]").val();
-      let lastname = $("input[name=lastname]").val();
-      let email = $("input[name=email]").val();
-      let phone = $("input[name=phone]").val();
-      let address = $("#address").val();
-      let county = $("#county").val();
-      let city = $("input[name=city]").val();
-      let zipcode = $("input[name=zipcode]").val();
-      //accesez totalul 
-      let str = $('#total').html();
-      var res = str.split(" ");
-      let total = parseInt(res[0]);
+    let firstname = $("input[name=firstname]").val();
+    let lastname = $("input[name=lastname]").val();
+    let email = $("input[name=email]").val();
+    let phone = $("input[name=phone]").val();
+    let address = $("#address").val();
+    let county = $("#county").val();
+    let city = $("input[name=city]").val();
+    let zipcode = $("input[name=zipcode]").val();
 
-      var id = $(this).data('id');
+    let str = $('#total').html();
+    var res = str.split(" ");
+    let total = parseInt(res[0]);
 
-      $.ajax({
-        url: "{{route('orders.store', app()->getLocale())}}",
-        type:"POST",
-        data:{
-            "_token": "{{ csrf_token() }}",
-            id:id,
-            firstname:firstname,
-            lastname:lastname,
-            email:email,
-            phone:phone,
-            address:address,
-            county:county,
-            city:city,
-            zipcode:zipcode,
+    var id = $(this).data('id');
+    let url = "{{route('orders.store', app()->getLocale())}}";
+
+    let axiosConfig = {
+        headers: {
+            'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+        }
+    };
+
+    axios({
+        method: 'post',
+        url: url,
+        headers: axiosConfig,
+        data: {
+            _token: "{{ csrf_token() }}",
+            id: id,
+            firstname: firstname,
+            lastname: lastname,
+            email: email,
+            phone: phone,
+            address: address,
+            county: county,
+            city: city,
+            zipcode: zipcode,
             total: total,
-        },
-        contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
-        success: function(response){
-            var dataResult = JSON.parse(response);
-			if(dataResult.statusCode==200){
-                showPaymentForm();        
-            } else {
-                $('.alert').addClass(' alert-danger');
-                $('#message-response').html(dataResult.orderError);
-            }
-        },
-       });
-  });
+        }
+    })
+    .then((response) => {			
+        showPaymentForm(); 
+    })
+    .catch(function (error) {
+        alert('A intervenit o eroare. Va rugam sa incercati din nou');
+    })
+});
 
 function showPaymentForm(){
     $('#payment-form').removeClass('d-none');

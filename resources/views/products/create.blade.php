@@ -120,36 +120,38 @@ $(document).on("click", "#createProduct", function(e) {
     })
 });
 
+// Verify if there is a product in our database with the same slug
 function checkSlug() {
     // e.preventDefault();
     var slug = $('#slug').val();
+    let url = "{{ route('slug.check', app()->getLocale()) }}"
     if(slug != "") {
-        $.ajax({
-            url: "{{ route('slug.check', app()->getLocale()) }}",
-            type: "POST",
+        axios({
+            method: 'post',
+            url: url,
             data: {
-                 _token: '{{ csrf_token() }}',
-                 slug: slug
-             },
-             cache: false,
-             success: function(dataResult){
-                
-                var dataResult = JSON.parse(dataResult);
-                 if(dataResult.statusCode==200){			
-                   
-                 }
-                 else if(dataResult.statusCode==201){
-                    // alert('Acest slug exista deja in baza de date !');
-                    var input = document.getElementById('slug');
-                    input.classList.add('is-invalid');
-                    $('#slug-error').html('Acest slug exista deja in baza de date !');
-                    // $('#slug-error').fadeOut(1000);
-                 }  
-             }
-        });
-    }
-    //unbind the event handler - second onblur is not working  
-}
+                _token: "{{ csrf_token() }}",
+                slug: slug
+            }
+        })
+        .then((response) => {	
+            var input = document.getElementById('slug');
 
+            if(response.data.statusCode == 200){
+                input.classList.remove('is-invalid');
+                input.classList.add('is-valid');
+            }
+            else if(response.data.statusCode == 201){
+                input.classList.add('is-invalid');
+                $('#slug-error').html('Acest slug exista deja in baza de date !');
+            }
+        })
+        .catch(function (error) {
+            var input = document.getElementById('slug');
+            input.classList.add('is-invalid');
+            $('#slug-error').html('Acest slug exista deja in baza de date !');
+        })
+    }
+}
 </script>
 @endsection

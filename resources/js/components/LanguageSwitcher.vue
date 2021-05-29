@@ -87,6 +87,7 @@ export default {
     focusItem() {
       this.$refs.dropdown.children[this.focusedIndex].children[0].focus()
     },
+    //access the setLocale function
     setLocale(locale) {
       this.$i18n.locale = locale
       this.$router.push({

@@ -14,6 +14,11 @@
                 <li class="breadcrumb-item active" aria-current="page">{{ __('My Account') }}</li>
             </ol>
         </nav>
+        @if (\Session::has('forbiddenmsg'))
+            <div class="alert alert-danger">
+                {!! \Session::get('forbiddenmsg') !!}
+            </div>
+        @endif
         <div class="alert"> 
             <p id="messageResp"></p>
         </div>
@@ -189,63 +194,35 @@
     <br>
 @endfor
 <script>
-    $(document).on("click", "#edit-user-data", function() { 
-        var user_id = $('#userId').val();
-        var url = "{{ url(app()->getLocale().'/user') }}"+'/'+user_id;
+// Edit user information
+$(document).on("click", "#edit-user-data", function() { 
+    var user_id = $('#userId').val();
+    var url = "{{ url(app()->getLocale().'/user') }}"+'/'+user_id;
 
-        formElement = document.getElementById("update-data-form")
-        formObject = new FormData(formElement)
-        formObject.append("user_id", user_id);
+    formElement = document.getElementById("update-data-form")
+    formObject = new FormData(formElement)
+    formObject.append("user_id", user_id);
 
-        dataObject = {}
-        formObject.forEach(function(valoare,cheie) {
-            dataObject[cheie]=valoare
-            })
-        finalData = JSON.stringify(dataObject)
-        
-        axios
-        .patch(url, finalData, {
-            headers: {"Content-Type": "application/json"}
-            }) 
-            .then(response => {
-                if(response.status == 200)
-                {
-                    $(".alert").addClass("alert-success"); 
-                    $("#messageResp").html("Informațiile au fost actualizate");  
-                }
-                else{
-                    alert("Internal Server Error");
-                }
-            })
-        });
-// $(document).on("click", "#edit-user-data", function() { 
-//     var user_id = $('#userId').val();
-//     var url = "{{ url(app()->getLocale().'/user') }}"+'/'+user_id;
-//     axios
-//     .patch(url, { 
-//             _token:'{{ csrf_token() }}',
-//             user_id: user_id,
-//             firstname: $('#firstname').val(),
-//             lastname: $('#lastname').val(),
-//             email: $('#email').val(),
-//             phone: $('#phone').val(),
-//             address: $('#address').val(),
-//             county: $('#county').val(),
-//             city: $('#city').val(),
-//             zipcode: $('#zipcode').val()
-//         }) 
-//         .then(response => {
-//             if(response.data.statusCode == 200)
-//             {
-//                 $(".alert").addClass("alert-success");  //stilizare
-//                 $("#messageResp").html("Informațiile au fost actualizate");  //continutul mesajului  
-//             }
-//             else{
-//                 alert("Internal Server Error");
-//             }
-//         })
-//     });
-
- 
+    dataObject = {}
+    formObject.forEach(function(valoare,cheie) {
+        dataObject[cheie]=valoare
+        })
+    finalData = JSON.stringify(dataObject)
+    
+    axios
+    .patch(url, finalData, {
+        headers: {"Content-Type": "application/json"}
+        }) 
+        .then(response => {
+            if(response.status == 200)
+            {
+                $(".alert").addClass("alert-success"); 
+                $("#messageResp").html("Informațiile au fost actualizate");  
+            }
+            else{
+                alert("Internal Server Error");
+            }
+        })
+    });
 </script>
 @endsection

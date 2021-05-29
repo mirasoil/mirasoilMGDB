@@ -2,8 +2,8 @@
 @section('content')
 <div class="container">
 <h1 class="text-center">{{ __('Users') }} Control Panel</h1>
- <div class="alert"> <!--- mesaje de succes pt insert delete ---->
-    <p></p>
+ <div class="alert">
+    <p id="messageResp"></p>
  </div>
  <div class="panel panel-default">
     <div class="panel-body">
@@ -48,19 +48,25 @@
 </div>
 <div class="pt-5"></div>
 <script>
+// Permanently delete an account from database
 function deleteUser(id){
+    let url = "{{ url(app()->getLocale().'/user/') }}"+'/'+id;
     if(confirm('Are you sure you want to permanently remove the user ? This action cannot be undone.')){
-        $.ajax({
-            url : "{{ url(app()->getLocale().'/user/') }}"+'/'+id,
-            type: "DELETE",
-            data:{
+        axios
+        .delete(url, {
+            data: {    
                 _token:'{{ csrf_token() }}',
-                'id': id
-            },
-            success: function(data){
-                $("#user-"+id).remove();
-            }
-        });
+                "id": id
+                }
+        })
+        .then(response => {
+            $("#user-"+id).remove();  
+            $(".alert").addClass("alert-success"); 
+            $("#messageResp").html("Utilizatorul a fost sters din baza de date");  
+        }) 
+        .catch(function (error) {
+            alert('A intervenit o eroare. Va rugam sa incercati din nou');
+        }) 
     }
 }
 </script>

@@ -36,11 +36,13 @@ class LoginController extends Controller
             'password' => 'required|min:6'
         ]);
 
-        if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) && $request->locale == "en") {
-
+        if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) 
+            && $request->locale == "en") 
+        {
             return redirect()->intended('/en/admin');
-        } else if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) && $request->locale == "ro") {
-
+        } else if (Auth::guard('admin')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) 
+            && $request->locale == "ro") 
+        {
             return redirect()->intended('/ro/admin');
         }
 
@@ -58,21 +60,24 @@ class LoginController extends Controller
             'email'   => 'required|email',
             'password' => 'required|min:6'
         ]);
-        // dd(Session::has('shop-session'));
         if (Session::has('shop-session')) {
-            if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) && $request->locale == "en") {
-
+            if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) 
+                && $request->locale == "en") 
+            {
                 return redirect()->intended('/en/shop');
-            } else if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) && $request->locale == "ro") {
-
+            } else if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) 
+                && $request->locale == "ro") 
+            {
                 return redirect()->intended('/ro/shop');
             }
         } else {
-            if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) && $request->locale == "en") {
-
+            if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) 
+                && $request->locale == "en") 
+            {
                 return redirect()->intended('/en/user');
-            } else if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) && $request->locale == "ro") {
-
+            } else if (Auth::guard('user')->attempt(['email' => $request->email, 'password' => $request->password], $request->get('remember')) 
+                && $request->locale == "ro") 
+            {
                 return redirect()->intended('/ro/user');
             }
         }

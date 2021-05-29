@@ -86,10 +86,15 @@ class ProductController extends Controller
     // Update cart quantity
     public function updateCart(Request $request)
     {
-        if($request->id and $request->quantity)
+        $data = json_decode(file_get_contents("php://input"),true);   
+        // var_dump($data["data"]["id"]);
+        $id = $data["data"]["id"];
+        $quantity = $data["data"]["quantity"];
+
+        if($id and $quantity)
         {
             $cart = session()->get('cart');
-            $cart[$request->id]["quantity"] = $request->quantity;
+            $cart[$id]["quantity"] = $quantity;
             session()->put('cart', $cart);
             session()->flash('cart-success', 'Cos actualizat!');
         }
@@ -136,7 +141,7 @@ class ProductController extends Controller
     }
 
     // Update user info - revieworder
-    public function updateUserInfo(Request $request, $id)
+    public function updateUserInfoOK(Request $request, $id)
     {
         $user = User::findOrFail($request->id)->first();
         $user-> firstname = $request->firstname;
@@ -147,6 +152,13 @@ class ProductController extends Controller
         $user-> city = $request->city;
         $user-> zipcode = $request->zipcode;
         $user->save();
+    }
+    public function updateUserInfo(Request $request, $id)
+    {
+        $_POST = json_decode(file_get_contents("php://input"),true);
+        $id = $_POST['id'];
+        User::find($id)->update($request->all());
+        return json_encode(array('statusCode'=>200, 'success' => 'Detalii utilizator actualizate cu succes!'));
     }
 
     //ADMIN resources
@@ -186,6 +198,17 @@ class ProductController extends Controller
 
     // Check if new entered slug already exists
     public function checkSlug(Request $request) 
+    {
+        $_POST = json_decode(file_get_contents("php://input"),true);
+        $slug = $_POST['slug'];
+        if($checkSlug = Product::where('slug', $slug)->first()){
+            return json_encode(array('statusCode'=>201));
+        } else {    
+            return json_encode(array('statusCode'=>200));
+        }
+        
+    }
+    public function checkSlugOK(Request $request) 
     {
         $checkSlug = Product::where('slug', $request->slug)->get();
         if ($checkSlug->count() > 0) {

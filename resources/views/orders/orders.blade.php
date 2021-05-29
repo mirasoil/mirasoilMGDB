@@ -8,12 +8,11 @@
 @section('content')
 <div class="container">
 <h3 class="text-center">{{ __('Orders Editor') }}</h3>
-    <div class="alert"> <!--- mesaje de succes pt insert delete ---->
+    <div class="alert"> 
         <p id="message-response"></p>
     </div>
     <div class="panel panel-default">
         <div class="panel-body">
-            <!---Capul de tabel care ramane mereu la fel, nu depinde de foreach--->
             <table class="table table-bordered table-stripped">
             <tr>
                 <th>{{ __('Order ID') }}</th>
@@ -89,48 +88,62 @@
  @for($i=0;$i<=7;$i++)
  <br>
  @endfor
- <script>
- function deleteOrder(id){
+<script>
+// Permanently delete an order as admin
+function deleteOrder(id){
+    let url = "{{ url(app()->getLocale().'/order/') }}"+'/'+id;
     if(confirm('Are you sure you want to permanently delete this order ? This action can\'t be undone.')){
-        $.ajax({
-            url : "{{ url(app()->getLocale().'/order/') }}"+'/'+id,
-            type: "DELETE",
-            data:{
+        axios
+        .delete(url, {
+            data: {    
                 _token:'{{ csrf_token() }}',
-                'id': id
-            },
-            success: function(data){
-                $("#order-"+id).remove();
-            }
-        });
+                "id": id
+                }
+        })
+        .then(response => {
+            $("#order-"+id).remove();   
+        }) 
+        .catch(function (error) {
+            alert('A intervenit o eroare. Va rugam sa incercati din nou');
+        })
     }
 }
 
- function setShipping(order_id){
+// Set shipping status
+function setShipping(order_id){
     var shipped = $('#shipped-'+order_id).val();
+    let url = "{{ url(app()->getLocale().'/order/edit') }}"+'/'+order_id;
     let currentUrl = "{{ url(app()->getLocale().'/orders') }}";
-        $.ajax({
-            url : "{{ url(app()->getLocale().'/order/edit') }}"+'/'+order_id,
-            type: "PATCH",
-            data:{
-                _token:'{{ csrf_token() }}',
-                order_id: order_id,
-                shipped: shipped
-            },
-            success: function(data){
-                var data = JSON.parse(data);
-                 if(data.statusCode==200){			
-                    $('.modal').modal('hide');
-                    $('.modal-backdrop').remove();
-                    $(".alert").addClass("alert-success");  //stilizare
-                    $("#message-response").html("Status comandă actualizat"); 
-                    $('#shipping-response-'+order_id).load(currentUrl+' #shipping-response-'+order_id);
-                 }
-                 else if(data.statusCode==201){
-                    alert("Error occured !");
-                 }
-            }
-        });
+
+    let axiosConfig = {
+    headers: {
+        'Content-Type' : 'application/json; charset=UTF-8',
+        'Accept': 'Token',
+        "Access-Control-Allow-Origin": "*",
+    }
+    };
+    axios({
+      method: 'post',
+      url: url,
+      headers: axiosConfig,
+      data: {
+        _token: '{{ csrf_token() }}',
+            "order_id": order_id,
+            "shipped": shipped
+      }
+    })
+    .then((response) => {			
+        $('.modal').modal('hide');
+        $('.modal-backdrop').remove();
+        $(".alert").addClass("alert-success");  //stilizare
+        $("#message-response").html("Status comandă actualizat"); 
+        // $("#shipping-response-"+order_id).load(" #shipping-response-"+order_id+" > *");
+        $('#shipping-response-'+order_id).load(currentUrl+' #shipping-response-'+order_id);
+    })
+    .catch(function (error) {
+        alert('A intervenit o eroare. Va rugam sa incercati din nou');
+    })
+    
 }
 </script>
 @endsection

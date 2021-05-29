@@ -25,23 +25,24 @@ class OrderController extends Controller
     }
 
     //Store the order for the logged in user 
-    public function storeOk(Request $request) {  //first order for the logged in user => not working, query gets null
+    public function store(Request $request) {  //first order for the logged in user => not working, query gets null
         $query = Order::where('user_id', auth()->user()->id)->latest()->get();
         $query->where('created_at', '<', Carbon::now()->subDays(1)->toDateTimeString());   //If last order was placed less than 24h ago - user cannot place another one
-        
+        $_POST = json_decode(file_get_contents("php://input"),true);
+
         // Creating the order so I can have access to the id
-        if (!$query) {
+        // if (!$query) {
             $order = Order::create([
                 'user_id' => auth()->user() ? auth()->user()->id : null,
-                'billing_fname' => $request->firstname,
-                'billing_lname' => $request->lastname,
-                'billing_email' => $request->email,
-                'billing_phone' => $request->phone,
-                'billing_address' => $request->address,
-                'billing_county' => $request->input('county'),
-                'billing_city' => $request->city,
-                'billing_zipcode' => $request->zipcode,
-                'billing_total' => $request->total
+                'billing_fname' => $_POST['firstname'],
+                'billing_lname' => $_POST['lastname'],
+                'billing_email' => $_POST['email'],
+                'billing_phone' => $_POST['phone'],
+                'billing_address' => $_POST['address'],
+                'billing_county' => $_POST['county'],
+                'billing_city' => $_POST['city'],
+                'billing_zipcode' => $_POST['zipcode'],
+                'billing_total' => $_POST['total']
             ]);
 
             //Get all the products that were ordered with the quantity and store them in an array
@@ -63,9 +64,9 @@ class OrderController extends Controller
             $order->save();
             
             return json_encode(array("statusCode"=>200));  
-        } else {
-            return json_encode(array('statusCode' => 201 , 'orderError' => 'Nu puteti plasa mai multe comenzi intr-un interval de 24h de la ultima comanda'));
-        }
+        // } else {
+        //     return json_encode(array('statusCode' => 201 , 'orderError' => 'Nu puteti plasa mai multe comenzi intr-un interval de 24h de la ultima comanda'));
+        // }
     }
 
     //Get the specific order details
@@ -122,12 +123,20 @@ class OrderController extends Controller
     }
 
     // Update order details
-    public function updateOrder(Request $request)
+    public function updateOrderOK(Request $request)
     {
         $id = request('order_id');
         $shipped = $request->shipped;
         Order::where('_id', $id)->update(['shipped' => $request->shipped]);
         return json_encode(array('statusCode'=>200, 'shipped' => $shipped));
+    }
+    public function updateOrder(Request $request)
+    {
+        $_POST = json_decode(file_get_contents("php://input"),true);
+        $id = $_POST['order_id'];
+        $shipped = $_POST['shipped'];
+        Order::where('_id', $id)->update(['shipped' => $shipped]);
+        return json_encode(array('statusCode'=>200, 'success' => 'Status comanda actualizat'));
     }
 
     //Delete an order

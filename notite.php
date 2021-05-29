@@ -4,3 +4,7 @@
 
 Left: -first order for user - if statement from OrderProduct
       -stripe (https://www.youtube.com/watch?v=B8LMVCO_GiQ)
+
+
+
+In details/produs, la adauga in cos -- mesaj de succes si update la cos !!!!!
