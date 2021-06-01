@@ -95,7 +95,7 @@
     "Price": "Preț",
     "Quantity": "Cantitate",
     "Unit price": "Preț/buc",
-    "Place order": "Plasare comandă",
+    "Place order": "Plasează comanda",
     "Billing Address": "Adresă facturare",
     "Shipping Address": "Adresă livrare",
     "Shipping address is the same as billing address": "Adresa de livrare este aceeași cu adresa de facturare",
@@ -173,6 +173,15 @@
     "User's orders": "Comenzile utilizatorului",
     "Registered at": "Înregistrată la data de",
     "This user has no orders registered yet": "Acest utilizator nu are comenzi înregistrate în baza de date",
-    "You have no orders registered yet.": "Nu aveți comenzi înregistrate"
+    "You have no orders registered yet.": "Nu aveți comenzi înregistrate",
+    "Order Confirmation": "Confirmare Comandă",
+    "Your order was placed succesfully! Please check My Orders section for further details": "Comanda dumneavoastră a fost plasată cu success. Vă rugăm verificați secțiunea Comenzile Mele pentru mai multe detalii",
+    "Complete order": "Finalizează comanda",
+    "Choosing the payment method will lead to placing the order. Please check all the details": "Prin alegerea metodei de plată, comanda de mai sus va fi plasată. Vă rugăm să verificați toate detaliile.",
+    "Payment method:": "Modalitate de plată",
+    "Update Details": "Actualizează informații",
+    "Product added to cart": "Produs adăugat în coș",
+    "Verify your shopping cart for more details": "Verificați coșul de cumpărături pentru mai multe detalii",
+    "Check cart": "Vezi coș"
     
 }

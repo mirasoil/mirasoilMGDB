@@ -24,25 +24,45 @@ class OrderController extends Controller
         ));      
     }
 
+    // Create session for order details
+    public function createSession(Request $request) {
+        $order = json_decode(file_get_contents("php://input"),true);
+
+        $order_info = [
+            'firstname' => $order['firstname'],
+            'lastname' => $order['lastname'],
+            'email' => $order['email'],
+            'phone' => $order['phone'],
+            'address' => $order['address'],
+            'county' => $order['county'],
+            'city' => $order['city'],
+            'zipcode' => $order['zipcode'],
+            'total' => $order['total']
+        ];
+        session()->put('order_info', $order_info);
+        return json_encode(array('statusCode'=>200, 'success' => 'Detalii utilizator actualizate cu succes!'));
+    }
+
+
     //Store the order for the logged in user 
     public function store(Request $request) {  //first order for the logged in user => not working, query gets null
         $query = Order::where('user_id', auth()->user()->id)->latest()->get();
         $query->where('created_at', '<', Carbon::now()->subDays(1)->toDateTimeString());   //If last order was placed less than 24h ago - user cannot place another one
-        $_POST = json_decode(file_get_contents("php://input"),true);
+        $axios = json_decode(file_get_contents("php://input"), true);
 
         // Creating the order so I can have access to the id
         // if (!$query) {
             $order = Order::create([
                 'user_id' => auth()->user() ? auth()->user()->id : null,
-                'billing_fname' => $_POST['firstname'],
-                'billing_lname' => $_POST['lastname'],
-                'billing_email' => $_POST['email'],
-                'billing_phone' => $_POST['phone'],
-                'billing_address' => $_POST['address'],
-                'billing_county' => $_POST['county'],
-                'billing_city' => $_POST['city'],
-                'billing_zipcode' => $_POST['zipcode'],
-                'billing_total' => $_POST['total']
+                'billing_fname' => session('order_info')['firstname'],
+                'billing_lname' => session('order_info')['lastname'],
+                'billing_email' => session('order_info')['email'],
+                'billing_phone' => session('order_info')['phone'],
+                'billing_address' => session('order_info')['address'],
+                'billing_county' => session('order_info')['county'],
+                'billing_city' => session('order_info')['city'],
+                'billing_zipcode' => session('order_info')['zipcode'],
+                'billing_total' => session('order_info')['total']
             ]);
 
             //Get all the products that were ordered with the quantity and store them in an array
@@ -62,6 +82,8 @@ class OrderController extends Controller
             //Add the products array to the order
             $order->products = $items;
             $order->save();
+
+            session()->forget('cart');
             
             return json_encode(array("statusCode"=>200));  
         // } else {
@@ -146,4 +168,9 @@ class OrderController extends Controller
         Order::find($id)->delete();
         return json_encode(array('statusCode'=>200, 'success' => 'Comanda a fost stearsa cu succes!'));
     }  
+
+    // Test page
+    public function testIndex(){
+        return view('test');
+    }
 }

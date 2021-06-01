@@ -3,18 +3,29 @@
 <title>{{ __('Place order') }} - Mirasoil</title>
 @endsection
 @section('extra-scripts')
-<script src="https://js.stripe.com/v3/"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 @endsection
 @section('content')
 <div id="checkout" class="container">
-    <div class="pt-3 text-center">
+    <nav aria-label="breadcrumb" class="main-breadcrumb mt-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/') }}">{{ __('Home') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/user') }}">{{ __('My Account') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/cart') }}">{{ __('My Cart') }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('Checkout') }}</li>
+        </ol>
+    </nav>
+    <!-- <div class="pt-3 text-center">
         <h2>{{ __('Place order') }}</h2>
         <p class="lead"></p>
-    </div>
+    </div> -->
     <div class="alert">
         <p id="message-response"></p>
     </div>
-    <br />
     <div class="row">
         <!-- Sectiunea Cosul Meu si Adresa facturare -->
         <div class="col-md-4 order-md-2 mb-2">
@@ -29,7 +40,7 @@
                     @foreach(session('cart') as $id => $details)
                     <?php $total += $details['price'] * $details['quantity'] ?>
                         <li class="list-group-item d-flex justify-content-between lh-condensed">
-                            <img src="../img/{{ $details['image'] }}" alt="Hidrolat de lavandă" width="60" height="60">
+                            <img src="../img/{{ $details['image'] }}" alt="{{ $details['name'] }}" width="60" height="60">
                             <div>
                                 <h6 class="my-0">{{ $details['name'] }}</h6>
                                 <small class="text-muted">{{ __('Quantity') }}: {{ $details['quantity'] }}</small><br>
@@ -44,12 +55,7 @@
                     <strong id="total">{{ $total.' RON' }}</strong>
                 </li>
             </ul>
-            <div class="card p-2 mb-3">
-                <a href="{{ url(app()->getLocale().'/cart') }}" class="btn btn-danger m-1"> &lt;&lt; Înapoi la Coșul meu</a> 
-                <a href="{{ url(app()->getLocale().'/shop') }}" class="btn btn-warning m-1"> &lt;&lt; Continuă Cumpărăturile </a>
-                <a href="{{ url(app()->getLocale().'/checkout') }}" class="btn btn-success m-1"> Finalizare Comandă &gt;&gt; </a>    
-            </div>
-            <h4 class="d-flex text-center mb-3"><span class="text-muted">{{ __('Billing Adress') }}</span></h4>
+            <h4 class="d-flex text-center mb-3"><span class="text-muted">{{ __('Billing Address') }}</span></h4>
             <hr>
             <div class="card p-2">
                 <div class="row">
@@ -71,6 +77,10 @@
                     <textarea class="form-control" id="address1" rows="3" disabled="">{{ Auth::user()->address }}</textarea>
                 </div>
             </div>  
+            <div class="card p-2 my-3">
+                <a href="{{ url(app()->getLocale().'/cart') }}" class="btn btn-info m-1"> Înapoi la Coșul meu</a> 
+                <a href="{{ url(app()->getLocale().'/shop') }}" class="btn btn-primary m-1"> Continuă Cumpărăturile </a>
+            </div>
         </div>
         <div class="col-md-8 order-md-1">
             <form method="POST" id="update-data-form">
@@ -211,46 +221,103 @@
                         <input type="checkbox" class="custom-control-input" id="save-info">
                         <label class="custom-control-label" for="save-info">{{ __('Save for later') }}</label>
                     </div>
-                </div>
-                <div class="form-group row mb-0">
-                    <div class="col-md-8">
-                        <button id="update-user-details" data-id="{{ Auth::user()->id }}" class="btn btn-primary">
+                    <div class="col-md-8 my-3">
+                        <button id="update-user-details" data-id="{{ Auth::user()->id }}" class="btn btn-primary" type="button">
                             {{ __('Save') }}
                         </button>
                     </div>
                 </div>
-                <div class="form-group row mb-0">
-                    <div class="col-md-8">
-                        <button type="submit" id="complete-order" data-id="{{ Auth::user()->id }}" class="btn btn-primary mt-3">
-                            {{ __('Proceed to payment') }}
-                        </button>
-                    </div>
+                <div class="form-group mt-5">
+                    <h3>{{ __('Complete order') }}</h3>
+                    <hr />
+                    <p>{{ __('Choosing the payment method will lead to placing the order. Please check all the details') }}</p>
+                    <p>{{ __('Payment method:') }}</p>
+                    <ul class="list-group">
+                        <li class="list-group-item">
+                            <span class="font-weight-light">Plata cu cardul de credit <i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard"></i> </span>
+                            <div class="float-right">
+                                <form action="{{ url(app()->getLocale().'/revieworder') }}" method="POST" id="payment-form" class="my-5 ml-5">
+                                    {{ csrf_field() }}
+                                    <script
+                                            src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                                            data-label="Plătește"
+                                            data-key="{{ env('STRIPE_KEY') }}"
+                                            data-amount="{{$total*100}}"
+                                            data-name="Plata comenzii"
+                                            data-description="Va rugam sa verificati datele introduse"
+                                            data-image="https://stripe.com/img/documentation/checkout/marketplace.png"
+                                            data-locale="auto"
+                                            data-currency="ron">
+                                    </script>
+                                </form>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <span class="font-weight-light">Ramburs (la curier)</span>
+                            <div class="float-right">
+                                <button type="button" onclick="placeOrder()" class="text-light" id="ramburs">
+                                    Plătește
+                                </button>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </form>
-            <form id="payment-form" class="d-none my-4">
-                @csrf
-                <h5 class="mt-5">{{ __('Payment details') }}</h5>
-                <hr>
-                <input type="text" id="email-stripe" class="form-control" placeholder="Email address" value="{{ Auth::user()->email }}" />
-                    <div id="card-element" class="my-3"><!--Stripe.js injects the Card Element--></div>
-                    <button id="submitButton" type="submit" class="btn btn-success my-4">
-                        <span id="button-text">{{ __('Pay') }}</span>
-                    </button>
-                    <p id="card-error" role="alert"></p>
-                    <p class="result-message d-none">
-                        {{ __('Payment successful!') }}
-                    </p>
-            </form>
+            
+            
         </div>  
     </div>
-    <button id="invoice-generator" class="btn btn-primary btn-lg btn-block" type="submit" data-id="{{ Auth::user()->id }}">{{ __('Proceed to payment') }}</button>
-    <a href="{{ url(app()->getLocale().'/checkout') }}">INVOICE</a>
 </div>
 @for ($i = 0; $i < 5; $i++)
     <br>
 @endfor
 <script>
 // Update user details - on checkout
+$( document ).ready(function(){
+
+    let firstname = $("input[name=firstname]").val();
+    let lastname = $("input[name=lastname]").val();
+    let email = $("input[name=email]").val();
+
+    let phone = $("input[name=phone]").val();
+    let address = $("#address").val();
+    let county = $("#county").val();
+    let city = $("input[name=city]").val();
+    let zipcode = $("input[name=zipcode]").val();
+
+    let str = $('#total').html();
+    var res = str.split(" ");
+    let total = parseInt(res[0]);
+
+    var id = "{{ Auth::user()->id }}";
+    let url = "{{ url(app()->getLocale().'/revieworder/session/') }}"+'/'+id;
+
+    let axiosConfig = {
+        headers: {
+            'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
+        }
+    };
+    axios({
+    method: 'post',
+    url: url,
+    headers: axiosConfig,
+    data: {
+            _token: "{{ csrf_token() }}",
+            id: id,
+            firstname: firstname,
+            lastname: lastname,
+            email: email,
+            phone: phone,
+            address: address,
+            county: county,
+            city: city,
+            zipcode: zipcode,
+            total: total
+    }
+    })
+});
+
+
 $('#update-user-details').click(function(event){
     event.preventDefault();
 
@@ -296,120 +363,11 @@ $('#update-user-details').click(function(event){
     })
 });
 
-// Store the order
-$("#complete-order").click(function(event){
-    event.preventDefault();
-
-    let firstname = $("input[name=firstname]").val();
-    let lastname = $("input[name=lastname]").val();
-    let email = $("input[name=email]").val();
-    let phone = $("input[name=phone]").val();
-    let address = $("#address").val();
-    let county = $("#county").val();
-    let city = $("input[name=city]").val();
-    let zipcode = $("input[name=zipcode]").val();
-
-    let str = $('#total').html();
-    var res = str.split(" ");
-    let total = parseInt(res[0]);
-
-    var id = $(this).data('id');
-    let url = "{{route('orders.store', app()->getLocale())}}";
-
-    let axiosConfig = {
-        headers: {
-            'Content-Type' : 'application/x-www-form-urlencoded; charset=UTF-8'
-        }
-    };
-
-    axios({
-        method: 'post',
-        url: url,
-        headers: axiosConfig,
-        data: {
-            _token: "{{ csrf_token() }}",
-            id: id,
-            firstname: firstname,
-            lastname: lastname,
-            email: email,
-            phone: phone,
-            address: address,
-            county: county,
-            city: city,
-            zipcode: zipcode,
-            total: total,
-        }
-    })
-    .then((response) => {			
-        showPaymentForm(); 
-    })
-    .catch(function (error) {
-        alert('A intervenit o eroare. Va rugam sa incercati din nou');
-    })
-});
-
-function showPaymentForm(){
-    $('#payment-form').removeClass('d-none');
-    $('#complete-order').remove();
+function placeOrder(){
+    if(confirm('Această acțiune va plasa comanda cu modalitatea de plată ramburs. Sunteți sigur că doriți să continuați ?')){
+        window.location.href='{{ route('checkout.index', app()->getLocale()) }}'
+    }
 }
 
-//Stripe script
-const stripe = Stripe("pk_test_51IIzThFPoGjTfy5WZEzx4HhJ923HVamP4Ul8zA1D1Z961FxJXnnK6im7bDRA17LzsToUNLe0YySRY0Dn75M2HAjm00c0GgoLHD");
-const elements = stripe.elements();
-
-const clientSecret = 'pi_1IJ0LNFPoGjTfy5WMpaX3SCT_secret_ZtZJcMKUJEKXNGhYwrWjcFevU';
-
-var style = {
-    base: {
-    color: "#32325d",
-    fontFamily: 'Arial, sans-serif',
-    fontSmoothing: "antialiased",
-    fontSize: "16px",
-    "::placeholder": {
-        color: "#32325d"
-    }
-    },
-    invalid: {
-    fontFamily: 'Arial, sans-serif',
-    color: "#fa755a",
-    iconColor: "#fa755a"
-    }
-};
-var card = elements.create("card", { style: style });
-// Stripe injects an iframe into the DOM
-card.mount("#card-element");
-
-card.on("change", function (event) {
-    // Disable the Pay button if there are no card details in the Element
-    document.querySelector("button").disabled = event.empty;
-    document.querySelector("#card-error").textContent = event.error ? event.error.message : "";
-});
-
-var form = document.getElementById("payment-form");
-form.addEventListener("submit", function(event) {
-    event.preventDefault();
-    // Complete payment when the submit button is clicked
-    payWithCard(stripe, card, data.clientSecret);
-});
-
-submitButton.addEventListener('click', function(ev) {
-stripe.confirmCardPayment(clientSecret, {
-    receipt_email: document.getElementById('email-stripe').value,
-    payment_method: {
-    card: card
-    }
-})
-.then(function(result) {
-    if (result.error) {
-    // Show error to your customer
-    showError(result.error.message);
-    } else {
-    // The payment succeeded!
-    orderComplete(result.paymentIntent.id);
-    $('.result message').removeClass('d-none');
-    console.log($paymentIntent);
-    }
-});
-});
 </script>
 @endsection

@@ -15,11 +15,9 @@
         </div>
         <div class="form-group">
             <div class="pull-right">
-                <!---Butonul pentru adaugarea unui produs nou--->
                 <a href="{{ url(app()->getLocale().'/products/create') }}" class="btn btn-info">{{ __('Create new product') }}</a>
             </div>
         </div>
-        <!---Capul de tabel care ramane mereu la fel, nu depinde de foreach--->
         <table class="table table-bordered table-stripped">
         <tr>
             <th width="50">{{ __('Slug') }}</th>
@@ -33,8 +31,7 @@
             <th width="250">{{ __('Uses') }}</th>
             <th width="100">{{ __('Actions') }}</th>
         </tr>
-        @if (count($products) > 0) <!---Numara cate produse sunt afisate pe ecran. Daca numarul e pozitiv, adica daca exista produse atunci le afisam. Cine e $products ? ---->
-            <!---Afisarea propriu zisa a produselor--->
+        @if (count($products) > 0) 
             @foreach ($products as $key => $product)
             <tr id="prod-{{$product->slug}}">
                 <td class="d-none">{{ ++$i }}</td>
@@ -46,7 +43,7 @@
                 <td class="text-center"><a href="{{ url(app()->getLocale().'/products/'.$product->slug) }}"><img src="../img/{{$product->image}}" style="width:200px; height:200px;" alt="{{ $product->name }}"/></a></td>
                 <td><p>{!! Str::limit($product->description, 100) !!}</p></td>
                 <td><p>{!! Str::limit($product->properties, 100) !!}</p></td>
-                <td><p>{!! Str::limit($product->uses, 100) !!}</p></td> <!---afiseaza doar primele 200 de caractere din descriere --->
+                <td><p>{!! Str::limit($product->uses, 100) !!}</p></td> 
                 <td>
                     <a class="btn btn-success m-2" href="{{ url(app()->getLocale().'/products/'.$product->slug) }}">{{ __('Details') }}</a><br>
                     <a class="btn btn-primary m-2" href="{{ url(app()->getLocale().'/products/'.$product->slug.'/edit') }}">{{ __('Modify') }}</a><br>
@@ -80,8 +77,9 @@ function deleteProduct(slug){
         })
         .then(res => {
             if (res.status === 200) {
-                //window.location.href = "{{ route('products.index', app()->getLocale(), [ session(['success' => 'Produs sters cu succes!'])]) }}";
                 $("#prod-"+slug).remove();
+                $('.alert').addClass(' alert-success');
+                $('#messageResp').html('Produs sters cu succes!');
             } else {
                 alert('A intervenit o eroare');
             }

@@ -835,6 +835,7 @@ footer dl, ol, ul {
 
 .rebus-logo {
    text-align: center;
+   font-family: Georgia, serif;
 }
 
 .rebus span,
@@ -853,31 +854,31 @@ footer dl, ol, ul {
 }
 
 .rebus1 {
-   margin-left: -25px;
+   margin-left: -30px;
 }
 
 .rebus2 {
-   margin-left: -10px;
+   margin-right: 10px;
 }
 
 .rebus3 {
-   margin-left: 38px;
+   margin-left: 47px;
 }
 
 .rebus4 {
-   margin-left: 95px;
+   margin-left: 110px;
 }
 
 .rebus5 {
-   margin-left: 5px;
+   margin-left: 10px;
 }
 
 .rebus6 {
-   margin-left: 80px;
+   margin-left: 90px;
 }
 
 .rebus7 {
-   margin-left: 50px;
+   margin-left: 55px;
 }
 
 
@@ -1350,4 +1351,54 @@ margin-left: 4px;
    display: flex;
    flex-direction: row;
    justify-content: center;
+}
+
+
+/*STRIPE*/
+.stripe-button-el span, #ramburs {
+   font-family: Arial, Helvetica, sans-serif !important;
+   -webkit-font-smoothing: antialiased;
+   padding: 10px !important;
+   min-height: 45px !important;
+   font-weight: normal !important;
+   font-size: 1.2em !important;
+   border-radius: 0.1em !important;
+   border: 0 !important;
+   border-style: none;
+   background-image: none !important;
+   background: #28a745!important;
+   background-color: #28a745 !important;
+}
+
+#ramburs {
+   border-radius: 5px !important;
+}
+
+.stripe-button-el:hover,  #ramburs:hover {
+   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19) !important;
+}
+
+
+/*shop*/
+#product-card:hover{
+   box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19) !important;
+   transition: 0.4s;
+}
+
+#place-order-btn {
+   margin-top: 5%;
+   font-size: 1.3rem;
+   margin-left:30%;
+   width: 30%;
+   display: flex;
+   flex-direction:column;
+}
+
+#empty-cart-btn {
+   position: absolute; 
+   right: 23%;
+}
+
+#cart-actions {
+   margin-top: 7%;
 }

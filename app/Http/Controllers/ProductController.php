@@ -141,18 +141,6 @@ class ProductController extends Controller
     }
 
     // Update user info - revieworder
-    public function updateUserInfoOK(Request $request, $id)
-    {
-        $user = User::findOrFail($request->id)->first();
-        $user-> firstname = $request->firstname;
-        $user-> lastname = $request->lastname;
-        $user-> address = $request->address;
-        $user-> phone = $request->phone;
-        $user-> county = $request->county;
-        $user-> city = $request->city;
-        $user-> zipcode = $request->zipcode;
-        $user->save();
-    }
     public function updateUserInfo(Request $request, $id)
     {
         $_POST = json_decode(file_get_contents("php://input"),true);
@@ -253,7 +241,7 @@ class ProductController extends Controller
 
         Product::where('slug', $slug)->delete();
 
-        return json_encode(array('statusCode'=>200, 'success' => 'Produs sters cu succes!'));
+        return json_encode(array('statusCode'=>200, 'successDeleteProduct' => 'Produs sters cu succes!'));
     }
 
 }

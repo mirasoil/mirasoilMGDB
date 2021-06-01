@@ -4,6 +4,9 @@
 @endsection
 @section('extra-scripts')
 <meta name="csrf-token" content="{{ csrf_token() }}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 @endsection
 @section('content')
 <div class="container">
@@ -15,17 +18,17 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Produs adaugat in cos</h5>
+            <h5 class="modal-title" id="exampleModalLabel">{{ __('Product added to cart') }}</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
         </div>
         <div class="modal-body">
-            Verificati cosul de cumparaturi pentru mai multe detalii
+            {{ __('Verify your shopping cart for more details') }}
         </div>
         <div class="modal-footer">
-            <a href="{{ url(app()->getLocale().'/cart') }}"><button type="button" class="btn btn-primary">Vezi cos</button></a>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <a href="{{ url(app()->getLocale().'/cart') }}"><button type="button" class="btn btn-primary">{{ __('Check cart') }}</button></a>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
         </div>
         </div>
     </div>
@@ -121,7 +124,7 @@ function btnAddCart(param){
         clearTimeout(myModal.data('hideInterval'));
         myModal.data('hideInterval', setTimeout(function(){
             myModal.modal('hide');
-        }, 3000));
+        }, 5000));
    })
    .catch(function (error) {
     	console.log(error);

@@ -1,139 +1,196 @@
 @extends('layouts.master')
 @section('title')
-<title>{{ __('Shop') }} - Mirasoil</title>
-@endsection
-@section('extra-scripts')
-<meta name="csrf-token" content="{{ csrf_token() }}">
+<title>{{ __('My Orders') }} - Mirasoil</title>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<style>
+        .card {
+    margin: auto;
+    max-width: 950px;
+    width: 90%;
+    box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 1rem;
+    border: transparent
+}
+
+@media(max-width:767px) {
+    .shopping-card {
+        margin: 3vh auto
+    }
+}
+
+.cart-div {
+    background-color: #fff;
+    padding: 4vh 5vh;
+    border-bottom-left-radius: 1rem;
+    border-top-left-radius: 1rem
+}
+
+@media(max-width:767px) {
+    .cart-div {
+        padding: 4vh;
+        border-bottom-left-radius: unset;
+        border-top-right-radius: 1rem
+    }
+}
+
+.summary {
+    background-color: #ddd;
+    border-top-right-radius: 1rem;
+    border-bottom-right-radius: 1rem;
+    padding: 4vh;
+    color: rgb(65, 65, 65)
+}
+
+@media(max-width:767px) {
+    .summary {
+        border-top-right-radius: unset;
+        border-bottom-left-radius: 1rem
+    }
+}
+
+.summary .col-2 {
+    padding: 0
+}
+
+.summary .col-10 {
+    padding: 0
+}
+
+.row {
+    margin: 0
+}
+
+.title b {
+    font-size: 1.5rem
+}
+
+.main {
+    margin: 0;
+    padding: 2vh 0;
+    width: 100%
+}
+
+.col-2,
+.col {
+    padding: 0 1vh
+}
+
+a {
+    padding: 0 1vh
+}
+
+.close {
+    margin-left: auto;
+    font-size: 0.7rem
+}
+
+img {
+    width: 3.5rem
+}
+
+.back-to-shop {
+    margin-top: 4.5rem
+}
+
+.summary-header {
+    margin-top: 4vh
+}
+
+
+select {
+    border: 1px solid rgba(0, 0, 0, 0.137);
+    padding: 1.5vh 1vh;
+    margin-bottom: 4vh;
+    outline: none;
+    width: 100%;
+    background-color: rgb(247, 247, 247)
+}
+
+.checkout-btn {
+    background-color: #000;
+    border-color: #000;
+    color: white;
+    width: 100%;
+    font-size: 0.7rem;
+    margin-top: 4vh;
+    padding: 1vh;
+    border-radius: 0
+}
+
+.checkout-btn:focus {
+    box-shadow: none;
+    outline: none;
+    box-shadow: none;
+    color: white;
+    -webkit-box-shadow: none;
+    -webkit-user-select: none;
+    transition: none
+}
+
+.checkout-btn:hover {
+    color: white
+}
+
+#code {
+    background-image: linear-gradient(to left, rgba(255, 255, 255, 0.253), rgba(255, 255, 255, 0.185)), url("https://img.icons8.com/small/16/000000/long-arrow-right.png");
+    background-repeat: no-repeat;
+    background-position-x: 95%;
+    background-position-y: center
+}
+</style>
 @endsection
 @section('content')
-@if (session()->has('success_message'))
-	<div class="alert alert-success">
-		<p class="shop-success">{{ session()->get('success_message') }}</p>
-	</div>
-@endif
-
-@if(count($errors) > 0)
-	<div class="alert alert-danger">
-		<ul>
-			@foreach ($errors->all() as $error)
-				<li>{{ $error }}</li>
-			@endforeach
-		</ul>
-	</div>
-@endif
 <div class="container">
-<div class="row" id="shop">
-		<div class="col-lg-12 col-sm-12 col-12 main-section">
-			<div class="dropdown" id="dropdown-cart">
-				<button type="button" class="btn btn-info" data-toggle="dropdown" id="cart-button">
-					<i class="fa fa-shopping-cart" aria-hidden="true"></i> {{ __('Cart') }} <span class="badge badge-pill badge-danger">{{ count((array) session('cart')) }}</span>
-				</button>
-				<div class="dropdown-menu" id="dropdown-cart-menu">
-					<div class="row total-header-section">
-						<div class="col-lg-6 col-sm-6 col-6">
-							<i class="fa fa-shopping-cart" aria-hidden="true"></i> <span class="badge badge-pill badge-danger">{{ count((array) session('cart')) }}</span>
-						</div>
-						<?php $total = 0 ?>
- 						@foreach((array) session('cart') as $id => $details)
- 							<?php $total += $details['price'] * $details['quantity'] ?>
- 						@endforeach
-        				<div class="col-lg-6 col-sm-6 col-6 total-section text-right">
-            				<p>{{ __('Total') }}: <span class="text-info">{{ $total }} lei</span></p>
-        				</div>
-    				</div>
-					@if(session('cart'))
- 						@foreach(session('cart') as $id => $details)
-							<div class="row cart-detail">
-								<div class="col-lg-4 col-sm-4 col-4 cart-detail-img">
-									<img src="../img/{{$details['image']}}" width="100" height="100"/>
-								</div>
-								<div class="col-lg-8 col-sm-8 col-8 cart-detail-product">
-									<p>{{ $details['name'] }}</p>
-									<p class="text-muted small">{{ __('Quantity') }}: <span class="price text-info">{{ $details['quantity'] }} buc</span></p>
-									<p class="text-muted small">{{ __('Unit price') }}: <span class="price text-info">{{ $details['price'] }} RON</span></p>
-								</div>
-							</div>
-						@endforeach
-					@endif
-					<div class="row">
-						<div class="col-lg-12 col-sm-12 col-12 text-center checkout">
-							<a href="{{ url(app()->getLocale().'/cart') }}" class="btn btn-primary btn-block">{{ __('See cart') }}</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>	
-	</div>
-	<div class="alert d-none">
-		<p class="shop-success"></p>
-	</div>
-<div class="container d-flex justify-content-center mt-2 mb-5">
+<nav aria-label="breadcrumb" class="main-breadcrumb mt-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/') }}">{{ __('Home') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/user') }}">{{ __('My Account') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/shop') }}">{{ __('Shop') }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('My Cart') }}</li>
+        </ol>
+    </nav>
+<div class="card shopping-card">
     <div class="row">
-    @if (count($products) > 0)
-		@foreach($products as $product)
-        <div class="d-none">{{ ++$i }}</div>
-        <div class="col-md-4 mt-4">
-            <div class="card shadow rounded">
-                <div class="card-body">
-                    <div class="card-img-actions"> <a href="{{ url(app()->getLocale().'/details', $product->slug) }}"><img src="../img/{{$product->image}}" class="card-img" width="96" height="350" alt=""> </a></div>
-                </div>
-                <div class="card-body bg-light text-center">
-                    <div class="mb-2">
-                        <h4 class="font-weight-semibold mb-2"> <a href="{{ url(app()->getLocale().'/details', $product->slug) }}" class="text-default mb-2" data-abc="true" style="text-decoration:none;color:black;">{{ $product->name }}</a> </h4> <!---<a href="#" class="text-muted" data-abc="true">Laptops & Notebooks</a>-->
-                        <p class="text-muted font-italic" style="font-size:15px;">{!! Str::limit($product->description, 70) !!}</p>
+        <div class="col-md-8 cart-div">
+            <div class="title">
+                <div class="row">
+                    <div class="col">
+                        <h4><b>Shopping Cart</b></h4>
                     </div>
-                    <h5 class="mb-0 font-weight-semibold">{{ $product->price }} RON</h5>
-                    @if(Auth::guard('user')->check())
-				    <button  type="button" class="btn btn-info btn-block text-center mt-4" id="{{$product->id}}" onclick="btnAddCart(this.id)">{{ __('Add to cart') }}</button>
-                    @else
-                    <a href="{{ route('login.default', app()->getLocale(), [session(['shop-session' => 'shop-session'])] ) }}" style="text-decoration:none;">
-                        <button type="button" class="btn btn-info btn-block text-center mt-4" id="{{$product->id}}">{{ __('Add to cart') }}</button><!---redirectare inapoi in cos --->
-                    </a>
+                    @if(session('cart'))
+                        <div class="col align-self-center text-right text-muted">{{ count((array) session('cart')) }}</div>
                     @endif
                 </div>
             </div>
+            <?php $total = 0 ?>
+        @if(session('cart'))
+        @foreach(session('cart') as $id => $details)
+        <?php $total += $details['price'] * $details['quantity'] ?>
+            <div class="row border-top border-bottom pl-4" id="product-show-{{ $id }}">
+                <div class="row main align-items-center">
+                    <div class="col-2"><img class="img-fluid" src="../img/{!!$details['image']!!}" ></div>
+                    <div class="col">
+                        <div class="row text-muted">{{ $details['name'] }}</div>
+                        <div class="row">{{ $details['price'] * $details['quantity'] }} Lei </div>
+                    </div>
+                    <div class="col"> <input type="number" value="{{ $details['quantity'] }}" class="form-control quantity{{$id}}" min="1" oninput="validity.valid||(value='');"/> </div>
+                    <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
+                </div>
+            </div>
+            <div class="back-to-shop"><a href="#">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
         </div>
         @endforeach
-        @endif     
+        <div class="col-md-4 summary">
+            <div>
+                <h5 class="summary-header"><b>Summary</b></h5>
+            </div>
+            <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                <div class="col">TOTAL PRICE</div>
+                <div class="col text-right">{{ $total }} Lei</div>
+            </div> <button class="btn checkout-btn">CHECKOUT</button>
+        </div>
+        @endif
     </div>
 </div>
-<div class="float-right mt-5">{{$products->render()}}</div><br>
-<div class="mt-5"></div>
 </div>
-<script>
-function btnAddCart(param) {
-	let currentUrl = "{{ url(app()->getLocale().'/shop') }}";
-  var product = param;
-  var url = "{{ url(app()->getLocale().'/add-to-cart/') }}"+'/'+product;
-
-  $.ajaxSetup({
-        headers: {
-        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-  $.ajax({
-	contentType: "application/x-www-form-urlencoded",
-    type: "POST",
-    url: url,
-    data: { 
-        "product": product
-	 },
-	 success: function (response) {
-			$('#shop').load(currentUrl+' #shop');    
-			$("#shop").css({"margin-left":"80%"});
-			$(".alert").removeClass("d-none").addClass("alert alert-success")  //stilizare
-			$('.shop-success').html('Produs adăugat în coș!');
-			console.log(product);
-
-    },
-    error: function (response) {
-      console.log('Error:', response);
-    }
-  });
-};
-</script>
 @endsection
-
-
-
-

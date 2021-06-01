@@ -5,6 +5,9 @@
 @section('extra-scripts')
 <!--Axios-->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 @endsection
 @section('content')
 <div class="container">
@@ -45,6 +48,16 @@
                         <li class="list-group-item"><a href="{{ url(app()->getLocale().'/shop') }}" style="text-decoration: none;"><strong>{{ __('Check products')}}</strong></a></li>
                         <li class="list-group-item"><a href="{{ url(app()->getLocale().'/cart') }}" style="text-decoration: none;"><strong>{{ __('My Cart')}} </strong></a></li>
                         <li class="list-group-item"><a href="{{ url(app()->getLocale().'/myorders') }}" style="text-decoration: none;"><strong>{{ __('Check history')}} </strong></a></li>
+                        <li class="list-group-item">
+                            <a style="text-decoration: none;" href="{{ route('logout', app()->getLocale()) }}"
+                                onclick="event.preventDefault();
+                                                document.getElementById('logout-form').submit();">
+                                <strong>{{ __('Logout') }}</strong>
+                            </a>
+                            <form id="logout-form-user" action="{{ route('logout', app()->getLocale()) }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </li>
                     </ul> 
                 </div><!--/col-3-->
                 <div class="col-sm-9 mt-3">
@@ -163,30 +176,18 @@
                                     @enderror
                                 </div>
                             </div>
-                            <hr>
-                            <div class="form-group mt-2">
-                                <div class="col-xs-6">
-                                    <button class="btn btn-success" id="edit-user-data" type="button">
-                                        {{ __('Save') }}
+                            <div class="form-group">
+                                    <button class="btn btn-success float-right" id="edit-user-data" type="button">
+                                        {{ __('Update Details') }}
                                     </button>
-                                    <a class="btn btn-primary float-right" href="{{ route('logout', app()->getLocale()) }}"
-                                        onclick="event.preventDefault();
-                                                        document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout', app()->getLocale()) }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
                             </div>
                         </form>
-                        <hr>
-                    </div><!--/tab-pane-->
+                    </div>
                     <div class="tab-pane" id="messages"><h2></h2>
                     <hr>
-                </div><!--/tab-pane-->
-                </div><!--/tab-content-->
-            </div><!--/col-9-->
+                </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

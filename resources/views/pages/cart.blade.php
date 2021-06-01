@@ -11,32 +11,40 @@
 @endsection
 @section('content')
 <div class="container">
-    <div class="py-2 text-center">
+    <nav aria-label="breadcrumb" class="main-breadcrumb mt-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/') }}">{{ __('Home') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/user') }}">{{ __('My Account') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/shop') }}">{{ __('Shop') }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('My Cart') }}</li>
+        </ol>
+    </nav>
+    <!-- <div class="py-2 text-center">
         <h2>{{ __('My Cart') }}</h2>
         <p class="lead"></p>
-    </div>
+    </div> -->
  @if (\Session::has('cart-success'))
 <div class="alert alert-success">
 <p id="message-response">{{ \Session::get('cart-success') }}</p>
-</div><br />
+</div>
 @endif
 @if (\Session::has('cart-failure'))
 <div class="alert alert-danger">
-<p id="message-response">{{ \Session::get('cart-failure') }}</p>
-</div><br />
+    <p id="message-response">{{ \Session::get('cart-failure') }}</p>
+</div>
 @endif
 <div class="alert">
-<p id="message-response"></p>
-</div><br />
+    <p id="message-response"></p>
+</div>
 @if(session('cart'))
-<table id="cart" class="table table-hover table-condensed mt-3">
+<table id="cart" class="table table-striped table-condensed mt-3">
     <thead>
         <tr>
-            <th style="width:45%">{{ __('Products') }}</th>
-            <th style="width:10%">{{ __('Unit price') }}</th>
-            <th style="width:8%">{{ __('Quantity') }}</th>
-            <th style="width:17%" class="text-center">{{ __('Subtotal') }}</th>
-            <th style="width:20%" class="text-center">{{ __('Actions') }}</th>
+            <th style="width:40%" class="h5 py-4">{{ __('Products') }}</th>
+            <th style="width:15%" class="h5 py-4">{{ __('Unit price') }}</th>
+            <th style="width:8%" class="h5 py-4">{{ __('Quantity') }}</th>
+            <th style="width:17%" class="text-center h5 py-4">{{ __('Subtotal') }}</th>
+            <th style="width:20%" class="text-center h5 py-4">{{ __('Actions') }}</th>
         </tr>
     </thead>
     <tbody>
@@ -57,11 +65,11 @@
                 </div>
             </div>
             </td>
-            <td data-th="Price" id="price{{$id}}">{{ $details['price'].' Lei' }}</td>
+            <td data-th="Price" class="pl-3" id="price{{$id}}">{{ $details['price'].' RON' }}</td>
             <td data-th="Quantity">
                 <input type="number" value="{{ $details['quantity'] }}" class="form-control quantity{{$id}}" min="1" oninput="validity.valid||(value='');"/>
             </td>
-            <td data-th="Subtotal" class="text-center" id="subtotal{{$id}}">{{ $details['price'] * $details['quantity'] }} Lei</td>
+            <td data-th="Subtotal" class="text-center" id="subtotal{{$id}}">{{ $details['price'] * $details['quantity'] }} RON</td>
             <td class="actions text-center" data-th="">
             <button class="btn btn-info btn-sm update-cart"  data-id="{{ $id }}"><i class="fa fa-refresh"></i>
                 {{ __('Modify') }}
@@ -74,28 +82,28 @@
     </tr>
  @endforeach
  </tbody>
- <tfoot>
-    <tr class="visible-sm">
-        <td colspan="3" class="hidden-xs"></td>
-        <td class="text-center" style="font-size: 1.1rem;"><strong>Total: </strong> <p id="total">{{ $total }}Lei</p></td>
-        <td></td>
-    </tr>
-    <tr>
-        <td><a href="{{ url(app()->getLocale().'/shop') }}" class="btn btn-info">{{ __('Continue shopping') }}</a></td>
-        <td colspan="3" class="hidden-xs"></td>
-        <td class="text-center"><a href="{{ url(app()->getLocale().'/cart/success') }}" class="btn btn-danger text-center">{{ __('Empty cart') }}</a></td>
-    </tr>
-    <tr>
-        <td colspan="4" class="hidden-xs"></td>
-        <td class="text-center"><a href="{{ url(app()->getLocale().'/revieworder') }}" class="btn btn-success">{{ __('Place order') }}</a></td>
-</tfoot>
-</table>
+ </table>
+ 
+    <div>
+        <p class="float-right" style="font-size: 1.4rem;padding-right:20%;"><strong>Total: </strong> <span id="total">{{ $total }} RON</span></p>
+    </div>
+    <div id="cart-actions">
+        <div style="font-size: 1.3rem;" class="text-muted"><i class="fas fa-reply"></i>  <a href="{{ url(app()->getLocale().'/shop') }}" class="text-decoration-none font-weight-bold text-muted">{{ __('Continue shopping') }}</a>
+        <a href="{{ url(app()->getLocale().'/cart/success') }}" class="btn btn-danger float-right" id="empty-cart-btn">{{ __('Empty cart') }}</a></div>
+    </div>
+    <div class="text-center">
+        <div class="text-center"><a href="{{ url(app()->getLocale().'/revieworder') }}" class="btn btn-info text-center" id="place-order-btn">{{ __('Place order') }}</a></div>
+    </div>
+
+
 @else
- <h4 class="text-center">{{ __('Your shopping cart is empty ! Please have a look at our products !') }}</h4>
+ <h5 class="text-center">{{ __('Your shopping cart is empty ! Please have a look at our products !') }}</h5>
  <div class="text-center mt-5">
     <a href="{{ url(app()->getLocale().'/shop') }}" class="btn btn-warning">{{ __('Go to shop') }}</a>
  </div>
+ <div class="mt-5 pt-5"></div>
  @endif
+ <div class="mt-5 pt-5"></div>
  <script>
  // Modify cart quantity for a product
   $(".update-cart").click(function (e) {
@@ -121,7 +129,7 @@
     })
     .then(response => {
         let newSubtotal = parseInt(quantity) * parseInt(res[0]); 
-        $('#subtotal'+id).html(newSubtotal+' Lei');
+        $('#subtotal'+id).html(newSubtotal+' RON');
         $('#total').load(currentUrl+' #total'); 
         $(".alert").addClass("alert-success");
         $("#message-response").html("Produsul a fost actualizat");

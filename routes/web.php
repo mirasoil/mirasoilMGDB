@@ -99,16 +99,21 @@ Route::group([
             Route::get('cart/success', 'ProductController@emptyCart')->name('cart.success');  //golire cos
             Route::get('/revieworder', 'ProductController@getCheckout')->name('revieworder'); //pentru confirmarea comenzii
             Route::patch('/revieworder/{id}', 'ProductController@updateUserInfo')->name('review-details'); //pentru pagina de revieworder, actualizare date utilizator
+            Route::post('/revieworder/session/{id}', 'OrderController@createSession')->name('create-session');  //create session with order details
             Route::post('/orders', 'OrderController@store')->name('orders.store');
+
+            Route::post('/revieworder', 'CheckoutController@charge')->name('charge');  //stripe payment
+            Route::get('/checkout', 'CheckoutController@index')->name('checkout.index');  //payment response
 
             //pagina pentru istoricul comenzilor
             Route::get('/myorders', 'OrderController@index')->name('myorders');
             Route::get('/myorder/{id}', 'OrderController@getMyOrderSpecs')->name('myorder');
+            Route::get('/test', 'OrderController@testIndex')->name('test');
     
             Route::get('/user', 'UserController@index')->name('user');    //pagina de dashboard pentru useri, formularul de update al datelor
             Route::patch('user/{id}', 'UserController@update');    //modificarea propriu-zisa a datelor in tabela dupa id-ul userului
             Route::post('user', 'UserController@updateAvatar')->name('update.avatar');
-    
+
             //generating invoice
             // Route::get('/checkout', 'InvoiceController@show')->name('invoice.show');
             // Route::post('/checkout/{id}', 'InvoiceController@show')->name('invoice.display');

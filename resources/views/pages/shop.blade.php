@@ -25,6 +25,15 @@
 	</div>
 @endif
 <div class="container">
+	@if(Auth::guard('user')->check())
+	<nav aria-label="breadcrumb" class="main-breadcrumb mt-4">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/') }}">{{ __('Home') }}</a></li>
+			<li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/user') }}">{{ __('My Account') }}</a></li>
+			<li class="breadcrumb-item active" aria-current="page">{{ __('Shop') }}</li>
+		</ol>
+	</nav>
+	@endif
 	<div class="row" id="shop">
 		<div class="col-lg-12 col-sm-12 col-12 main-section">
 			<div class="dropdown" id="dropdown-cart">
@@ -76,7 +85,7 @@
 		@foreach($products as $product)
         <div class="d-none">{{ ++$i }}</div>
         <div class="col-md-4 mt-4">
-            <div class="card shadow rounded">
+            <div class="card shadow rounded" id="product-card">
                 <div class="card-body">
                     <div class="card-img-actions"> <a href="{{ url(app()->getLocale().'/details', $product->slug) }}">
 						<img src="../img/{{$product->image}}" class="card-img" width="96" height="350" alt="{{ $product->name }}"> </a>
