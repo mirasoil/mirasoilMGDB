@@ -7,6 +7,7 @@
     @yield('title')
     <link rel="icon" href="{{URL::asset('/img/Logo-mirasoil.png')}}">
     <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="Description" content="Ești fan lavandă ? Ei bine, la Mirasoil avem o gamă largă de produse naturale pentru tine. Află mai multe chiar acum !">
     <meta name="keywords" content="ulei de lavandă, apă florală, săpun, buchete florale lavandă, produse naturale din lavandă">
