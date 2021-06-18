@@ -5,9 +5,17 @@
 @section('content')
 <div class="container">
 @foreach($orders as $order)
-    <h3 class="text-center">{{ __('Order no.') }} {{ $order->id }}</h3>
+    <h3 class="text-center">{{ __('Order no.') }} <?php echo substr($order['_id'], -6) ?></h3>
 @endforeach
 <div class="container-fluid">
+   <!-- Breadcrumb -->
+   <nav aria-label="breadcrumb" class="main-breadcrumb mt-4">
+      <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/admin') }}">{{ __('Home') }}</a></li>
+         <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/orders') }}">{{ __('Orders Editor') }}</a></li>
+         <li class="breadcrumb-item active" aria-current="page">{{ __('Order no.') }} <?php echo substr($order['_id'], -6) ?></li>
+      </ol>
+   </nav>
   <div class="row">
     <div class="col-sm-4">
     <h5 class="my-5">{{ __('User Details') }}</h5>

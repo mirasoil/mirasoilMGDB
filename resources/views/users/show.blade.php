@@ -8,17 +8,14 @@
 @section('content')
 <div class="container">
     <div class="main-body">
-    
           <!-- Breadcrumb -->
           <nav aria-label="breadcrumb" class="main-breadcrumb">
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/admin') }}">{{ __('Home') }}</a></li>
               <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/users') }}">{{ __('Users Editor') }}</a></li>
-              <li class="breadcrumb-item active" aria-current="page">{{ __('User') }}</li>
+              <li class="breadcrumb-item active" aria-current="page">{{ __('User') }} {{ $user['id'] }}</li>
             </ol>
           </nav>
-          <!-- /Breadcrumb -->
-    
           <div class="row gutters-sm">
             <div class="col-md-4 mb-3">
               <div class="card">
@@ -101,7 +98,7 @@
                       @if(!empty($orders))
                         @foreach($orders as $order)
                         <div class="mt-3">
-                            <a href="{{ url(app()->getLocale().'/order/'.$order['id']) }}" class="text-decoration-none h5">{{ $order['id'] }}</a> 
+                            <a href="{{ url(app()->getLocale().'/order/'.$order['id']) }}" class="text-decoration-none h5">{{ __('Order') }} <?php echo substr($order['_id'], -6) ?></a> 
                             <p class="text-muted font-size-sm d-inline-block">&rarr; {{ __('Registered at') }} {{ $order->created_at->isoFormat('D MMM YYYY hh:mm') }}</p>
                         </div>
                         @endforeach
@@ -115,6 +112,7 @@
               </div>
         </div>
     </div>
+<div class="py-4"></div>
 @endsection
 
 

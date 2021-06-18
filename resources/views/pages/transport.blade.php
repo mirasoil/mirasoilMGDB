@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('title')
-<title>Informații transport - Mirasoil</title>
+<title>{{ __('Shipping details - Mirasoil')}}</title>
 @endsection
 @section('extra-scripts')
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -14,34 +14,34 @@
 					<div class="row">
 						<div id="center_column" class="center_column col-xs-12 col-sm-12">
 						<article class="rte">
-						<h1 class="page-heading bottom-indent">Expediere și livrare colete</h1>
+						<h1 class="page-heading bottom-indent">{{ __('Shipping and delivery') }}</h1>
 							<div class="row">
 								<div class="col-xs-12 col-sm-4">
 									<div class="cms-block">
-									<h3 class="page-subheading" id="romania">Taxe de expediere și livrare - România</h3>
-									<p><strong class="dark">Pe teritoriul României expediem gratuit comenzile cu produse în valoare <strong>peste 200 de lei*</strong>.</strong></p>
-									<p class="expediere"><i class="fas fa-truck"></i><span> </span>Expediere în 1-3 zile lucrătoare</p>
-									<p>Pentru orice comandă sub 200 lei, taxa de expediere a coletului este <strong>25 lei</strong> (cu TVA inclus).</p>
-									<p>În județul Alba, pentru comenzi sub 200 lei, taxa de expediere este <strong>9 lei </strong>(cu TVA inclus).</p>
-									<p>Pentru expedierea coletelor folosim companiile de curierat rapid GLS și FanCourier.<br />În perioadele cu reduceri speciale sau de sărbători, livrările pot să dureze 2-3 zile sau chiar mai mult.</p>
-									<p>*Aceste taxe de expediere standard nu se aplică pentru comenzile speciale sau cele cu un volum/greutate foarte mare.</p>
+									<h3 class="page-subheading" id="romania">{{ __('Shipping taxes - Romania') }}</h3>
+									<p><strong class="dark">{!! __('On the Romanian territory, we ship orders with products worth <strong>200 lei or more</strong> free of charge') !!}.</strong></p>
+									<p class="expediere"><i class="fas fa-truck"></i><span> </span>{{ __('Shipping in 1-3 working days') }}</p>
+									<p>{!! __('For any order under 200 lei, the shipping fee of the package is <strong> 25 lei </strong> (VAT included).') !!}</p>
+									<p>{!! __('In Alba County, for orders under 200 lei, the shipping fee is <strong> 9 lei </strong> (VAT included).') !!}</p>
+									<p>{!! __('We use GLS and FanCourier express courier companies to ship products. <br /> During periods with special discounts or holidays, deliveries may take 2-3 days or even longer.') !!}</p>
+									<p>{{ __('*These standard shipping charges do not apply to special orders or those with a very high volume/weight.') }}</p>
 									</div>
 								</div>
 								<div class="col-xs-12 col-sm-4">
 									<div class="cms-box">
-									<h3 class="page-subheading">Unde este comanda mea?</h3>
-									<p><strong class="dark">Pe viitor - verificați statusul comenzii</strong></p>
-									<p>Din diverse motive este posibil ca livrarea coletului să întârzie. Puteți verifica oricând statusul comenzii accesând <strong><a href="cont.php">contul de client</a></strong> de pe site-ul nostru.</p>
-									<p>Dacă au trecut cel puțin 3 zile lucrătoare de la efectuarea comenzii și nu ați primit coletul sau nu ați fost contactat de curier, vă rugăm să ne contactați telefonic, prin rubrica de contact sau prin email. </p>
+									<h3 class="page-subheading">{{ __('Where is my order?') }}</h3>
+									<p><strong class="dark">{{ __('For future reference, check order status') }}</strong></p>
+									<p>{{ __('For various reasons, the delivery of the package may be delayed. You can check the status of your order at any time by visiting the')}} <strong><a href="{{ url(app()->getLocale().'/myorders') }}">{{ __('customer account') }}</a></strong> {{ __('on our site.')}}</p>
+									<p>{{ __('If at least 7 working days have passed since placing the order and you have not received the package or you have not been contacted by the courier, please contact us by phone, through the contact section or by email.')}} </p>
 								</div>
 							</div>
 							<div class="col-xs-12 col-sm-4">
 								<div class="cms-box">
-								<h3 class="page-subheading">Suport Clienți</h3>
-								<p><strong class="dark">Dacă nu sunt la adresa livrării ce se întâmplă?</strong></p>
-								<p>În ziua livrării coletului, curierul vă contactează cu câteva ore înainte, de regulă telefonic. Dacă nu răspundeți și/sau nu vă găsește la adresă, coletul se va păstra în depozitul curierului aproximativ 7 zile. Puteți lua legătura cu compania de curierat sau ne puteți contacta telefonic sau prin rubrica de <a href="index.php#contact">contact</a> pentru a stabili o nouă livrare.</p>
-								<p><strong class="dark">Cum livrați comenzile speciale?</strong></p>
-								<p>Comenzile speciale sunt acele comenzi care conțin o cantitate mare de produse sau la volume care nu sunt disponibile pri comandă on-line direct de pe site. Costul de transport și termenul de livrare se stabilesc individual pentru aceste comenzi, echipa de suport clienți vă stă la dispoziție telefonic, prin email sau rubrica de contact.</p>
+								<h3 class="page-subheading">{{ __('Customer Support')}}</h3>
+								<p><strong class="dark">{{ __('If I am not at home on delivery, what happens?')}}</strong></p>
+								<p>{{ __('On the day of delivery of the package, the courier will contact you a few hours in advance, usually by phone. If you do not reply and/or cannot be found at the address, the package will be kept in the courier\'s warehouse for approximately 7 days. You can contact the courier company or you can contact us by phone or through the section')}} <a href="{{ url(app()->getLocale().'/#contact') }}">{{ __('contact')}}</a> {{ __('or by') }} <a href="mailto:contact@mirasoil.ro">{{ __('email') }}</a> {{ __('for discussing a new shipping date.')}}</p>
+								<p><strong class="dark">{{ __('How do you ship special orders?') }}</strong></p>
+								<p>{{ __('Special orders are those orders that contain a large quantity of products or in volumes that are not available for online order directly from the site. The shipping cost and delivery time are set individually for these orders, the customer support team is available by phone, email or contact.')}}</p>
 							</div>
 						</div>
 					</div>

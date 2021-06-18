@@ -11,42 +11,54 @@ class ContactUsFormController extends Controller
     public function createForm(Request $request) {
         return view('contact');
       }
-  
-      // Store Contact Form data
-      public function ContactUsForm(Request $request) {
-  
-          // Form validation
-          $this->validate($request, [
-              'name' => 'required',
-              'email' => 'required|email',
-              'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
-              'subject'=>'required',
-              'message' => 'required'
-           ]);
-  
-          //  Store data in database
-          Contact::create($request->all());
-  
-          //  Send mail to admin
-        \Mail::send('mail', array(
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'phone' => $request->get('phone'),
-            'subject' => $request->get('subject'),
-            'user_query' => $request->get('message'),
-        ), function($message) use ($request){
-            $message->from($request->email);
-            $message->to('digambersingh126@gmail.com', 'Admin')->subject($request->get('subject'));
-        });
 
-        $successMessageEn = "We have received your message and would like to thank you for writing to us.";
-        $successMessageRo = "Mulțumim pentru mesajul tău ! Revenim în cel mai scurt timp cu un răspuns !";
-        
-          if (app()->getLocale() == "ro") {
-              return back()->with("success", $successMessageRo);
-          } else if (app()->getLocale() == "en") {
-            return back()->with("success", $successMessageEn);
-          }
-      }
+    // Store Contact Form data
+    public function ContactUsForm(Request $request) {
+  
+        // Form validation
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10',
+            'subject'=>'required',
+            'message' => 'required'
+         ]);
+
+        //  Store data in database
+        Contact::create($request->all());
+
+
+        //  Send mail to admin
+      \Mail::send('mail', array(
+          'name' => $request->get('name'),
+          'email' => $request->get('email'),
+          'phone' => $request->get('phone'),
+          'subject' => $request->get('subject'),
+          'user_query' => $request->get('message'),
+      ), function($message) use ($request){
+          $message->from($request->email);
+          $message->to('teosweet99@yahoo.com', 'Admin')->subject($request->get('subject'));
+      });
+
+      return json_encode(array('statusCode'=>200));
+    }
+
+    // Display messages from database
+    public function showMessages(Request $request){
+        $messages = Contact::orderBy('created_at','DESC')->paginate(3);
+        $value = ($request->input('page',1)-1)*3;
+
+        return view('pages.messages', compact('messages'))->with('i', $value); 
+    }
+
+    // Delete message from database
+    public function deleteMessage(Request $request){
+        $_POST = json_decode(file_get_contents("php://input"),true);
+        $id = $_POST['id'];
+
+        Contact::where('_id', $id)->delete();
+
+        return json_encode(array('statusCode'=>200, 'successDeleteMessage' => 'Mesaj sters cu succes!'));
+    }
   
 }

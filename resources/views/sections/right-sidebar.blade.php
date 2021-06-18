@@ -26,14 +26,20 @@
                                 </form>
                             </li>
                         @elseif(Auth::guard('admin')->check())
-                            <li class="{{ Request::is('controlPanel') ? 'active' : '' }}">
+                            <li class="{{ Request::is(app()->getLocale().'/admin') ? 'active' : '' }}">
+                                <a href="{{ url(app()->getLocale().'/admin') }}">{{ __('Home') }}</a>
+                            </li>
+                            <li class="{{ Request::is(app()->getLocale().'/products') ? 'active' : '' }}">
                                 <a href="{{ route('products.index', app()->getLocale()) }}">{{ __('Control Panel') }}</a>
                             </li>
-                            <li class="{{ Request::is('account') ? 'active' : '' }}">
+                            <li class="{{ Request::is(app()->getLocale().'/orders') ? 'active' : '' }}">
                                 <a href="{{ url(app()->getLocale().'/orders') }}">{{ __('Orders Editor') }}</a>
                             </li>
-                            <li class="{{ Request::is('account') ? 'active' : '' }}">
+                            <li class="{{ Request::is(app()->getLocale().'/users') ? 'active' : '' }}">
                                 <a href="{{ url(app()->getLocale().'/users') }}"> {{ __('Users Editor') }}</a>
+                            </li>
+                            <li class="{{ Request::is(app()->getLocale().'/messages') ? 'active' : '' }}">
+                                <a href="{{ url(app()->getLocale().'/messages') }}"> {{ __('Messages Editor') }}</a>
                             </li>
                             <li>
                                 <a class="dropdown-item" href="{{ route('logout', app()->getLocale()) }}"

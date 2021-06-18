@@ -5,6 +5,13 @@
  <div class="alert">
     <p id="messageResp"></p>
  </div>
+ <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="main-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/admin') }}">{{ __('Home') }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('Users Editor') }}</li>
+        </ol>
+    </nav>
  <div class="panel panel-default">
     <div class="panel-body">
         <table class="table table-bordered table-stripped">
@@ -40,7 +47,7 @@
         @endif
         </table>
         <div class="float-left">
-            <a class="btn btn-info" href="{{ url(app()->getLocale().'/admin') }}">{{ __('Back') }}</a>
+            <a class="btn btn-lg btn-info" href="{{ url(app()->getLocale().'/admin') }}">{{ __('Back') }}</a>
         </div>
         <div class="float-right">{{$users->render()}}</div><br>
     </div>

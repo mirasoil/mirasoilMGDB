@@ -7,47 +7,54 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.19.0/axios.min.js"></script>
 @endsection
 @section('content')
+<div class="container">
 <h1 class="text-center">{{ __('Control Panel') }}</h1>
- <div class="panel panel-default" style="padding:50px">
+ <div class="panel panel-default">
+  <!-- Breadcrumb -->
+  <nav aria-label="breadcrumb" class="main-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/admin') }}">{{ __('Home') }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('Control Panel') }}</li>
+        </ol>
+    </nav>
     <div class="panel-body">
-        <div class="alert"> 
+        <div class="alert d-none"> 
             <p id="messageResp"></p>
         </div>
         <div class="form-group">
             <div class="pull-right">
-                <a href="{{ url(app()->getLocale().'/products/create') }}" class="btn btn-info">{{ __('Create new product') }}</a>
+                <a href="{{ url(app()->getLocale().'/products/create') }}" class="btn btn-primary">{{ __('Create new product') }}</a>
             </div>
         </div>
         <table class="table table-bordered table-stripped">
         <tr>
-            <th width="50">{{ __('Slug') }}</th>
-            <th width="200">{{ __('Product Name') }}</th>
-            <th width="80">{{ __('Quantity') }}</th>
-            <th width="80">{{ __('Price') }}</th>
-            <th width="80">{{ __('Stock') }}</th>
+            <th>{{ __('Slug') }}</th>
+            <th>{{ __('Product Name') }}</th>
+            <th>{{ __('Quantity') }}</th>
+            <th>{{ __('Price') }}</th>
+            <th>{{ __('Stock') }}</th>
             <th>{{ __('Image') }}</th>
-            <th width="250">{{ __('Description') }}</th>
-            <th width="250">{{ __('Properties') }}</th>
-            <th width="250">{{ __('Uses') }}</th>
-            <th width="100">{{ __('Actions') }}</th>
+            <th>{{ __('Description') }}</th>
+            <th>{{ __('Properties') }}</th>
+            <th>{{ __('Uses') }}</th>
+            <th>{{ __('Actions') }}</th>
         </tr>
         @if (count($products) > 0) 
             @foreach ($products as $key => $product)
             <tr id="prod-{{$product->slug}}">
                 <td class="d-none">{{ ++$i }}</td>
-                <td><strong><i>{{ $product->slug }}</i></strong></td>
-                <td><a href="{{ url(app()->getLocale().'/products/'.$product->slug) }}" style="text-decoration:none;color:gray;font-size:18px;"><strong>{{ $product->name }}</strong></a></td>
-                <td class="text-center"><p>{{ $product->quantity }}</p></td>
-                <td class="text-center"><p>{{ $product->price }}</p></td>
-                <td class="text-center"><p>{{ $product->stock }}</p></td>
-                <td class="text-center"><a href="{{ url(app()->getLocale().'/products/'.$product->slug) }}"><img src="../img/{{$product->image}}" style="width:200px; height:200px;" alt="{{ $product->name }}"/></a></td>
-                <td><p>{!! Str::limit($product->description, 100) !!}</p></td>
-                <td><p>{!! Str::limit($product->properties, 100) !!}</p></td>
-                <td><p>{!! Str::limit($product->uses, 100) !!}</p></td> 
-                <td>
-                    <a class="btn btn-success m-2" href="{{ url(app()->getLocale().'/products/'.$product->slug) }}">{{ __('Details') }}</a><br>
-                    <a class="btn btn-primary m-2" href="{{ url(app()->getLocale().'/products/'.$product->slug.'/edit') }}">{{ __('Modify') }}</a><br>
-                    <button class="btn btn-danger m-2" id="{{ $product->slug }}" onclick="deleteProduct(this.id)">{{ __('Delete') }}</button>
+                <td style="text-align: center; vertical-align: middle;"><strong><i>{{ $product->slug }}</i></strong></td>
+                <td style="text-align: center; vertical-align: middle;"><a href="{{ url(app()->getLocale().'/products/'.$product->slug) }}" style="text-decoration:none;color:gray;font-size:18px;"><strong>{{ $product->name }}</strong></a></td>
+                <td class="text-center" style="text-align: center; vertical-align: middle;"><p>{{ $product->quantity }}</p></td>
+                <td class="text-center" style="text-align: center; vertical-align: middle;"><p>{{ $product->price }}</p></td>
+                <td class="text-center" style="text-align: center; vertical-align: middle;"><p>{{ $product->stock }}</p></td>
+                <td class="text-center"><a href="{{ url(app()->getLocale().'/products/'.$product->slug) }}"><img src="../img/{{$product->image}}" style="width:100px;" alt="{{ $product->name }}"/></a></td>
+                <td><a class="text-decoration-none" href="{{ url(app()->getLocale().'/products/'.$product->slug) }}"><p>{!! Str::limit($product->description, 50) !!}</p></a></td>
+                <td><a class="text-decoration-none" href="{{ url(app()->getLocale().'/products/'.$product->slug) }}"><p>{!! Str::limit($product->properties, 50) !!}</p></a></td>
+                <td><a class="text-decoration-none" href="{{ url(app()->getLocale().'/products/'.$product->slug) }}"><p>{!! Str::limit($product->uses, 50) !!}</p></a></td> 
+                <td class="text-center">
+                    <a class="btn btn-info mt-3" href="{{ url(app()->getLocale().'/products/'.$product->slug.'/edit') }}">{{ __('Modify') }}</a><br>
+                    <button class="btn btn-danger mt-3" id="{{ $product->slug }}" onclick="deleteProduct(this.id)">{{ __('Delete') }}</button>
                 </td>
             </tr>
              @endforeach
@@ -57,13 +64,15 @@
             </tr>
         @endif
         </table>
-        <div class="float-right m-4">
-            <a class="btn btn-info m-4" href="{{ url(app()->getLocale().'/admin') }}">{{ __('Back') }}</a>
+        <div class="float-right mt-3">
+            <a class="btn btn-lg btn-info my-4" href="{{ url(app()->getLocale().'/admin') }}">{{ __('Back') }}</a>
         </div>
         <!-- Page numbering -->
         {{$products->render()}} 
     </div>
  </div>
+ </div>
+ <div class="py-5"></div>
  <script>
 //Delete button
 function deleteProduct(slug){
@@ -78,6 +87,7 @@ function deleteProduct(slug){
         .then(res => {
             if (res.status === 200) {
                 $("#prod-"+slug).remove();
+                $('.alert').removeClass('d-none');
                 $('.alert').addClass(' alert-success');
                 $('#messageResp').html('Produs sters cu succes!');
             } else {

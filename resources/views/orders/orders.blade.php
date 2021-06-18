@@ -1,15 +1,22 @@
 @extends('layouts.master')
 @section('title')
 <title>{{ __('Orders Editor') }} - Admin</title>
-@endsection
-@section('extra-scripts')
 <meta name="csrf-token" content="{{ csrf_token() }}">
+@endsection
+@section('admin-modal-script')
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-modal/2.2.6/js/bootstrap-modal.js" integrity="sha512-Bp1SEH6unclxWdEeJvGQdSKlFarPwBjDVg5uwApgKLdrae0h+NKTcox+MqagH0Xl9dC1jgWdg66wFP4JXumrlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 @endsection
 @section('content')
 <div class="container">
-<h3 class="text-center">{{ __('Orders Editor') }}</h3>
-    <div class="alert"> 
-        <p id="message-response"></p>
+    <h3 class="text-center">{{ __('Orders Editor') }}</h3>
+    <nav aria-label="breadcrumb" class="main-breadcrumb mt-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/admin') }}">{{ __('Home') }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('Orders Editor') }}</li>
+        </ol>
+    </nav>
+    <div class="alert d-none"> 
+        <h5 id="message-response"></h5>
     </div>
     <div class="panel panel-default">
         <div class="panel-body">
@@ -20,21 +27,21 @@
                 <th>{{ __('Date') }}</th>
                 <th>{{ __('Total') }}</th>
                 <th>{{ __('Status') }}</th>
-                <th>{{ __('Actions') }}</th>
+                <th class="text-center">{{ __('Actions') }}</th>
             </tr>
             @foreach($orders as $order)
             <tr id="order-{{ $order->id }}">
                 <div class="d-none">{{ ++$i }}</div>
                 <td>
-                    <a href="{{ url(app()->getLocale().'/order/'.$order['id']) }}">{{ $order['id'] }}</a>
+                    <a href="{{ url(app()->getLocale().'/order/'.$order['id']) }}"><?php echo substr($order['_id'], -6) ?></a>
                 </td>
                 <td>
                     <a href="{{ url(app()->getLocale().'/user/'.$order['user_id']) }}">{{ $order['user_id'] }}</a>
                 </td>
                 <td>{{$order->created_at->isoFormat('D MMM YYYY')}}</td>
                 <td>{{ $order['billing_total'] }} RON</td>
-                <td>
-                    <p id="shipping-response-{{ $order->id }}">
+                <td id="shipping-response-{{ $order->id }}">
+                    <p>
                         @if(!$order->shipped)
                             {{ __('Not shipped') }}
                         @else
@@ -42,7 +49,7 @@
                         @endif
                     </p>
                 </td>
-                <td> 
+                <td class="text-center"> 
                 <a class="btn btn-success m-2" href="{{ url(app()->getLocale().'/order',$order->id) }}">{{ __('Details') }}</a><br>
                     <!-- Button trigger modal -->
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal-{{ $order->id }}">
@@ -78,10 +85,10 @@
             </tr>
             @endforeach
             </table>
-            <div class="float-right m-4">
-                <a class="btn btn-info m-4" href="{{ url(app()->getLocale().'/admin') }}">{{ __('Back') }}</a>
+            <div class="float-right mt-4">
+                <a class="btn btn-lg btn-info mt-4" href="{{ url(app()->getLocale().'/admin') }}">{{ __('Back') }}</a>
             </div>
-            <div class="float-right">{{$orders->render()}}</div><br>
+            <div>{{$orders->render()}}</div><br>
         </div>
     </div>
  </div>
@@ -135,10 +142,11 @@ function setShipping(order_id){
     .then((response) => {			
         $('.modal').modal('hide');
         $('.modal-backdrop').remove();
+        $(".alert").removeClass('d-none');
         $(".alert").addClass("alert-success");  //stilizare
         $("#message-response").html("Status comandă actualizat"); 
         // $("#shipping-response-"+order_id).load(" #shipping-response-"+order_id+" > *");
-        $('#shipping-response-'+order_id).load(currentUrl+' #shipping-response-'+order_id);
+        $('#shipping-response-'+order_id).load(" #shipping-response-"+order_id+" > *");  
     })
     .catch(function (error) {
         alert('A intervenit o eroare. Va rugam sa incercati din nou');

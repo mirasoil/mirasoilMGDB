@@ -86,6 +86,9 @@ Route::group([
         Route::delete('user/{id}', 'UserController@destroyUser')->name('user.destroy');
 
         Route::get('/invoices/{id}', 'InvoiceController@showAdmin')->name('invoice.admin');
+
+        Route::get('/messages', 'ContactUsFormController@showMessages')->name('message.admin');
+        Route::delete('/messages/{id}', 'ContactUsFormController@deleteMessage')->name('message.delete');
     
     });
     
@@ -107,6 +110,7 @@ Route::group([
 
             //pagina pentru istoricul comenzilor
             Route::get('/myorders', 'OrderController@index')->name('myorders');
+            Route::delete('/myorders/{id}', 'OrderController@cancelOrder')->name('order.cancel');
             Route::get('/myorder/{id}', 'OrderController@getMyOrderSpecs')->name('myorder');
             Route::get('/test', 'OrderController@testIndex')->name('test');
     

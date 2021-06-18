@@ -8,9 +8,16 @@
 @endsection
 @section('content')
 <div class="container">
-<h1 class="text-center">{{ $product->name }}</h1>
-<h3 class="text-center">{{ __('Changes') }}</h3>
-<div class="panel panel-default" style="padding:50px">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="main-breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/admin') }}">{{ __('Home') }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/products') }}">{{ __('Control Panel') }}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('Modify') }} {{ $product->name }}</li>
+        </ol>
+    </nav>
+    <h1 class="text-center">{{ __('Changes') }} {{ $product->name }}</h1>
+<div class="panel panel-default px-5">
         <div class="panel-body">
             <div class="alert"> 
                 <p id="messageResp"></p>

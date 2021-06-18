@@ -41,8 +41,10 @@ class ProductController extends Controller
     // Add to cart using session
     public function addToCart(Request $request, $id)
     {
-        $id = request()->segment(count(request()->segments()));
-        $shop = Product::find($request->product);
+        $data = json_decode(file_get_contents("php://input"),true); 
+        // dd($data['data']['product']);
+        $id = $data['product'];
+        $shop = Product::find($id);
         if(!$shop) {
             abort(404);
         }
@@ -61,14 +63,14 @@ class ProductController extends Controller
                 ]
             ];
             session()->put('cart', $cart);
-            return redirect()->back()->with('cart-success', 'Produs adaugat cu succes!');
+            return json_encode(array('statusCode'=>200));
         }
         
         // But if there is already a cart in session just increase quantity
         if(isset($cart[$id])) {       
             $cart[$id]['quantity']++;
             session()->put('cart', $cart);
-            return redirect()->back()->with('cart-success', 'Produs adaugat cu succes!');
+            return json_encode(array('statusCode'=>200));
         }
         
         // For a new product we add it to cart with a default quantity of 1
@@ -80,7 +82,7 @@ class ProductController extends Controller
         ];
         session()->put('cart', $cart);
 
-        return redirect()->back()->with('cart-success', 'Produs adaugat cu succes!');
+        return json_encode(array('statusCode'=>200));
     }
 
     // Update cart quantity
@@ -124,7 +126,7 @@ class ProductController extends Controller
     public function emptyCart()
     {         
         session()->forget('cart');
-        return redirect()->back()->with('cart-success', 'Cosul dumneavoastra de cumparaturi este gol!');
+        return redirect()->back()->with('cart-success', 'Cosul dumneavoastră a fost șters cu succes!');
     } 
 
     // Place order
@@ -195,15 +197,6 @@ class ProductController extends Controller
             return json_encode(array('statusCode'=>200));
         }
         
-    }
-    public function checkSlugOK(Request $request) 
-    {
-        $checkSlug = Product::where('slug', $request->slug)->get();
-        if ($checkSlug->count() > 0) {
-            return json_encode(array('statusCode'=>201));
-        } else {    
-            return json_encode(array('statusCode'=>200));
-        }
     }
 
     // Display product's details 

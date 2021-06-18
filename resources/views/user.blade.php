@@ -19,11 +19,11 @@
         </nav>
         @if (\Session::has('forbiddenmsg'))
             <div class="alert alert-danger">
-                {!! \Session::get('forbiddenmsg') !!}
+                <h6>{!! \Session::get('forbiddenmsg') !!}</h6>
             </div>
         @endif
-        <div class="alert"> 
-            <p id="messageResp"></p>
+        <div class="alert d-none"> 
+            <h6 id="messageResp"></h6>
         </div>
         <div class="container bootstrap snippet">
             <div class="row">
@@ -217,6 +217,7 @@ $(document).on("click", "#edit-user-data", function() {
         .then(response => {
             if(response.status == 200)
             {
+                $(".alert").removeClass("d-none"); 
                 $(".alert").addClass("alert-success"); 
                 $("#messageResp").html("Informațiile au fost actualizate");  
             }

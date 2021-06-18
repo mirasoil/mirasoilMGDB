@@ -14,7 +14,7 @@
             <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/') }}">{{ __('Home') }}</a></li>
             <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/user') }}">{{ __('My Account') }}</a></li>
             <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/myorders') }}">{{ __('My Orders') }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ __('Order') }} {{$orders['id']}}</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('Order') }} <?php echo substr($orders['_id'], -6) ?></li>
       </ol>
    </nav>
 <div class="container-fluid">

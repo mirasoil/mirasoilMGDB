@@ -21,7 +21,7 @@
         </ol>
     </nav>
 <!--If payment was successfull, the order gets stored in the database-->
-@if (session('paymentSuccessfull'))
+@if (session('paymentSuccessfull'))  <!--payment using Stripe credit card-->
     <script>
         var id = "{{ Auth::user()->id }}";
         let url = "{{route('orders.store', app()->getLocale())}}";
@@ -53,16 +53,16 @@
     </div>
     <h5 class="text-center">{{ __('Your order was placed succesfully! Please check My Orders section for further details') }}</h5>
     <div class="text-center mt-5">
-        <a href="{{ url(app()->getLocale().'/myorders') }}" class="btn btn-warning">{{ __('My Orders') }}</a>
+        <a href="{{ url(app()->getLocale().'/myorders') }}" class="btn btn-info">{{ __('My Orders') }}</a>
     </div>
-@elseif(session('paymentDeclined'))
+@elseif(session('paymentDeclined'))   <!--declined payment using Stripe credit card--->
     <div class="alert alert-danger">
         {{ session('paymentDeclined') }}
     </div>
     <div class="text-center mt-5">
-        <a href="{{ url(app()->getLocale().'/cart') }}" class="btn btn-warning">{{ __('My Cart') }}</a>
+        <a href="{{ url(app()->getLocale().'/cart') }}" class="btn btn-info">{{ __('My Cart') }}</a>
     </div>
-@else
+@elseif(session('cart'))   <!--courier refunds-->
 <script>
         var id = "{{ Auth::user()->id }}";
         let url = "{{route('orders.store', app()->getLocale())}}";
@@ -89,20 +89,23 @@
             alert('A intervenit o eroare. Va rugam sa incercati din nou');
         })
     </script>
-<div class="alert alert-success">
-    {{ session('paymentSuccessfull') }}
-</div>
-<h5 class="text-center">{{ __('Your order was placed succesfully! Please check My Orders section for further details') }}</h5>
-<div class="text-center mt-5">
-    <a href="{{ url(app()->getLocale().'/myorders') }}" class="btn btn-warning">{{ __('My Orders') }}</a>
-</div>
+    <div class="alert alert-success">
+        <h5 class="text-center">{{ __('Your order was placed succesfully! Please check My Orders section for further details') }}</h5>
+    </div>
+    <div class="text-center mt-5">
+        <a href="{{ url(app()->getLocale().'/myorders') }}" class="btn btn-info">{{ __('My Orders') }}</a>
+    </div>
+@else
+    <div class="alert alert-warning">
+        <h5 class="text-center">{{ __('Please do not refresh the page until you complete payment!') }}</h5>
+    </div>
+    <h5 class="text-center">{{ __('Please check My Orders section for further details') }}</h5>
+    <div class="text-center mt-5">
+        <a href="{{ url(app()->getLocale().'/myorders') }}" class="btn btn-info">{{ __('My Orders') }}</a>
+    </div>
 @endif
- <br />
- <br />
- <br />
- <br />
- <br />
- <br />
-
 </div>
+<div class="mt-5 pt-5"></div>
+<div class="mt-5 pt-5"></div>
+<div class="mt-5 pt-5"></div>
 @endsection

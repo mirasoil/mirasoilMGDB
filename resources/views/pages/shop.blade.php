@@ -77,7 +77,7 @@
 	</div>	
 </div>
 <div class="alert d-none">
-	<p class="shop-success"></p>
+	<h5 class="shop-success"></h5>
 </div>
 <div class="container d-flex justify-content-center mt-2 mb-5">
     <div class="row">
@@ -117,29 +117,35 @@
 <div class="mt-5"></div>
 </div>
 <script>
-function btnAddCart(param) {
-  let currentUrl = "{{ url(app()->getLocale().'/shop') }}";
-  var product = param;
-  var url = "{{ url(app()->getLocale().'/add-to-cart/') }}"+'/'+product;
+function btnAddCart(product){
+    let url = "{{ url(app()->getLocale().'/add-to-cart/') }}"+'/'+product;
 
-  axios
-   .post(url, {
-    data: { 
-		_token: '{{ csrf_token() }}',
-        "product": product
-	 }
-   })
-   .then(response => {
-		// $('#shop').load(currentUrl+' #shop');  
-		$("#shop").load(" #shop > *");  
-		// $("#shop").css({"margin-left":"80%"});
+    let axiosConfig = {
+		headers: {
+			'Content-Type' : 'application/json; charset=UTF-8',
+			'Accept': 'Token',
+			"Access-Control-Allow-Origin": "*",
+		}
+    };
+    axios({
+      method: 'post',
+      url: url,
+      headers: axiosConfig,
+      data: {
+        _token: $('meta[name="csrf-token"]').attr('content'),
+            "product": product
+      }
+    })
+    .then((response) => {			
+        $("#shop").load(" #shop > *");  
 		$(".alert").removeClass("d-none").addClass("alert alert-success");
 		$('.shop-success').html('Produs adăugat în coș!');
-   })
-   .catch(function (error) {
-    	console.log(error);
-  })
-  }
+    })
+    .catch(function (error) {
+        console.log(error);
+    })
+    
+}
 </script>
 @endsection
 

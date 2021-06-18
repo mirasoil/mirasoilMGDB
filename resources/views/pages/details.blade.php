@@ -1,9 +1,9 @@
 @extends('layouts.master')
 @section('title')
 <title>{{ __('Product Details') }} - Mirasoil</title>
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @endsection
 @section('extra-scripts')
-<meta name="csrf-token" content="{{ csrf_token() }}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
@@ -109,13 +109,23 @@ function btnAddCart(param){
     var product = param;
     var url = "{{ url(app()->getLocale().'/add-to-cart/') }}"+'/'+product;  
 
-    axios
-   .post(url, {
-    data: { 
-		_token: $('meta[name="csrf-token"]').attr('content'),
-        "product": product
-	 }
-   })
+    let axiosConfig = {
+		headers: {
+			'Content-Type' : 'application/json; charset=UTF-8',
+			'Accept': 'Token',
+			"Access-Control-Allow-Origin": "*",
+		}
+    };
+
+    axios({
+      method: 'post',
+      url: url,
+      headers: axiosConfig,
+      data: {
+        _token: $('meta[name="csrf-token"]').attr('content'),
+            "product": product
+      }
+    })
    .then(response => {
         $("#cart-button").load(" #cart-button > *");
         $("#exampleModal").modal("show");
@@ -130,6 +140,10 @@ function btnAddCart(param){
     	console.log(error);
   })  
 }
+
+
+
+
 
 </script>
 @endsection

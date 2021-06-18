@@ -19,22 +19,18 @@
             <li class="breadcrumb-item active" aria-current="page">{{ __('My Cart') }}</li>
         </ol>
     </nav>
-    <!-- <div class="py-2 text-center">
-        <h2>{{ __('My Cart') }}</h2>
-        <p class="lead"></p>
-    </div> -->
  @if (\Session::has('cart-success'))
 <div class="alert alert-success">
-<p id="message-response">{{ \Session::get('cart-success') }}</p>
+    <h6 id="message-response">{{ \Session::get('cart-success') }}</h6>
 </div>
 @endif
 @if (\Session::has('cart-failure'))
 <div class="alert alert-danger">
-    <p id="message-response">{{ \Session::get('cart-failure') }}</p>
+    <h6 id="message-response">{{ \Session::get('cart-failure') }}</h6>
 </div>
 @endif
-<div class="alert">
-    <p id="message-response"></p>
+<div class="alert d-none">
+    <h6 id="message-response"></h6>
 </div>
 @if(session('cart'))
 <table id="cart" class="table table-striped table-condensed mt-3">
@@ -97,10 +93,12 @@
 
 
 @else
- <h5 class="text-center">{{ __('Your shopping cart is empty ! Please have a look at our products !') }}</h5>
+ <h5 class="text-center">{{ __('You have no products in your shopping cart ! Please have a look at our products !') }}</h5>
  <div class="text-center mt-5">
     <a href="{{ url(app()->getLocale().'/shop') }}" class="btn btn-warning">{{ __('Go to shop') }}</a>
  </div>
+ <div class="mt-5 pt-5"></div>
+ <div class="mt-5 pt-5"></div>
  <div class="mt-5 pt-5"></div>
  @endif
  <div class="mt-5 pt-5"></div>
@@ -131,6 +129,7 @@
         let newSubtotal = parseInt(quantity) * parseInt(res[0]); 
         $('#subtotal'+id).html(newSubtotal+' RON');
         $('#total').load(currentUrl+' #total'); 
+        $(".alert").removeClass("d-none");
         $(".alert").addClass("alert-success");
         $("#message-response").html("Produsul a fost actualizat");
     })

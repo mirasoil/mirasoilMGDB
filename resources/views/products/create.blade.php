@@ -4,7 +4,15 @@
 @endsection
 @section('content')
 <div class="container">
-    <h1 class="text-center">{{ ('Add product') }}</h1>
+      <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="main-breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/admin') }}">{{ __('Home') }}</a></li>
+                <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/products') }}">{{ __('Control Panel') }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ __('Add new product') }}</li>
+            </ol>
+        </nav>
+    <h1 class="text-center">{{ __('Add new product') }}</h1>
     <div class="panel panel-default p-5">
         <div class="panel-body">
             @if (count($errors) > 0)

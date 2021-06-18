@@ -5,12 +5,10 @@
         <div class="row ">
             <div class="col-md-6 ">
                 <!-- Success message -->
-                @if(Session::has('success'))
-                    <div class="alert alert-success">
-                        {{Session::get('success')}}
+                    <div class="alert d-none" id="contact-section">
+                        <h5 id="messageResponse"></h5>
                     </div>
-                @endif
-                <form class="contact-form " action="{{ route('contact.store', app()->getLocale()) }}" method="POST">
+                <form class="contact-form" id="contact-message-form">
                 <!-- CROSS Site Request Forgery Protection -->
                 @csrf
                     <div class="form-group ">
@@ -54,7 +52,7 @@
                         </div>
                         @endif
                     </div>
-                    <button type="submit" name="contact-submit" class="btn btn-primary" data-toggle="modal" data-target="#errorsystem">{{ __('Send message') }}</button>
+                    <button type="button" name="contact-submit" class="btn btn-primary" data-toggle="modal" data-target="#errorsystem" id="contact-message-submit">{{ __('Send message') }}</button>
                 </form>
             </div>
             <div class="col-md-6 contact-info ">
@@ -71,3 +69,36 @@
         </div>
     </div>
 </section>
+<script>
+// Send contact message
+$(document).on("click", "#contact-message-submit", function() { 
+    var user_id = $('#userId').val();
+    var url = "{{ route('contact.store', app()->getLocale()) }}";
+
+    formElement = document.getElementById("contact-message-form")
+    formObject = new FormData(formElement)
+
+    dataObject = {}
+    formObject.forEach(function(valoare,cheie) {
+        dataObject[cheie]=valoare
+        })
+    finalData = JSON.stringify(dataObject)
+
+    axios
+    .post(url, finalData, {
+        headers: {"Content-Type": "application/json"}
+        }) 
+        .then(response => {
+            if(response.status == 200)
+            {
+                $("#contact-section").removeClass("d-none"); 
+                $("#contact-section").addClass("alert-success"); 
+                $("#messageResponse").html("{{ __('We have received your message and would like to thank you for writing to us.') }}");  
+                $('#contact-message-form').trigger("reset");
+            }
+            else{
+                alert("Internal Server Error");
+            }
+        })
+    });
+</script>

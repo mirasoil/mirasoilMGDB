@@ -16,17 +16,16 @@
             <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/') }}">{{ __('Home') }}</a></li>
             <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/user') }}">{{ __('My Account') }}</a></li>
             <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/cart') }}">{{ __('My Cart') }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ __('Checkout') }}</li>
+            <li class="breadcrumb-item active" aria-current="page">{{ __('Review order') }}</li>
         </ol>
     </nav>
-    <!-- <div class="pt-3 text-center">
-        <h2>{{ __('Place order') }}</h2>
-        <p class="lead"></p>
-    </div> -->
-    <div class="alert">
-        <p id="message-response"></p>
+    <div class="alert alert-warning">
+        <h6>{{ __('Please do not refresh the page or use the back button during the process. These actions can lead to order cancellation.') }}</h6>
     </div>
-    <div class="row">
+    <div id="alert" class="alert d-none">
+        <h6 id="message-response"></h6>
+    </div>
+    <div class="row mt-4">
         <!-- Sectiunea Cosul Meu si Adresa facturare -->
         <div class="col-md-4 order-md-2 mb-2">
             <h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -234,13 +233,13 @@
                     <p>{{ __('Payment method:') }}</p>
                     <ul class="list-group">
                         <li class="list-group-item">
-                            <span class="font-weight-light">Plata cu cardul de credit <i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard"></i> </span>
+                            <span class="font-weight-light">{{ __('Pay with credit card') }} <i class="fab fa-cc-visa"></i> <i class="fab fa-cc-mastercard"></i> </span>
                             <div class="float-right">
                                 <form action="{{ url(app()->getLocale().'/revieworder') }}" method="POST" id="payment-form" class="my-5 ml-5">
                                     {{ csrf_field() }}
                                     <script
                                             src="https://checkout.stripe.com/checkout.js" class="stripe-button"
-                                            data-label="Plătește"
+                                            data-label="{{ __('Pay') }}"
                                             data-key="{{ env('STRIPE_KEY') }}"
                                             data-amount="{{$total*100}}"
                                             data-name="Plata comenzii"
@@ -253,10 +252,10 @@
                             </div>
                         </li>
                         <li class="list-group-item">
-                            <span class="font-weight-light">Ramburs (la curier)</span>
+                            <span class="font-weight-light">{{ __('Courier refunds') }}</span>
                             <div class="float-right">
                                 <button type="button" onclick="placeOrder()" class="text-light" id="ramburs">
-                                    Plătește
+                                    {{ __('Pay') }}
                                 </button>
                             </div>
                         </li>
@@ -354,7 +353,8 @@ $('#update-user-details').click(function(event){
             zipcode: zipcode
     }
     })
-    .then((response) => {			
+    .then((response) => {		
+        $('#alert').removeClass('d-none');	
         $(".alert").addClass("alert-success")  //stilizare
         $("#message-response").html("Informațiile au fost actualizate")  //continutul mesajului   
     })

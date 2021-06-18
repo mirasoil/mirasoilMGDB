@@ -17,7 +17,7 @@ class OrderController extends Controller
     public function index()  
     {        
         $user_id = Auth::user()->id;
-        $orders = Order::where('user_id', $user_id)->get();   //din orders toate id-urile comenzilor plasate de utilizatorul cu id-ul $user_id
+        $orders = Order::where('user_id', $user_id)->latest()->get();   //din orders toate id-urile comenzilor plasate de utilizatorul cu id-ul $user_id
 
         return view('orders.myorders', array(
             'orders' => $orders
@@ -110,9 +110,19 @@ class OrderController extends Controller
         ));
     }
 
+    public function cancelOrder() {
+        $_POST = json_decode(file_get_contents("php://input"),true);
+        $id = $_POST['id'];
+
+        $order = Order::where('_id', $id)->delete();
+
+        return json_encode(array('statusCode'=>200, 'success' => 'Comanda anulata!'));
+
+    }
+
     //ORDERS for ADMIN
     function getOrders(Request $request){
-        $orders = Order::orderBy('id','DESC')->paginate(5);   //apelam modelul care va face legatura cu BD de unde va afisa produsele - pentru admin
+        $orders = Order::orderBy('created_at','DESC')->paginate(5);   //apelam modelul care va face legatura cu BD de unde va afisa produsele - pentru admin
         $value = ($request->input('page',1)-1)*5;    // get the top 5 of all products, ordered by the id of products in descending order
         return view('orders.orders', compact('orders'))->with('i', $value); 
     } 
