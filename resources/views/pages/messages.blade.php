@@ -14,7 +14,7 @@
         </ol>
     </nav>
     <div class="panel-body">
-        <div class="alert d-none"> 
+        <div class="alert d-none" id="message-response"> 
             <h5 id="messageRes"></h5>
         </div>
     </div>
@@ -69,9 +69,9 @@ function deleteMessage(id){
         .then(res => {
             if (res.status === 200) {
                 $("#message-"+id).remove();
-                $('.alert').removeClass('d-none');
-                $('.alert').addClass(' alert-success');
+                $('.alert').removeClass('d-none').addClass(' alert-success');
                 $('#messageRes').html('Mesaj sters cu succes!');
+                setTimeout(function(){$('#message-response').fadeOut();}, 3000);
             } else {
                 alert('A intervenit o eroare');
             }

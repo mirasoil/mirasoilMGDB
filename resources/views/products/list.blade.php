@@ -18,8 +18,8 @@
         </ol>
     </nav>
     <div class="panel-body">
-        <div class="alert d-none"> 
-            <p id="messageResp"></p>
+        <div class="alert d-none" id="message-response"> 
+            <h5 id="messageResp"></h5>
         </div>
         <div class="form-group">
             <div class="pull-right">
@@ -90,6 +90,7 @@ function deleteProduct(slug){
                 $('.alert').removeClass('d-none');
                 $('.alert').addClass(' alert-success');
                 $('#messageResp').html('Produs sters cu succes!');
+                setTimeout(function(){$('#message-response').fadeOut();}, 3000);
             } else {
                 alert('A intervenit o eroare');
             }

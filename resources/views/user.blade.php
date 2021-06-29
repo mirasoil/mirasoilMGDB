@@ -22,7 +22,7 @@
                 <h6>{!! \Session::get('forbiddenmsg') !!}</h6>
             </div>
         @endif
-        <div class="alert d-none"> 
+        <div class="alert d-none" id="message-response"> 
             <h6 id="messageResp"></h6>
         </div>
         <div class="container bootstrap snippet">
@@ -220,6 +220,7 @@ $(document).on("click", "#edit-user-data", function() {
                 $(".alert").removeClass("d-none"); 
                 $(".alert").addClass("alert-success"); 
                 $("#messageResp").html("Informațiile au fost actualizate");  
+                setTimeout(function(){$('#message-response').fadeOut();}, 3000);
             }
             else{
                 alert("Internal Server Error");

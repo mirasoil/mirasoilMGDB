@@ -155,13 +155,6 @@ class OrderController extends Controller
     }
 
     // Update order details
-    public function updateOrderOK(Request $request)
-    {
-        $id = request('order_id');
-        $shipped = $request->shipped;
-        Order::where('_id', $id)->update(['shipped' => $request->shipped]);
-        return json_encode(array('statusCode'=>200, 'shipped' => $shipped));
-    }
     public function updateOrder(Request $request)
     {
         $_POST = json_decode(file_get_contents("php://input"),true);

@@ -30,14 +30,14 @@ class ContactUsFormController extends Controller
 
         //  Send mail to admin
       \Mail::send('mail', array(
-          'name' => $request->get('name'),
-          'email' => $request->get('email'),
-          'phone' => $request->get('phone'),
-          'subject' => $request->get('subject'),
-          'user_query' => $request->get('message'),
+          'name' => $request->name,
+          'email' => $request->email,
+          'phone' => $request->phone,
+          'subject' => $request->subject,
+          'user_query' => $request->message,
       ), function($message) use ($request){
           $message->from($request->email);
-          $message->to('teosweet99@yahoo.com', 'Admin')->subject($request->get('subject'));
+          $message->to('mirasoilproduction@gmail.com', 'Admin')->subject($request->subject);
       });
 
       return json_encode(array('statusCode'=>200));

@@ -76,7 +76,7 @@
 		</div>
 	</div>	
 </div>
-<div class="alert d-none">
+<div class="alert d-none" id="shop-message">
 	<h5 class="shop-success"></h5>
 </div>
 <div class="container d-flex justify-content-center mt-2 mb-5">
@@ -119,6 +119,7 @@
 <script>
 function btnAddCart(product){
     let url = "{{ url(app()->getLocale().'/add-to-cart/') }}"+'/'+product;
+	let shopMessage = $("#shop-message").attr('class');
 
     let axiosConfig = {
 		headers: {
@@ -138,8 +139,14 @@ function btnAddCart(product){
     })
     .then((response) => {			
         $("#shop").load(" #shop > *");  
-		$(".alert").removeClass("d-none").addClass("alert alert-success");
-		$('.shop-success').html('Produs adăugat în coș!');
+		if (shopMessage == "alert d-none") {
+			$("#shop-message").removeClass("d-none").addClass("alert alert-success");
+			$('.shop-success').html('Produs adăugat în coș!');
+		} else {
+			$("#shop-message").removeAttr("style");
+			$('.shop-success').html('Produs adăugat în coș!');
+		}
+		setTimeout(function(){$('#shop-message').fadeOut();}, 3000);		
     })
     .catch(function (error) {
         console.log(error);

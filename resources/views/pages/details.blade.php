@@ -104,6 +104,7 @@
 </div>
 </div>
 </div>
+<div class="py-5"></div>
 <script>
 function btnAddCart(param){
     var product = param;

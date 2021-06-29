@@ -2,16 +2,16 @@
 @section('content')
 <div class="container">
 <h1 class="text-center">{{ __('Users') }} Control Panel</h1>
- <div class="alert">
-    <p id="messageResp"></p>
- </div>
  <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="main-breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/admin') }}">{{ __('Home') }}</a></li>
-            <li class="breadcrumb-item active" aria-current="page">{{ __('Users Editor') }}</li>
-        </ol>
-    </nav>
+<nav aria-label="breadcrumb" class="main-breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{{ url(app()->getLocale().'/admin') }}">{{ __('Home') }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ __('Users Editor') }}</li>
+    </ol>
+</nav>
+<div class="alert d-none" id="message-response">
+    <h5 id="messageResp"></h5>
+</div>
  <div class="panel panel-default">
     <div class="panel-body">
         <table class="table table-bordered table-stripped">
@@ -68,8 +68,9 @@ function deleteUser(id){
         })
         .then(response => {
             $("#user-"+id).remove();  
-            $(".alert").addClass("alert-success"); 
+            $(".alert").removeClass('d-none').addClass("alert-success"); 
             $("#messageResp").html("Utilizatorul a fost sters din baza de date");  
+            setTimeout(function(){$('#message-response').fadeOut();}, 3000);
         }) 
         .catch(function (error) {
             alert('A intervenit o eroare. Va rugam sa incercati din nou');
